@@ -355,10 +355,10 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 5 PLAY -->
 <section class="panel" id="p-play" hidden>
-  <div class="shead"><span class="snum">5</span><div><h1>🎮 Play: Align It!</h1><div class="tags"><span class="tag">Quick game · 8 rounds</span>Right on the first try = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="shead"><span class="snum">5</span><div><h1>🎮 Play: Align It!</h1><div class="tags"><span class="tag">Quick game · 4 rounds</span>Right on the first try = <span class="xptag">+10 XP</span></div></div></div>
   <div class="playbox">
     <div class="card">
-      <span class="round" id="pRound">Round 1 of 8</span>
+      <span class="round" id="pRound">Round 1 of 4</span>
       <p class="ptask" id="pTask"></p>
       <div class="choices" id="pChoices"></div>
       <div class="msg" id="pMsg" style="margin-top:12px"></div>
@@ -501,8 +501,8 @@ const seen = new Set();
 function markDone(k){ seen.add(k); $('tab-'+k).classList.add('done'); }
 
 /* ---------- XP + rank ---------- */
-const MAX_XP = 240;
-const RANKS = [[0,'🥉 Rookie'],[50,'🧭 Explorer'],[100,'🧱 Builder'],[150,'🎨 Designer'],[200,'👑 Master']];
+const MAX_XP = 200;
+const RANKS = [[0,'🥉 Rookie'],[40,'🧭 Explorer'],[80,'🧱 Builder'],[120,'🎨 Designer'],[160,'👑 Master']];
 const warmPts = () => st.warmQ.filter(v => v === 1).length, exitPts = () => st.exitQ.filter(v => v === 1).length;
 const playPts = () => st.play.filter(v => v === 1).length;
 const tickArr = i => st.ticks[i] || (st.ticks[i] = [0,0,0,0,0,0,0,0,0]);
@@ -600,11 +600,7 @@ const ROUNDS = [
   {t:'The title of a National Day invitation', a:'center', html:'<h2 style="margin:0;font-size:1.6rem">You Are Invited!</h2>', why:'Titles and invitations look best in the center.'},
   {t:'The price on a canteen menu', a:'right', html:'<div>Fruit Salad</div><div style="font-weight:bold">10 AED</div>', why:'Prices go on the right so they line up neatly.'},
   {t:'A long newspaper article', a:'justify', html:'<p style="margin:0">The Sharjah International Book Fair opened today with thousands of visitors. Students from many schools came to meet authors, buy new books and join reading workshops for young people.</p>', why:'Newspapers use justify so both edges are straight.'},
-  {t:'A sentence written in Arabic', a:'right', html:'<div class="ar" lang="ar" dir="rtl">مرحبا بكم في الشارقة</div>', why:'Arabic is written right to left, so it is right-aligned.'},
-  {t:'The date at the top of a school notice', a:'right', html:'<div>Date: 5 November 2026</div>', why:'Dates are usually placed on the right.'},
-  {t:'A normal story paragraph in English', a:'left', html:'<p style="margin:0">Ali opened his laptop and started to build his first web page. He was excited to see his heading on the screen.</p>', why:'Normal English text starts on the left.'},
-  {t:'The heading of a Science Exhibition poster', a:'center', html:'<h2 style="margin:0;font-size:1.6rem">Science Exhibition</h2>', why:'Poster headings are centred to catch the eye.'},
-  {t:'A page in a storybook with both edges straight', a:'justify', html:'<p style="margin:0">Once upon a time, in a small village near the desert, a young boy dreamed of building a robot that could help his family water the date palm trees every morning.</p>', why:'Both edges straight = justify.'}
+  {t:'A normal story paragraph in English', a:'left', html:'<p style="margin:0">Ali opened his laptop and started to build his first web page. He was excited to see his heading on the screen.</p>', why:'Normal English text starts on the left.'}
 ];
 let pr = 0, pTried = false;
 $('pChoices').innerHTML = AL.map(v => `<button data-v="${v}">${v}</button>`).join('');
@@ -883,13 +879,13 @@ function drawTrophies(){
   const T = [
     ['🔥','Warm-up Star','3 / 3 in the Warm-up', warmPts() === 3],
     ['📘','Fast Learner','Visited Goals and Learn', seen.has('goals') && seen.has('learn')],
-    ['🎮','Align Ace','6 or more in Play', playPts() >= 6],
+    ['🎮','Align Ace','4 / 4 in Play', playPts() === 4],
     ['🏗️','Web Designer','All 8 main ticks in the Mini Project', main === 8],
     ['⭐','Bonus Hunter','Made the 3-property banner', !!d[8]],
     ['📝','Reflective Designer','Submitted the self-review', !!st.review],
     ['🎯','Exit Champion','3 / 3 in the Exit Ticket', exitPts() === 3]
   ];
-  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/8</b>Play</div><div><b>${sum(d)}/9</b>Mini Project</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
+  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/4</b>Play</div><div><b>${sum(d)}/9</b>Mini Project</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
   $('troBox').innerHTML = T.map(([ic,n,how,got]) => `<div class="tro${got ? ' got' : ''}"><span class="ic">${ic}</span><b>${n}</b><span>${got ? 'Earned! 🎉' : how}</span></div>`).join('');
   if (T.some(t => t[3])) confetti(80);
   if (st.sid){ markDone('tro'); save('Trophies'); }
