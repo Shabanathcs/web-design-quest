@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Web Design Quest</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-/* Layout: sticky tab bar (Start · Starter Quiz · Learn · Project · Exit Ticket); Project = game level path → task | criteria → editor | output */
+/* Sections: Home · Warm-up · Goals · Learn · Play · Mini Project · Plenary · HOT · AE Connect · Trophies */
 :root{
-  --paper:#F3F6FB; --card:#FFFFFF; --ink:#16203B; --muted:#5A6482; --line:#DCE3EE;
-  --tomato:#FF6347; --sun:#F5B700; --ok:#0E8A6A; --ok-soft:#DDF5EC; --bad:#C62828; --bad-soft:#FDE7E7;
-  --gold:#F5B700; --violet:#6C4BD8;
-  --code-bg:#151C36; --code-fg:#E8ECF8; --gutter:#0F1530; --gutter-fg:#5E6A92;
+  --paper:#FFF3E8; --card:#FFFFFF; --ink:#1A1F3D; --muted:#5D6585; --line:#E8E3F0;
+  --navy:#1B2140; --navy2:#262E57; --orange:#FF7A1A; --orange-d:#E0600A; --violet:#6C4BD8; --lav:#E9E4FF;
+  --ok:#11956F; --ok-soft:#DCF7EC; --bad:#C62828; --bad-soft:#FDE7E7; --gold:#FFC531;
+  --code-bg:#161B38; --code-fg:#E8ECF8; --gutter:#10142C; --gutter-fg:#5E6A92;
   --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
   --body:"Nunito","Segoe UI",system-ui,sans-serif;
   --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
@@ -21,238 +21,213 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
-.wrap{max-width:1400px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
 p{margin:0}
 button{font-family:var(--body)}
-button:focus-visible,textarea:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
-code{font-family:var(--mono);font-size:.9em;background:#EEF2F9;padding:0 5px;border-radius:5px}
-.eyebrow{font:800 .78rem var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--tomato)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
-.title{font-size:clamp(1.8rem,3.6vw,2.5rem);font-weight:800}
-.lead{color:var(--muted);max-width:70ch}
+button:focus-visible,textarea:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:#F1EEF8;padding:0 5px;border-radius:5px}
+
+/* ---------- header ---------- */
+header.top{background:var(--navy);color:#fff;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.hrow{display:flex;align-items:center;gap:12px;padding-block:9px;flex-wrap:wrap}
+.brand{font:800 1.15rem var(--display);display:flex;gap:8px;align-items:center;white-space:nowrap}
+.brand b{color:var(--gold)}
+.mission{font:800 .82rem var(--body);background:var(--orange);color:#fff;border-radius:999px;padding:3px 12px;white-space:nowrap}
+.xpbar{flex:1 1 140px;height:10px;border-radius:999px;background:#343C6B;overflow:hidden;min-width:100px}
+.xpbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--gold));border-radius:999px;transition:width .5s}
+.xpnum{font:800 .95rem var(--body);white-space:nowrap;font-variant-numeric:tabular-nums}
+.rank{font:800 .85rem var(--body);background:var(--violet);border-radius:999px;padding:3px 12px;white-space:nowrap}
+.who{font:700 .85rem var(--body);color:#FFC977;white-space:nowrap}
+nav.tabs{display:flex;gap:6px;overflow-x:auto;padding-block:2px 10px;scrollbar-width:thin}
+nav.tabs button{flex:none;font:800 .88rem var(--body);border:0;background:var(--navy2);color:#D7DCF2;padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+nav.tabs button:hover{background:#333C6E;color:#fff}
+nav.tabs button[aria-selected="true"]{background:var(--orange);color:#fff;box-shadow:0 0 0 2px #FFB27A inset}
+nav.tabs button.done::after{content:" ✓";color:#7CF0C5}
+nav.tabs button[aria-selected="true"].done::after{color:#fff}
+main{padding-block:26px 30px}
+
+/* ---------- section heads + cards ---------- */
+section.panel{display:grid;gap:16px}
+.shead{display:flex;gap:14px;align-items:center}
+.snum{flex:none;width:46px;height:46px;border-radius:12px;background:var(--orange);color:#fff;display:grid;place-items:center;font:800 1.35rem var(--display);box-shadow:0 4px 0 var(--orange-d)}
+.shead h1{font-size:clamp(1.5rem,3.2vw,2rem);font-weight:800}
+.tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:3px;font-size:.88rem;color:var(--muted)}
+.tag{font:800 .7rem var(--body);letter-spacing:.08em;text-transform:uppercase;background:var(--lav);color:var(--violet);border-radius:999px;padding:3px 10px}
+.xptag{font:800 .78rem var(--body);background:var(--gold);color:#5A3B00;border-radius:999px;padding:2px 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:0 4px 0 #F0E3D6}
+.step{display:flex;align-items:center;gap:8px;font:800 1.08rem var(--display);margin-bottom:10px}
+.step .k{width:24px;height:24px;border-radius:7px;background:#4F86F7;color:#fff;display:grid;place-items:center;font-size:.9rem}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.btn{font:800 1.05rem var(--body);border:0;border-radius:12px;padding:13px 22px;cursor:pointer;background:var(--ink);color:#fff}
-.btn.big{background:var(--tomato);font-size:1.2rem;padding:15px 30px;box-shadow:0 5px 0 #C8432C}
-.btn.big:active{transform:translateY(3px);box-shadow:0 2px 0 #C8432C}
-.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line)}
-.msg{font-weight:700;border-radius:10px;padding:10px 14px}
+.lead{color:var(--muted);max-width:70ch}
+.btn{font:800 1.05rem var(--body);border:0;border-radius:12px;padding:12px 22px;cursor:pointer;background:var(--navy);color:#fff;box-shadow:0 4px 0 #0B0F24}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #0B0F24}
+.btn.big{background:var(--orange);box-shadow:0 4px 0 var(--orange-d);font-size:1.12rem}
+.btn.big:active{box-shadow:0 1px 0 var(--orange-d)}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn.hint{background:var(--gold);color:#4A3000;box-shadow:0 4px 0 #D29B00}
+.msg{font-weight:800;border-radius:10px;padding:10px 14px}
 .msg:empty{display:none}
 .msg.ok{background:var(--ok-soft);color:var(--ok)}
 .msg.bad{background:var(--bad-soft);color:var(--bad)}
-.msg.info{background:#EAF0FA;color:var(--ink)}
 
-/* header + tabs */
-header.top{background:var(--ink);color:#fff;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
-header.top .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:10px}
-.brand{font:800 1.3rem var(--display);margin-right:auto;display:flex;gap:10px;align-items:center}
-.brand .flag{display:inline-grid;grid-template-columns:6px 18px;grid-template-rows:repeat(3,5px);border-radius:2px;overflow:hidden}
-.brand .flag i:nth-child(1){grid-row:1/4;background:#D7263D}.brand .flag i:nth-child(2){background:#00843D}.brand .flag i:nth-child(3){background:#fff}.brand .flag i:nth-child(4){background:#000}
-.who{font:700 .9rem var(--body);color:#FFC66D}
-nav.tabs{display:flex;gap:4px;flex-wrap:wrap}
-nav.tabs button{font:700 .95rem var(--body);border:0;background:transparent;color:#C9D2EA;padding:6px 12px;border-radius:999px;cursor:pointer}
-nav.tabs button .n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#2B355C;color:#fff;font-size:.8rem;margin-right:6px}
-nav.tabs button[aria-selected="true"]{background:#fff;color:var(--ink)}
-nav.tabs button[aria-selected="true"] .n{background:var(--tomato)}
-nav.tabs button.done .n{background:var(--ok)}
-main{padding-block:24px 50px}
-section.panel{display:grid;gap:18px}
+/* bottom prev / next */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+.pager button{font:800 .98rem var(--body);border:0;border-radius:12px;padding:11px 18px;cursor:pointer}
+.pager .prev{background:var(--lav);color:var(--violet)}
+.pager .next{background:var(--orange);color:#fff;box-shadow:0 4px 0 var(--orange-d);margin-left:auto}
 
-/* start */
-.start{max-width:620px;margin:0 auto;display:grid;gap:16px;text-align:center;justify-items:center}
-.start .card{width:100%;display:grid;gap:14px;text-align:left}
+/* ---------- home ---------- */
+.home{max-width:640px;margin:0 auto;display:grid;gap:16px;text-align:center;justify-items:center}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-10px) rotate(6deg)}}
+.hero-ico{font-size:4rem;line-height:1;animation:float 3s ease-in-out infinite}
+.home h1{font-size:clamp(2.3rem,6vw,3.6rem);background:linear-gradient(90deg,#FF7A1A,#F5A700 40%,#10B5A6 70%,#6C4BD8);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:4px}
+.motto{font:700 clamp(1.15rem,2.4vw,1.4rem) var(--display);color:#3A4466;max-width:40ch}
+.perks{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.perks span{font:800 1rem var(--body);padding:7px 15px;border-radius:999px;background:#fff;border:2px solid currentColor;box-shadow:0 4px 0 currentColor}
+.perks .p1{color:#E0602D}.perks .p2{color:#1D6FD1}.perks .p3{color:#B88400}
+.home .card{width:100%;display:grid;gap:14px;text-align:left;border:2px solid var(--gold);box-shadow:0 6px 0 var(--gold)}
 .field{display:grid;gap:6px}
 label{font-weight:800}
-input,select{font:600 1.05rem var(--body);padding:12px 14px;border:2px solid var(--line);border-radius:12px;width:100%;background:#fff;color:var(--ink)}
-.motto{font:700 clamp(1.15rem,2.4vw,1.45rem) var(--display);color:var(--muted);max-width:40ch}
-.divs{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:6px}
-@media (max-width:560px){.divs{grid-template-columns:repeat(6,minmax(0,1fr))}}
-.divs button{font:800 1rem var(--body);border:2px solid var(--line);background:#fff;border-radius:10px;padding:9px 0;cursor:pointer;color:var(--ink)}
-.divs button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+input,select{font:700 1.05rem var(--body);padding:12px 14px;border:2px solid var(--line);border-radius:12px;width:100%;background:#fff;color:var(--ink)}
 
-/* quizzes */
-.q{display:grid;gap:10px}
+/* ---------- quizzes ---------- */
+.q{display:grid;gap:10px;align-content:start;border-top:7px solid var(--acc)}
+.grid3 > .q:nth-child(3n+1){--acc:#FF7A1A}.grid3 > .q:nth-child(3n+2){--acc:#10A99B}.grid3 > .q:nth-child(3n){--acc:#6C4BD8}
+.q .qn{font:800 .78rem var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+.q h3{font-size:1.2rem}
 .opts{display:grid;gap:8px}
-.opt{font:700 1rem var(--body);text-align:left;border:2px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;cursor:pointer;color:var(--ink)}
+.opt{display:flex;gap:12px;align-items:center;font:700 1rem var(--body);text-align:left;border:2px solid var(--line);background:#fff;border-radius:12px;padding:9px 12px;cursor:pointer;color:var(--ink);box-shadow:0 3px 0 var(--line)}
+.opt:hover{border-color:var(--acc)}
 .opt code{background:transparent;padding:0}
-.opt.right{border-color:var(--ok);background:var(--ok-soft)}
-.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt .ltr{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--acc);color:#fff;font:800 1rem var(--display)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}.opt.right .ltr{background:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}.opt.wrong .ltr{background:var(--bad)}
 
-/* learn */
-.formula{font:700 clamp(1.1rem,2.6vw,1.6rem) var(--mono);background:var(--code-bg);color:var(--code-fg);border-radius:12px;padding:16px 18px;overflow-x:auto;white-space:nowrap}
+/* ---------- goals ---------- */
+.goal{border-radius:16px;padding:20px 22px;background:#fff;display:grid;gap:10px;align-content:start;font-size:1.2rem}
+.goal.lo{border:3px solid var(--navy);box-shadow:0 6px 0 var(--navy)}
+.goal.sc{border:3px solid var(--ok);box-shadow:0 6px 0 var(--ok)}
+.goal h2{font-size:1.35rem}
+.sclist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.sclist li{padding-left:1.7em;text-indent:-1.7em}
+.sclist li::before{content:"☐";color:var(--ok);font-size:1.25rem;display:inline-block;width:1.7em;text-indent:0}
+
+/* ---------- learn ---------- */
+.learn{font-size:1.15rem}
+.big{font:700 clamp(1.2rem,2.4vw,1.5rem) var(--display)}
+.k-l{color:#2F6FDB}.k-c{color:#D7263D}.k-r{color:#E07A00}.k-j{color:#0E8A6A}
+.formula{font:700 clamp(1rem,2.4vw,1.45rem) var(--mono);background:var(--code-bg);color:var(--code-fg);border-radius:12px;padding:15px 18px;overflow-x:auto;white-space:nowrap}
 .formula .a{color:#FFC66D}.formula .v{color:#9BE58C}.formula .t{color:#7FD3FF}
+.codeout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px;align-items:stretch}
+@media (max-width:900px){.codeout{grid-template-columns:minmax(0,1fr)}}
+.lab{font:800 .74rem var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block}
+.outbox{border:2px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+.outbox .lab{margin:0;padding:6px 12px;background:#F4F1FA;border-bottom:1px solid var(--line)}
+.page{font-family:"Times New Roman",serif;color:#000;padding:10px 14px;display:grid;align-content:center}
+.page h1{font-family:"Times New Roman",serif;font-size:1.9rem;margin:.2em 0}
+.page h2{font-family:"Times New Roman",serif;font-size:1.6rem;margin:.2em 0}
+.page p{margin:.45em 0;font-size:1.05rem}
+.arrow{font:800 1rem var(--body);color:var(--orange)}
 .demo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
 @media (max-width:900px){.demo{grid-template-columns:minmax(0,1fr)}}
 .alignbtns{display:flex;gap:8px;flex-wrap:wrap}
-.alignbtns button{font:800 1rem var(--mono);border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;color:var(--ink)}
-.alignbtns button[aria-pressed="true"]{background:var(--tomato);border-color:var(--tomato);color:#fff}
-.stage{border:2px dashed var(--line);border-radius:12px;padding:14px 16px;background:#fff;font-family:"Times New Roman",serif;color:#000}
-.stage h2{font-family:"Times New Roman",serif;font-size:1.7rem;margin:.2em 0}
+.alignbtns button,.choices button{--c:#2F6FDB;font:800 1.05rem var(--mono);border:2px solid var(--c);color:var(--c);background:#fff;border-radius:12px;padding:9px 16px;cursor:pointer;box-shadow:0 4px 0 var(--c)}
+[data-v="center"]{--c:#D7263D!important}[data-v="right"]{--c:#E07A00!important}[data-v="justify"]{--c:#0E8A6A!important}
+.alignbtns button[aria-pressed="true"],.choices button[aria-pressed="true"]{background:var(--c);color:#fff}
+.choices button:disabled:not([aria-pressed="true"]){opacity:.4;cursor:default}
+.codeout .formula{white-space:pre-wrap;word-break:break-word}
+.stage{border:2px dashed #D9D2E8;border-radius:12px;padding:12px 16px;background:#fff;font-family:"Times New Roman",serif;color:#000}
+.stage h2{font-family:"Times New Roman",serif;font-size:1.6rem;margin:.2em 0}
 .stage p{margin:.5em 0;font-size:1.05rem}
 .where{display:grid;gap:10px}
-.where .mini{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:"Times New Roman",serif;background:#fff}
-.rules{margin:0;padding-left:1.2em;display:grid;gap:6px}
-.conn{border-radius:14px;padding:16px 18px;display:grid;gap:8px;border:1px solid var(--line)}
-.conn.uae{background:#FFF1F1}.conn.cross{background:#EEF4FF}.conn.hot{background:#FFF8E3}.conn.life{background:#EDF9F1}
-.conn h3{font-size:1.15rem}
-.conn ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
-.arabic{font-size:1.3rem;text-align:right;direction:rtl;background:#fff;border-radius:8px;padding:6px 10px;border:1px solid var(--line)}
+.where .mini{border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-family:"Times New Roman",serif;background:#fff}
+.rules{margin:0;padding-left:1.2em;display:grid;gap:7px;font-size:1.12rem}
+.rules mark{border-radius:6px;padding:0 6px;font-weight:800;font-family:var(--mono);font-size:.95em}
+.rules s{color:var(--bad)}
+mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301B}mark.m3{background:#FFF0C2;color:#8A5A00}mark.m4{background:#E6DEFF;color:#5B35C8}mark.m5{background:#D9F5E8;color:#0B6F55}
 
-/* project */
-.projects{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-@media (max-width:900px){.projects{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.proj{display:grid;gap:2px;text-align:left;border:2px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;color:var(--ink)}
-.proj b{font:800 1.02rem var(--display)}
-.proj span{font-size:.85rem;color:var(--muted)}
-.proj[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}
-.game{background:linear-gradient(135deg,#1C2550,#2B1F5C);color:#fff;border-radius:16px;padding:16px 20px;display:grid;gap:12px}
-.game .row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.game h2{font-size:1.5rem}
-.xp{font:800 1.1rem var(--mono);background:rgba(255,255,255,.12);padding:6px 14px;border-radius:999px;font-variant-numeric:tabular-nums}
-.path{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-.lvl{cursor:pointer;border-radius:12px;padding:10px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);display:grid;gap:2px;text-align:center}
-.lvl .num{font:800 1.4rem var(--display)}
-.lvl .nm{font:700 .82rem var(--body);color:#C9D2EA}
-.lvl .st{font-size:1rem;letter-spacing:2px;color:rgba(255,255,255,.3)}
-.lvl.done{background:rgba(14,138,106,.35);border-color:#3FD3A6}
-.lvl.done .st{color:#FFD24D}
-.lvl.now{border-color:#FFD24D;box-shadow:0 0 0 3px rgba(255,210,77,.35)}
-.lvl.locked{opacity:.55}
-.taskrow{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px}
-@media (max-width:900px){.taskrow{grid-template-columns:minmax(0,1fr)}}
-.question{display:grid;gap:12px;align-content:start}
-.lvmenu{display:flex;gap:6px;flex-wrap:wrap}
-.lvmenu button{font:800 .88rem var(--body);border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--ink)}
-.lvmenu button[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:#fff}
-.lvmenu button.done{border-color:var(--ok);color:var(--ok)}
-.lvmenu button.done::after{content:" ✓"}
-.lvmenu button.done[aria-pressed="true"]{color:#fff;background:var(--ok)}
-.question .lvtag{justify-self:start;background:var(--violet);color:#fff;font:800 .85rem var(--body);letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:999px}
-.question .ask{font:700 clamp(1.25rem,2.4vw,1.6rem) var(--display);line-height:1.3}
-.exrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start}
-.ex{border:1px dashed #C8D2E3;border-radius:10px;overflow:hidden;background:#fff}
-.ex .lab{font:800 .7rem var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:5px 10px;background:#F1F4FA;border-bottom:1px dashed #C8D2E3}
-.ex .shot{height:170px;overflow:hidden}
-.ex .shot > div{transform:scale(.62);transform-origin:top left;width:161.3%;pointer-events:none}
-.hintbtn{font:800 .95rem var(--body);border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;color:var(--ink);white-space:nowrap}
-.hint{background:#FFF7DB;border:1px solid #F1DE9B;border-radius:10px;padding:8px 10px;display:grid;gap:6px;user-select:none;-webkit-user-select:none;font-size:.92rem}
-.hint img{display:block;max-width:100%;height:auto;pointer-events:none;-webkit-user-drag:none}
-.sc{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
-.sc li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;align-items:start;font-weight:700}
-.sc li .box{width:24px;height:24px;border-radius:7px;border:2px solid var(--line);background:#fff;display:grid;place-items:center;color:#fff;font-size:15px;margin-top:1px}
-.sc li.met .box{background:var(--ok);border-color:var(--ok)}
-.sc li.met .box::after{content:"✓";font-weight:800}
-.sc li.met{color:var(--ok)}
-.sc li .lv{display:block;font:800 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.bench{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+/* ---------- play ---------- */
+.playbox{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.playbox{grid-template-columns:minmax(0,1fr)}}
+.round{font:800 .8rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--violet)}
+.ptask{font:700 clamp(1.25rem,2.6vw,1.6rem) var(--display);line-height:1.3;margin:6px 0 12px}
+.dots{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.dots i{width:16px;height:16px;border-radius:50%;background:#EEE8F7;border:2px solid #DDD3EE}
+.dots i.ok{background:var(--ok);border-color:var(--ok)}.dots i.miss{background:var(--gold);border-color:#D29B00}.dots i.now{border-color:var(--orange)}
+.choices{display:flex;gap:10px;flex-wrap:wrap}
+.thing{min-height:170px;border:2px dashed #D9D2E8;border-radius:12px;background:#fff;padding:14px 16px;font-family:"Times New Roman",serif;color:#000;display:grid;align-content:center;gap:6px;font-size:1.1rem}
+.thing .menu{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted #bbb;padding-bottom:4px}
+.thing .ar{font-size:1.5rem}
+
+/* ---------- mini project (like Junior Web Studio) ---------- */
+.themes{display:flex;gap:8px;flex-wrap:wrap}
+.theme{font:800 .95rem var(--body);border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;color:var(--ink);display:flex;gap:6px;align-items:center}
+.theme[aria-pressed="true"]{border-color:var(--orange);background:#FFF1E6;color:#B04A00}
+.prog{height:12px;border-radius:999px;background:#EFEAF6;overflow:hidden;margin-bottom:10px}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#21C08B,#7BE0B5);transition:width .5s}
+.must{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media (max-width:900px){.must{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.must li{list-style:none;display:grid;grid-template-columns:22px minmax(0,1fr);gap:9px;align-items:start;background:#F5F3FA;border-radius:10px;padding:10px 12px;font-weight:800;font-size:.98rem}
+.must li .bx{width:20px;height:20px;border-radius:6px;background:#DCD5EA;display:grid;place-items:center;color:#fff;font-size:13px;margin-top:2px}
+.must li.met{background:var(--ok-soft);color:#0A6E52}
+.must li.met .bx{background:var(--ok)}
+.must li.met .bx::after{content:"✓";font-weight:900}
+.must li.bonus{background:#FFF7DA}.must li.bonus.met{background:var(--ok-soft)}
+.must{margin:0;padding:0}
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
 @media (max-width:900px){.bench{grid-template-columns:minmax(0,1fr)}}
-.pane{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--card);display:grid;grid-template-rows:auto 1fr;min-width:0}
-.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 14px;font:800 .78rem var(--body);letter-spacing:.08em;text-transform:uppercase}
-.editor .bar{background:#0D1328;color:#AEB8D6}
-.output .bar{background:#E7EDF7;color:var(--muted)}
-.dots{display:flex;gap:6px}.dots i{width:11px;height:11px;border-radius:50%;background:#FF6B6B}.dots i:nth-child(2){background:#FFC93C}.dots i:nth-child(3){background:#2EC4B6}
-.codebox{display:grid;grid-template-columns:auto minmax(0,1fr);background:var(--code-bg);height:min(62vh,560px);min-height:340px}
+.codebox{display:grid;grid-template-columns:auto minmax(0,1fr);background:var(--code-bg);border-radius:14px;overflow:hidden;height:min(58vh,520px);min-height:330px}
 .gutter{background:var(--gutter);color:var(--gutter-fg);font:500 16px/1.65 var(--mono);padding:14px 10px 14px 14px;text-align:right;overflow:hidden;user-select:none;white-space:pre}
 .gutter .err{color:#FF8A80;font-weight:700}
-textarea.code{border:0;margin:0;resize:none;width:100%;height:100%;background:transparent;color:var(--code-fg);font:500 16px/1.65 var(--mono);padding:14px;tab-size:2;white-space:pre;overflow:auto;caret-color:var(--tomato)}
-iframe.out{border:0;width:100%;height:min(62vh,560px);min-height:340px;background:#fff;display:block}
-.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
-.result{margin-top:14px;border-radius:12px;padding:14px 16px;display:grid;gap:8px}
+textarea.code{border:0;margin:0;resize:none;width:100%;height:100%;background:transparent;color:var(--code-fg);font:500 16px/1.65 var(--mono);padding:14px;tab-size:2;white-space:pre;overflow:auto;caret-color:var(--orange)}
+iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min(58vh,520px);min-height:330px;background:#fff;display:block}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.hintpic{margin-top:12px;background:#FFF7DB;border:1px solid #F1DE9B;border-radius:12px;padding:10px 12px;display:grid;gap:8px;user-select:none;-webkit-user-select:none;font-weight:700}
+.hintpic img{display:block;max-width:100%;height:auto;pointer-events:none;-webkit-user-drag:none}
+.result{margin-top:12px;border-radius:12px;padding:14px 16px;display:grid;gap:8px}
 .result.bad{background:var(--bad-soft);border:2px solid #F2B8B5}
-.result.ok{background:var(--ok-soft);border:2px solid #A9DEC9}
+.result.ok{background:linear-gradient(135deg,#DDF5EC,#FFF4CC);border:2px solid #A9DEC9}
 .result h3{font-size:1.2rem}
 .result.bad h3{color:var(--bad)}.result.ok h3{color:var(--ok)}
 .errs{margin:0;padding:0;list-style:none;display:grid;gap:6px}
 .errs li{color:var(--bad);font-weight:700;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:baseline}
 .errs .ln{font:700 .8rem var(--mono);background:var(--bad);color:#fff;border-radius:6px;padding:2px 7px;white-space:nowrap;cursor:pointer}
 .errs code{background:#fff;color:var(--bad)}
-.foot{color:var(--muted);font-size:.85rem;text-align:center;padding-block:4px 20px}
 
-/* learn: bigger, easy to read */
-.learn{font-size:1.15rem}
-.learn .big{font:700 clamp(1.2rem,2.4vw,1.5rem) var(--display);margin-top:4px}
-.learn h3{font-size:1.3rem}
-.learn .mini{font-size:1.1rem}
-.learn .conn p,.learn .conn li{font-size:1.08rem}
-.lo{border-radius:14px;padding:16px 20px;background:#fff;border:2px solid var(--ink);display:grid;gap:8px}
-.lo p{font-size:1.15rem}
-.sc-box{border-color:var(--ok)}
-.sclist{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.sclist li{padding-left:1.6em;text-indent:-1.6em}
-.sclist li::before{content:"☐";color:var(--ok);font-size:1.2rem;display:inline-block;width:1.6em;text-indent:0}
-.lo{min-width:0;align-content:start}
-.k-l{color:#2F6FDB}.k-c{color:#D7263D}.k-r{color:#E07A00}.k-j{color:#0E8A6A}
-.rules{font-size:1.15rem}
-.rules mark{border-radius:6px;padding:0 6px;font-weight:800;font-family:var(--mono);font-size:.95em}
-.rules s{color:var(--bad)}
-mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301B}mark.m3{background:#FFF0C2;color:#8A5A00}mark.m4{background:#E6DEFF;color:#5B35C8}mark.m5{background:#D9F5E8;color:#0B6F55}
-/* compact game level on the right */
-.gamebox{display:grid;gap:8px;background:linear-gradient(135deg,#1C2550,#2B1F5C);color:#fff;border-radius:12px;padding:10px 12px;margin-top:10px}
-.gamebox .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.gamebox h2{font-size:1.02rem}
-.gamebox .xp{font-size:.85rem;padding:3px 10px}
-.gamebox .path{gap:5px}
-.gamebox .lvl{padding:4px 2px;border-radius:8px}
-.gamebox .lvl .num{font-size:1rem}
-.gamebox .lvl .nm{font-size:.62rem}
-.gamebox .lvl .st{font-size:.62rem;letter-spacing:1px}
-@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
-.lvl.justdone{animation:pop .5s}
-/* ===== Game theme for Grade 6 ===== */
-body{background:#EEF3FF radial-gradient(circle at 8% 0%,#FFE0D4 0,transparent 32%),radial-gradient(circle at 96% 8%,#D9E8FF 0,transparent 34%),radial-gradient(circle at 50% 100%,#DFFBEA 0,transparent 40%);background-attachment:fixed}
-body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(#C3CFEA 1.2px,transparent 1.3px);background-size:24px 24px;opacity:.55}
-header.top{background:linear-gradient(90deg,#1B1F4B,#3A1C71 60%,#5B2A86);box-shadow:0 4px 0 #FFC93C}
-.brand .rk{font-size:1.4rem}
-nav.tabs button{transition:background .15s,color .15s}
-nav.tabs button:hover{background:rgba(255,255,255,.12);color:#fff}
-nav.tabs button[aria-selected="true"]{background:#FFC93C;color:#1B1F4B;box-shadow:0 3px 0 #C99A00}
-nav.tabs button[aria-selected="true"] .n{background:#FF6347}
-.card{border:2px solid #E1E8F6;border-radius:18px;box-shadow:0 6px 0 #E1E8F6}
-.title{background:linear-gradient(90deg,#FF6347,#F59E0B 35%,#10B5A6 65%,#6C4BD8);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:4px;width:fit-content;max-width:100%}
-.eyebrow{font-size:.85rem}
-.btn{box-shadow:0 4px 0 #0A0F24;transition:transform .08s}
-.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #0A0F24}
-.btn.big{background:linear-gradient(180deg,#FF7D60,#FF5733)}
-.btn.ghost{box-shadow:0 4px 0 var(--line)}
-@keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-10px) rotate(6deg)}}
-.hero-ico{font-size:4rem;line-height:1;animation:float 3s ease-in-out infinite}
-.start .title{font-size:clamp(2.4rem,6.5vw,3.9rem)}
-.motto{color:#3A4466}
-.perks{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.perks span{font:800 1.05rem var(--body);padding:8px 16px;border-radius:999px;background:#fff;border:2px solid currentColor;box-shadow:0 4px 0 currentColor}
-.perks .p1{color:#E0482D}.perks .p2{color:#1D6FD1}.perks .p3{color:#B88400}
-.start .card{border-color:#FFC93C;box-shadow:0 8px 0 #FFC93C}
-.grid3 > .q:nth-child(3n+1){--acc:#FF6347}.grid3 > .q:nth-child(3n+2){--acc:#10A99B}.grid3 > .q:nth-child(3n){--acc:#6C4BD8}
-.q{border-top:7px solid var(--acc)}
-.q .eyebrow{color:var(--acc)}
-.opt{display:flex;gap:12px;align-items:center;box-shadow:0 4px 0 var(--line);transition:transform .1s,border-color .1s}
-.opt:hover{transform:translateY(-2px);border-color:var(--acc)}
-.opt .ltr{flex:none;width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:var(--acc);color:#fff;font:800 1.05rem var(--display)}
-.opt.right .ltr{background:var(--ok)}.opt.wrong .ltr{background:var(--bad)}
-.lo{box-shadow:0 6px 0 var(--ink)}
-.sc-box{box-shadow:0 6px 0 var(--ok)}
-.alignbtns button[data-v="left"]{--c:#2F6FDB}.alignbtns button[data-v="center"]{--c:#D7263D}.alignbtns button[data-v="right"]{--c:#E07A00}.alignbtns button[data-v="justify"]{--c:#0E8A6A}
-.alignbtns button{border-color:var(--c);color:var(--c);box-shadow:0 4px 0 var(--c);font-size:1.1rem;padding:10px 18px}
-.alignbtns button[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
-.stage{border-color:#C9D5EE;box-shadow:0 6px 0 #E1E8F6}
-.conn{border-width:2px;box-shadow:0 5px 0 rgba(22,32,59,.08)}
-.proj{grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:center;border:0;border-radius:16px;padding:14px;color:#fff;background:linear-gradient(135deg,var(--p1),var(--p2));box-shadow:0 5px 0 rgba(0,0,0,.22);transition:transform .12s}
-.proj .ic{grid-row:1/3;font-size:2.1rem;line-height:1}
-.proj b{font-size:1.08rem}
-.proj span:not(.ic){color:rgba(255,255,255,.92);font-weight:700}
-.proj:hover{transform:translateY(-3px)}
-.proj[aria-pressed="true"]{box-shadow:0 0 0 4px #FFC93C,0 5px 0 rgba(0,0,0,.22);transform:translateY(-3px)}
-.gamebox{background:linear-gradient(135deg,#1B1F4B,#5B2A86);box-shadow:0 5px 0 #FFC93C}
-#gXP{background:#FFC93C;color:#1B1F4B}
-@keyframes xp{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
-#gXP.bump{animation:xp .6s}
-.question{border-color:#D9CFFB;box-shadow:0 6px 0 #D9CFFB}
-.result.ok{background:linear-gradient(135deg,#DDF5EC,#FFF4CC)}
-#summary{border-color:#FFC93C;box-shadow:0 6px 0 #FFC93C;text-align:center}
-#summary h3{font-size:1.5rem}
+/* ---------- HOT, AE connect ---------- */
+.hotq{font:700 clamp(1.3rem,2.8vw,1.75rem) var(--display);line-height:1.3}
+.menuc{border:2px dashed #D9D2E8;border-radius:12px;background:#fff;padding:12px 16px;font-family:"Times New Roman",serif;color:#000;font-size:1.15rem;display:grid;gap:4px}
+.menuc h3{font-family:"Times New Roman",serif;text-align:center;font-size:1.45rem}
+.menuc .r{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted #bbb}
+.menuc.cent .r{flex-direction:column;align-items:center;gap:0}
+.tps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:700px){.tps{grid-template-columns:minmax(0,1fr)}}
+.tps div{border-radius:12px;padding:12px 14px;font-weight:800;background:#EEF4FF}
+.tps div:nth-child(2){background:#FFF1E6}.tps div:nth-child(3){background:#E9F9F1}
+.tps b{display:block;font:800 1.15rem var(--display)}
+.conn{border-radius:16px;padding:16px 18px;display:grid;gap:8px;border:2px solid var(--line);font-size:1.08rem;align-content:start}
+.conn.uae{background:#FFF0F0}.conn.cross{background:#EEF4FF}.conn.life{background:#EDF9F1}.conn.moral{background:#FFF8E3}.conn.sdg{background:#F3EEFF}
+.conn h3{font-size:1.2rem}
+.conn ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
+.arabic{font-size:1.4rem;text-align:right;direction:rtl;background:#fff;border-radius:8px;padding:6px 10px;border:1px solid var(--line)}
+
+/* ---------- trophies ---------- */
+.trophies{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.tro{border-radius:16px;padding:16px;text-align:center;background:#fff;border:2px dashed #D9D2E8;display:grid;gap:4px;opacity:.6;filter:grayscale(1)}
+.tro .ic{font-size:2.6rem;line-height:1}
+.tro b{font:800 1.12rem var(--display)}
+.tro span{color:var(--muted);font-size:.92rem;font-weight:700}
+.tro.got{opacity:1;filter:none;border:2px solid var(--gold);box-shadow:0 5px 0 var(--gold);background:#FFFBEA}
+.scoreboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.scoreboard div{background:var(--navy);color:#fff;border-radius:12px;padding:12px;text-align:center}
+.scoreboard b{display:block;font:800 1.6rem var(--display);color:var(--gold)}
+.foot{color:var(--muted);font-size:.85rem;text-align:center;padding-block:4px 20px}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.3)}100%{transform:scale(1)}}
+.bump{animation:pop .6s}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -260,26 +235,27 @@ nav.tabs button[aria-selected="true"] .n{background:#FF6347}
 
 <header class="top">
   <div class="wrap">
-    <div class="brand"><span class="flag"><i></i><i></i><i></i><i></i></span>Web Design Quest <span class="who" id="whoTag"></span></div>
-    <nav class="tabs" role="tablist" aria-label="Lesson sections">
-      <button role="tab" data-p="start" aria-selected="true"><span class="n">1</span>Start</button>
-      <button role="tab" data-p="quiz" aria-selected="false"><span class="n">2</span>Starter Quiz</button>
-      <button role="tab" data-p="learn" aria-selected="false"><span class="n">3</span>Learn</button>
-      <button role="tab" data-p="proj" aria-selected="false"><span class="n">4</span>Project</button>
-      <button role="tab" data-p="exit" aria-selected="false"><span class="n">5</span>Exit Ticket</button>
-    </nav>
+    <div class="hrow">
+      <div class="brand"><span aria-hidden="true">🧑‍💻</span>Web Design <b>Quest</b></div>
+      <span class="mission">🎯 Text-Align Mission</span>
+      <div class="xpbar" aria-hidden="true"><i id="xpFill"></i></div>
+      <span class="xpnum" id="xpNum">⚡ 0 XP</span>
+      <span class="rank" id="rankTag">🥉 Rookie</span>
+      <span class="who" id="whoTag"></span>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Lesson sections" id="tabs"></nav>
   </div>
 </header>
 
 <main class="wrap">
 
-<!-- ============ 1 START ============ -->
-<section class="panel" id="p-start">
-  <div class="start">
+<!-- 1 HOME -->
+<section class="panel" id="p-home">
+  <div class="home">
     <div class="hero-ico" aria-hidden="true">🚀</div>
-    <h1 class="title">Ready, Web Designers?</h1>
+    <h1>Ready, Web Designers?</h1>
     <p class="motto">Every great website starts with one line of code. Let's build something amazing today!</p>
-    <div class="perks"><span class="p1">🎮 5 levels</span><span class="p2">🏗️ 4 projects</span><span class="p3">⭐ 500 XP</span></div>
+    <div class="perks"><span class="p1">🎮 Play</span><span class="p2">🏗️ Mini Project</span><span class="p3">🏆 Trophies</span></div>
     <div class="card">
       <div class="field"><label for="sname">Your full name</label><input id="sname" maxlength="40" placeholder="Type your name" autocomplete="off"></div>
       <div class="field"><label for="scls">Your class</label><select id="scls"><option value="">Select your class</option></select></div>
@@ -289,26 +265,26 @@ nav.tabs button[aria-selected="true"] .n{background:#FF6347}
   </div>
 </section>
 
-<!-- ============ 2 STARTER QUIZ ============ -->
-<section class="panel" id="p-quiz" hidden>
-  <div><span class="eyebrow">⚡ Starter · what do you remember?</span><h1 class="title">Starter Quiz</h1>
-  <p class="lead">Three quick questions from the last lesson. 1 point for each question you answer correctly on the first try.</p></div>
-  <div class="grid3" id="quizBox"></div>
-  <div class="msg" id="quizMsg"></div>
-  <div><button class="btn" data-go="learn">Next: Learn the new style →</button></div>
+<!-- 2 WARM-UP -->
+<section class="panel" id="p-warm" hidden>
+  <div class="shead"><span class="snum">2</span><div><h1>🔥 Warm-up</h1><div class="tags"><span class="tag">Starter · what do you remember?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
+  <p class="lead">Three quick questions from the last lesson. You get XP if you are right on the first try.</p>
+  <div class="grid3" id="warmBox"></div>
+  <div class="msg" id="warmMsg"></div>
 </section>
 
-<!-- ============ 3 LEARN ============ -->
-<section class="panel learn" id="p-learn" hidden>
+<!-- 3 GOALS -->
+<section class="panel" id="p-goals" hidden>
+  <div class="shead"><span class="snum">3</span><div><h1>🎯 Goals</h1><div class="tags"><span class="tag">Learning objective · success criteria</span></div></div></div>
   <div class="grid2">
-    <div class="lo">
-      <span class="eyebrow">Learning Objective</span>
+    <div class="goal lo">
+      <h2>Learning Objective</h2>
       <p>I will be able to <b>apply</b> the <code>text-align</code> property to align text, and <b>design</b> a web page using headings, paragraphs and colours.</p>
     </div>
-    <div class="lo sc-box">
-      <span class="eyebrow">Success Criteria · I can:</span>
+    <div class="goal sc">
+      <h2>Success Criteria · I can:</h2>
       <ul class="sclist">
-        <li><b>Identify</b> the 4 values: left, center, right, justify</li>
+        <li><b>Identify</b> the four values: left, center, right, justify</li>
         <li><b>Apply</b> <code>text-align:center</code> to a heading</li>
         <li><b>Combine</b> text-align with color in one style</li>
         <li><b>Create</b> a project page with <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;b&gt;</code></li>
@@ -316,17 +292,26 @@ nav.tabs button[aria-selected="true"] .n{background:#FF6347}
       </ul>
     </div>
   </div>
+</section>
 
-  <div><span class="eyebrow">✨ New today</span><h1 class="title">text-align</h1>
-  <p class="big">Moves your text to the <b class="k-l">left</b>, <b class="k-c">center</b>, <b class="k-r">right</b>, or makes both edges straight with <b class="k-j">justify</b>.</p></div>
+<!-- 4 LEARN -->
+<section class="panel learn" id="p-learn" hidden>
+  <div class="shead"><span class="snum">4</span><div><h1>📘 Learn: text-align</h1><div class="tags"><span class="tag">New today</span></div></div></div>
+  <p class="big">Moves your text to the <b class="k-l">left</b>, <b class="k-c">center</b>, <b class="k-r">right</b>, or makes both edges straight with <b class="k-j">justify</b>.</p>
 
-  <div class="formula"><span class="t">&lt;h1 </span><span class="a">style</span>=<span class="v">"text-align:center;"</span><span class="t">&gt;</span>Happy UAE National Day!<span class="t">&lt;/h1&gt;</span></div>
+  <div class="codeout">
+    <div><span class="lab">💻 Code</span>
+      <div class="formula"><span class="t">&lt;h1 </span><span class="a">style</span>=<span class="v">"text-align:center;"</span><span class="t">&gt;</span>Happy UAE National Day!<span class="t">&lt;/h1&gt;</span></div>
+      <p class="arrow" style="margin-top:8px">The heading moves to the middle of the page →</p>
+    </div>
+    <div class="outbox"><span class="lab">🖥️ Output</span><div class="page"><h1 style="text-align:center">Happy UAE National Day!</h1></div></div>
+  </div>
 
   <div class="demo">
-    <div class="card" style="display:grid;gap:12px">
+    <div class="card" style="display:grid;gap:12px;align-content:start">
       <h3>Try it: press a value</h3>
       <div class="alignbtns" id="alignBtns"></div>
-      <div class="formula" id="demoCode" style="font-size:1.05rem"></div>
+      <div class="formula" id="demoCode" style="font-size:1.02rem"></div>
     </div>
     <div class="stage" id="demoStage">
       <h2>Proud of the UAE</h2>
@@ -354,94 +339,105 @@ nav.tabs button[aria-selected="true"] .n{background:#FF6347}
       </ol>
     </div>
   </div>
-
-  <div class="grid3">
-    <div class="conn uae">
-      <h3>UAE Connect</h3>
-      <p>Arabic is written right to left, so Arabic pages are <b>right-aligned</b>.</p>
-      <div class="arabic" lang="ar">عيد الاتحاد الإماراتي</div>
-    </div>
-    <div class="conn cross">
-      <h3>Cross-curricular</h3>
-      <ul><li><b>Arabic:</b> right to left</li><li><b>English:</b> newspaper columns</li><li><b>Art &amp; Maths:</b> balance and symmetry</li></ul>
-    </div>
-    <div class="conn life">
-      <h3>Real life</h3>
-      <ul><li>Invitations → center</li><li>Menu prices → right</li><li>Gulf News articles → justify</li></ul>
-    </div>
-  </div>
-  <div><button class="btn big" data-go="proj">Start the Project →</button></div>
 </section>
 
-<!-- ============ 4 PROJECT ============ -->
-<section class="panel" id="p-proj" hidden>
-  <div>
-    <span class="eyebrow">🎮 Main activity · choose any project</span>
-    <div class="projects" id="projects" role="group" aria-label="Projects" style="margin-top:8px"></div>
-  </div>
-
-
-  <div class="taskrow">
-    <div class="card question">
-      <div class="lvmenu" id="lvMenu" role="group" aria-label="Choose a level"></div>
-      <span class="lvtag" id="qTag">Level 1 of 5</span>
-      <p class="ask" id="qAsk"></p>
-      <div class="exrow">
-        <div class="ex"><div class="lab">Example output for this level</div><div class="shot"><div id="qShot"></div></div></div>
-        <button class="hintbtn" id="hintBtn">Show hint</button>
-      </div>
-      <div class="hint" id="hintBox" hidden></div>
-    </div>
+<!-- 5 PLAY -->
+<section class="panel" id="p-play" hidden>
+  <div class="shead"><span class="snum">5</span><div><h1>🎮 Play: Align It!</h1><div class="tags"><span class="tag">Quick game · 8 rounds</span>Right on the first try = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="playbox">
     <div class="card">
-      <div class="gamebox">
-        <div class="row"><h2 id="gTitle">Level 1 · Rookie</h2><span class="xp" id="gXP">0 / 500 XP</span></div>
-        <div class="path" id="path"></div>
-      </div>
-      <span class="eyebrow" style="display:block;margin-top:12px">Success criteria · I can…</span>
-      <ul class="sc" id="sc"></ul>
+      <span class="round" id="pRound">Round 1 of 8</span>
+      <p class="ptask" id="pTask"></p>
+      <div class="choices" id="pChoices"></div>
+      <div class="msg" id="pMsg" style="margin-top:12px"></div>
+      <div class="actions"><button class="btn big" id="pNext" hidden>Next round →</button></div>
+      <div class="dots" id="pDots"></div>
     </div>
+    <div><span class="lab">🖥️ How it looks</span><div class="thing" id="pThing"></div></div>
   </div>
+</section>
 
+<!-- 6 MINI PROJECT -->
+<section class="panel" id="p-mini" hidden>
+  <div class="shead"><span class="snum">6</span><div><h1>🏗️ Mini Project: My Aligned Web Page</h1><div class="tags"><span class="tag">Main activity · mini project</span>Each tick = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="card">
+    <div class="step"><span class="k">1</span>Pick your theme</div>
+    <div class="themes" id="themes" role="group" aria-label="Themes"></div>
+    <div class="step" style="margin-top:16px"><span class="k">2</span>Build it — your page must have:</div>
+    <div class="prog" aria-hidden="true"><i id="progFill"></i></div>
+    <ul class="must" id="must"></ul>
+  </div>
   <div class="bench">
     <div>
-      <div class="pane editor">
-        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span id="fileName">project.html · type your code here</span></div>
-        <div class="codebox">
-          <div class="gutter" id="gutter" aria-hidden="true">1</div>
-          <textarea class="code" id="editor" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="HTML code editor"></textarea>
-        </div>
+      <span class="lab">💻 Your code</span>
+      <div class="codebox">
+        <div class="gutter" id="gutter" aria-hidden="true">1</div>
+        <textarea class="code" id="editor" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="HTML code editor"></textarea>
       </div>
       <div class="actions">
-        <button class="btn big" id="checkBtn">Check my code</button>
-        <button class="btn ghost" id="resetBtn">Start again</button>
-        <span class="lead" style="font-size:.92rem">Press <b>Check my code</b> to see your page and level up.</span>
+        <button class="btn big" id="checkBtn">▶ Check my code</button>
+        <button class="btn hint" id="hintBtn">💡 Show hint</button>
+        <button class="btn ghost" id="resetBtn">↺ Start again</button>
       </div>
+      <div class="hintpic" id="hintBox" hidden></div>
       <div class="result" id="result" hidden></div>
     </div>
-    <div class="pane output">
-      <div class="bar"><span>Output · your web page</span><span>shows after Check my code</span></div>
+    <div>
+      <span class="lab">🖥️ Your web page</span>
       <iframe class="out" id="out" title="Your web page" sandbox=""></iframe>
     </div>
   </div>
-  <div><button class="btn" data-go="exit">Finished? Go to the Exit Ticket →</button></div>
 </section>
 
-<!-- ============ 5 EXIT TICKET ============ -->
-<section class="panel" id="p-exit" hidden>
-  <div><span class="eyebrow">🎯 Plenary</span><h1 class="title">Exit Ticket</h1>
-  <p class="lead">Three questions about today's lesson. 1 point for each question you answer correctly on the first try.</p></div>
+<!-- 7 PLENARY -->
+<section class="panel" id="p-plen" hidden>
+  <div class="shead"><span class="snum">7</span><div><h1>🎯 Plenary: Exit Ticket</h1><div class="tags"><span class="tag">What did you learn today?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
+  <p class="lead">Three questions about today's lesson. You get XP if you are right on the first try.</p>
   <div class="grid3" id="exitBox"></div>
   <div class="msg" id="exitMsg"></div>
-  <div class="card" id="summary" hidden></div>
-  <div class="conn hot" id="hotBox" hidden>
-    <h3>Think deeper (HOT)</h3>
-    <ul>
-      <li>Why do newspapers use <code>justify</code> for articles but <code>center</code> for headlines?</li>
-      <li><code>align="center"</code> still works. Why did HTML5 move alignment into <code>style</code>?</li>
-      <li>How would the same page look different in Arabic and in English?</li>
-    </ul>
+</section>
+
+<!-- 8 HOT -->
+<section class="panel" id="p-hot" hidden>
+  <div class="shead"><span class="snum">8</span><div><h1>🧠 HOT: Think Deeper</h1><div class="tags"><span class="tag">Higher-order thinking</span></div></div></div>
+  <div class="grid2">
+    <div class="card" style="display:grid;gap:14px;align-content:start">
+      <p class="hotq">On a restaurant menu, the food names are on the left and the prices are on the right. Why are prices right-aligned? What would happen if they were centred?</p>
+      <div class="tps"><div><b>🤔 Think</b>on your own</div><div><b>👥 Pair</b>with your partner</div><div><b>🗣️ Share</b>with the class</div></div>
+    </div>
+    <div style="display:grid;gap:10px;align-content:start">
+      <div class="alignbtns" id="menuBtns"><button data-m="0" aria-pressed="true" style="--c:#E07A00">Prices right</button><button data-m="1" aria-pressed="false" style="--c:#D7263D">Prices centred</button></div>
+      <div class="menuc" id="menuCard">
+        <h3>Canteen Menu</h3>
+        <div class="r"><span>Fruit Salad</span><span>10 AED</span></div>
+        <div class="r"><span>Chicken Wrap</span><span>12 AED</span></div>
+        <div class="r"><span>Fresh Juice</span><span>8 AED</span></div>
+        <div class="r"><span>Veg Sandwich</span><span>9 AED</span></div>
+      </div>
+    </div>
   </div>
 </section>
+
+<!-- 9 AE CONNECT -->
+<section class="panel" id="p-uae" hidden>
+  <div class="shead"><span class="snum">9</span><div><h1>🇦🇪 AE Connect</h1><div class="tags"><span class="tag">UAE · cross-curricular · real life</span></div></div></div>
+  <div class="grid3">
+    <div class="conn uae"><h3>🇦🇪 UAE Connect</h3><p>Arabic is written right to left, so Arabic web pages such as <b>u.ae</b> are <b>right-aligned</b>.</p><div class="arabic" lang="ar">عيد الاتحاد الإماراتي</div></div>
+    <div class="conn cross"><h3>📚 Cross-curricular</h3><ul><li><b>Arabic:</b> right to left</li><li><b>English:</b> newspaper columns use justify</li><li><b>Art &amp; Maths:</b> balance and symmetry (center)</li></ul></div>
+    <div class="conn life"><h3>🌍 Real life</h3><ul><li>Invitations → center</li><li>Menu prices → right</li><li>Gulf News articles → justify</li></ul></div>
+    <div class="conn moral"><h3>💛 Moral values</h3><ul><li><b>Honesty:</b> type your own code</li><li><b>Perseverance:</b> fix errors and keep going</li></ul></div>
+    <div class="conn sdg"><h3>🎯 SDG</h3><ul><li>SDG 3: Good Health (Healthy Food Menu)</li><li>SDG 4: Quality Education</li><li>SDG 9: Industry, Innovation &amp; Infrastructure</li></ul></div>
+  </div>
+</section>
+
+<!-- 10 TROPHIES -->
+<section class="panel" id="p-tro" hidden>
+  <div class="shead"><span class="snum">10</span><div><h1>🏆 Trophies</h1><div class="tags"><span class="tag">Your results today</span></div></div></div>
+  <div class="scoreboard" id="board"></div>
+  <div class="trophies" id="troBox"></div>
+</section>
+
+<div class="pager"><button class="prev" id="prevBtn"></button><button class="next" id="nextBtn"></button></div>
 </main>
 <p class="foot">Teacher-designed for Grade 6 · Sharjah Indian School, Juwaiza</p>
 
@@ -451,68 +447,114 @@ const SCORE_URL = '';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const st = { sid:'', seq:0, name:'', div:'', startQ:['','',''], start:0, exitQ:['','',''], exit:0, proj:0, levels:{} , t0:0 };
+const sum = a => a.reduce((x,y)=>x+y,0);
+const st = { sid:'', seq:0, name:'', div:'', t0:0, warmQ:['','',''], exitQ:['','',''], play:[], theme:0, ticks:{} };
 
-/* ---------- tabs ---------- */
-function showTab(p){
-  document.querySelectorAll('nav.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.p === p)));
-  ['start','quiz','learn','proj','exit'].forEach(k => $('p-' + k).hidden = k !== p);
+/* ---------- sections ---------- */
+const SECS = [['home','🏠 Home'],['warm','🔥 Warm-up'],['goals','🎯 Goals'],['learn','📘 Learn'],['play','🎮 Play'],['mini','🏗️ Mini Project'],['plen','📝 Plenary'],['hot','🧠 HOT'],['uae','🇦🇪 AE Connect'],['tro','🏆 Trophies']];
+let cur = 0;
+$('tabs').innerHTML = SECS.map(([k,n],i) => `<button role="tab" data-i="${i}" id="tab-${k}" aria-selected="${i===0}">${n}</button>`).join('');
+function showSec(i){
+  cur = i;
+  SECS.forEach(([k],j) => { $('p-'+k).hidden = j !== i; $('tab-'+k).setAttribute('aria-selected', String(j === i)); });
+  $('prevBtn').hidden = i === 0; $('nextBtn').hidden = i === SECS.length - 1;
+  if (i > 0) $('prevBtn').textContent = '◀ ' + SECS[i-1][1];
+  if (i < SECS.length - 1) $('nextBtn').textContent = SECS[i+1][1] + ' ▶';
+  if (['learn','goals','hot','uae'].includes(SECS[i][0]) && st.sid) markDone(SECS[i][0]);
+  if (SECS[i][0] === 'tro') drawTrophies();
+  $('tab-'+SECS[i][0]).scrollIntoView({block:'nearest', inline:'nearest'});
   window.scrollTo({top:0});
 }
-document.querySelectorAll('nav.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.p));
-document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => showTab(b.dataset.go));
-const markTab = p => document.querySelector(`nav.tabs button[data-p="${p}"]`).classList.add('done');
+const idx = k => SECS.findIndex(s => s[0] === k);
+$('tabs').addEventListener('click', e => { const b = e.target.closest('button[data-i]'); if (b) showSec(+b.dataset.i); });
+$('prevBtn').onclick = () => showSec(cur - 1);
+$('nextBtn').onclick = () => showSec(cur + 1);
+const seen = new Set();
+function markDone(k){ seen.add(k); $('tab-'+k).classList.add('done'); }
 
-/* ---------- start: name, then division ---------- */
+/* ---------- XP + rank ---------- */
+const MAX_XP = 220;
+const RANKS = [[0,'🥉 Rookie'],[50,'🧭 Explorer'],[100,'🧱 Builder'],[150,'🎨 Designer'],[200,'👑 Master']];
+const warmPts = () => st.warmQ.filter(v => v === 1).length, exitPts = () => st.exitQ.filter(v => v === 1).length;
+const playPts = () => st.play.filter(v => v === 1).length;
+const tickArr = i => st.ticks[i] || (st.ticks[i] = [0,0,0,0,0,0,0,0]);
+const bestTheme = () => { let b = st.theme; THEMES.forEach((_,i) => { if (sum(tickArr(i)) > sum(tickArr(b))) b = i; }); return b; };
+const xp = () => (warmPts() + playPts() + sum(tickArr(bestTheme())) + exitPts()) * 10;
+const rank = () => RANKS.filter(r => xp() >= r[0]).pop()[1];
+let lastXP = 0;
+function drawXP(){
+  const x = xp();
+  $('xpFill').style.width = Math.min(100, x / MAX_XP * 100) + '%';
+  $('xpNum').textContent = `⚡ ${x} XP`; $('rankTag').textContent = rank();
+  if (x > lastXP){ $('xpNum').classList.remove('bump'); void $('xpNum').offsetWidth; $('xpNum').classList.add('bump'); }
+  lastXP = x;
+}
+
+/* ---------- celebration ---------- */
+function confetti(n){
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = document.createElement('canvas'); c.className = 'confetti'; document.body.appendChild(c);
+  const x = c.getContext('2d'), W = c.width = innerWidth, H = c.height = innerHeight;
+  const cols = ['#FF7A1A','#FFC531','#2EC4B6','#6C4BD8','#00843D','#2F6FDB'];
+  const ps = Array.from({length:n}, () => ({ x:W/2 + (Math.random()-.5)*W*.5, y:H*.4, vx:(Math.random()-.5)*16, vy:-Math.random()*15-5, s:7+Math.random()*7, r:Math.random()*6, vr:(Math.random()-.5)*.35, c:cols[Math.random()*cols.length|0] }));
+  let f = 0;
+  (function tick(){
+    x.clearRect(0,0,W,H);
+    ps.forEach(p => { p.vy += .42; p.x += p.vx; p.y += p.vy; p.r += p.vr; x.save(); x.translate(p.x,p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2); x.restore(); });
+    if (++f < 120) requestAnimationFrame(tick); else c.remove();
+  })();
+}
+
+/* ---------- home: name, then class ---------- */
 'ABCDEFGHIJKLMNOPQ'.split('').forEach(d => { const o = document.createElement('option'); o.value = o.textContent = 'VI ' + d; $('scls').appendChild(o); });
 $('goBtn').onclick = () => {
-  if (st.sid){ showTab('quiz'); return; }
+  if (st.sid){ showSec(1); return; }
   const n = $('sname').value.trim();
   if (n.length < 2){ $('startMsg').className = 'msg bad'; $('startMsg').textContent = 'Type your full name first.'; return; }
   st.div = $('scls').value;
   if (!st.div){ $('startMsg').className = 'msg bad'; $('startMsg').textContent = 'Now select your class.'; return; }
   st.name = n; st.sid = Date.now().toString(36) + Math.random().toString(36).slice(2, 8); st.t0 = Date.now();
   $('sname').disabled = true; $('scls').disabled = true;
-  $('whoTag').textContent = `· ${st.name} (${st.div})`;
+  $('whoTag').textContent = `${st.name} · ${st.div}`;
   $('startMsg').className = 'msg ok'; $('startMsg').textContent = `Welcome, ${st.name}! Your work is saved for ${st.div}.`;
-  markTab('start'); save('Start'); showTab('quiz');
+  markDone('home'); save('Start'); showSec(1);
 };
 function needId(show){
   if (st.sid) return true;
-  show('Type your name and select your class in the Start tab first.');
-  setTimeout(() => showTab('start'), 1300);
+  show('Type your name and select your class in Home first.');
+  setTimeout(() => showSec(0), 1300);
   return false;
 }
 
-/* ---------- quizzes ---------- */
-function makeQuiz(box, doneMsg, items, marks, key, label, tab){
-  const pre = key + 'q';
-  $(box).innerHTML = items.map((e,i) => `<div class="card q"><span class="eyebrow">Question ${i+1}</span><h3>${e.q}</h3><div class="opts">${e.o.map((o,j)=>`<button class="opt" data-q="${i}" data-j="${j}"><span class="ltr">${'ABC'[j]}</span><code>${esc(o)}</code></button>`).join('')}</div><div class="msg" id="${pre}${i}"></div></div>`).join('');
+/* ---------- quizzes (warm-up + exit ticket) ---------- */
+function makeQuiz(box, doneMsg, items, marks, label, tabKey){
+  $(box).innerHTML = items.map((e,i) => `<div class="card q"><span class="qn">Question ${i+1}</span><h3>${e.q}</h3><div class="opts">${e.o.map((o,j)=>`<button class="opt" data-q="${i}" data-j="${j}"><span class="ltr">${'ABC'[j]}</span><code>${esc(o)}</code></button>`).join('')}</div><div class="msg" id="${box}${i}"></div></div>`).join('');
   const done = new Set(), tried = new Set();
   $(box).addEventListener('click', ev => {
     const b = ev.target.closest('.opt'); if (!b) return;
-    const i = +b.dataset.q, j = +b.dataset.j, E = items[i], m = $(pre + i);
+    const i = +b.dataset.q, j = +b.dataset.j, E = items[i], m = $(box + i);
     if (done.has(i)) return;
     if (!needId(t => { m.className = 'msg bad'; m.textContent = t; })) return;
     const first = !tried.has(i); tried.add(i);
     if (j === E.a){
-      b.classList.add('right'); done.add(i); marks[i] = first ? 1 : 0; if (first) st[key]++;
-      m.className = 'msg ok'; m.textContent = (first ? 'Correct! +1 point. ' : 'Correct! ') + E.why;
-      if (done.size === items.length){ confetti(90); $(doneMsg).className = 'msg ok'; $(doneMsg).textContent = `🎉 ${label} done: ${st[key]} / ${items.length} points.`; markTab(tab); save(label); if (key === 'exit') showSummary(); }
+      b.classList.add('right'); done.add(i); marks[i] = first ? 1 : 0;
+      m.className = 'msg ok'; m.textContent = (first ? 'Correct! +10 XP. ' : 'Correct! ') + E.why;
+      drawXP();
+      if (done.size === items.length){ confetti(90); $(doneMsg).className = 'msg ok'; $(doneMsg).textContent = `🎉 ${label} done: ${marks.filter(v => v === 1).length} / ${items.length} correct. Press the orange button below to go on.`; markDone(tabKey); save(label); }
       else save(`${label} Q${i+1}`);
-    } else { b.classList.add('wrong'); m.className = 'msg bad'; m.textContent = 'Not quite. Try again (no point for this question now).'; }
+    } else { b.classList.add('wrong'); m.className = 'msg bad'; m.textContent = 'Not quite. Try again (no XP for this question now).'; }
   });
 }
-makeQuiz('quizBox', 'quizMsg', [
+makeQuiz('warmBox', 'warmMsg', [
   {q:'Which code makes the text red?', o:['<p style="color=red">','<p style="color:red;">','<p colour="red">'], a:1, why:'style, then property:value inside double quotes.'},
   {q:'Where do we write the style attribute?', o:['Inside the start tag','Inside the end tag','After the end tag'], a:0, why:'Attributes always go inside the start tag.'},
   {q:'How do we put two properties in one style?', o:['style="color:white background-color:red"','style="color:white; background-color:red;"','style="color:white, background-color:red"'], a:1, why:'A semicolon separates the two properties.'}
-], st.startQ, 'start', 'Starter Quiz', 'quiz');
+], st.warmQ, 'Warm-up', 'warm');
 makeQuiz('exitBox', 'exitMsg', [
   {q:'Which value puts text in the middle of the line?', o:['middle','centre','center'], a:2, why:'CSS uses the spelling center.'},
   {q:'Which syntax is correct?', o:['<p align="right">','<p style="text-align:right;">','<p style="text align:right;">'], a:1, why:'text-align goes inside style, with a hyphen.'},
   {q:'Which alignment makes both edges of a long paragraph straight?', o:['left','justify','right'], a:1, why:'justify stretches the lines so both edges are straight, like a newspaper.'}
-], st.exitQ, 'exit', 'Exit Ticket', 'exit');
+], st.exitQ, 'Exit Ticket', 'plen');
 
 /* ---------- Learn: live demo ---------- */
 const AL = ['left','center','right','justify'];
@@ -525,133 +567,102 @@ function demo(v){
 $('alignBtns').addEventListener('click', e => { const b = e.target.closest('button'); if (b) demo(b.dataset.v); });
 demo('center');
 
-/* ---------- Project: 4 choices × 5 levels (beginner → challenging) ---------- */
-const LEVELS = ['Rookie','Explorer','Builder','Designer','Master'];
+/* ---------- Play: Align It! ---------- */
+const ROUNDS = [
+  {t:'The title of a National Day invitation', a:'center', html:'<h2 style="margin:0;font-size:1.6rem">You Are Invited!</h2>', why:'Titles and invitations look best in the center.'},
+  {t:'The price on a canteen menu', a:'right', html:'<div>Fruit Salad</div><div style="font-weight:bold">10 AED</div>', why:'Prices go on the right so they line up neatly.'},
+  {t:'A long newspaper article', a:'justify', html:'<p style="margin:0">The Sharjah International Book Fair opened today with thousands of visitors. Students from many schools came to meet authors, buy new books and join reading workshops for young people.</p>', why:'Newspapers use justify so both edges are straight.'},
+  {t:'A sentence written in Arabic', a:'right', html:'<div class="ar" lang="ar" dir="rtl">مرحبا بكم في الشارقة</div>', why:'Arabic is written right to left, so it is right-aligned.'},
+  {t:'The date at the top of a school notice', a:'right', html:'<div>Date: 5 November 2026</div>', why:'Dates are usually placed on the right.'},
+  {t:'A normal story paragraph in English', a:'left', html:'<p style="margin:0">Ali opened his laptop and started to build his first web page. He was excited to see his heading on the screen.</p>', why:'Normal English text starts on the left.'},
+  {t:'The heading of a Science Exhibition poster', a:'center', html:'<h2 style="margin:0;font-size:1.6rem">Science Exhibition</h2>', why:'Poster headings are centred to catch the eye.'},
+  {t:'A page in a storybook with both edges straight', a:'justify', html:'<p style="margin:0">Once upon a time, in a small village near the desert, a young boy dreamed of building a robot that could help his family water the date palm trees every morning.</p>', why:'Both edges straight = justify.'}
+];
+let pr = 0, pTried = false;
+$('pChoices').innerHTML = AL.map(v => `<button data-v="${v}">${v}</button>`).join('');
+function drawRound(){
+  const R = ROUNDS[pr];
+  $('pRound').textContent = `Round ${pr+1} of ${ROUNDS.length}`;
+  $('pTask').textContent = `Which alignment fits: ${R.t}?`;
+  $('pThing').innerHTML = R.html; $('pThing').style.textAlign = 'left';
+  $('pMsg').textContent = ''; $('pMsg').className = 'msg'; $('pNext').hidden = true; pTried = false;
+  $('pChoices').querySelectorAll('button').forEach(b => { b.disabled = false; b.removeAttribute('aria-pressed'); });
+  $('pDots').innerHTML = ROUNDS.map((_,k) => `<i class="${st.play[k] === 1 ? 'ok' : st.play[k] === 0 ? 'miss' : ''}${k === pr ? ' now' : ''}"></i>`).join('');
+}
+$('pChoices').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || !$('pNext').hidden) return;
+  if (!needId(t => { $('pMsg').className = 'msg bad'; $('pMsg').textContent = t; })) return;
+  const R = ROUNDS[pr], v = b.dataset.v;
+  $('pThing').style.textAlign = v;
+  $('pThing').querySelectorAll('h2,p,div').forEach(el => el.style.textAlign = v);
+  if (v === R.a){
+    if (st.play[pr] == null) st.play[pr] = pTried ? 0 : 1;
+    b.setAttribute('aria-pressed','true');
+    $('pMsg').className = 'msg ok'; $('pMsg').textContent = (pTried ? 'Correct! ' : 'Correct! +10 XP. ') + R.why;
+    $('pChoices').querySelectorAll('button').forEach(x => x.disabled = x !== b);
+    drawXP();
+    if (pr < ROUNDS.length - 1){ $('pNext').hidden = false; $('pNext').textContent = 'Next round →'; }
+    else { $('pNext').hidden = false; $('pNext').textContent = 'Play again ↺'; confetti(110); markDone('play'); save('Play'); $('pMsg').textContent += ` 🎉 Game over: ${playPts()} / ${ROUNDS.length} on the first try!`; }
+    $('pDots').innerHTML = ROUNDS.map((_,k) => `<i class="${st.play[k] === 1 ? 'ok' : st.play[k] === 0 ? 'miss' : ''}${k === pr ? ' now' : ''}"></i>`).join('');
+  } else { pTried = true; $('pMsg').className = 'msg bad'; $('pMsg').textContent = `Look at the page: ${v} does not fit here. Try another value.`; }
+});
+$('pNext').onclick = () => { pr = pr < ROUNDS.length - 1 ? pr + 1 : 0; drawRound(); };
+drawRound();
+
+/* ---------- Mini Project ---------- */
 const txt = el => (el ? el.textContent : '').replace(/\s+/g,' ').trim();
 const al = el => el && el.style.textAlign;
-const isCol = (v, name) => { if (!v) return false; const a = document.createElement('i'), b = document.createElement('i'); a.style.color = v; b.style.color = name; document.body.append(a, b); const r = getComputedStyle(a).color === getComputedStyle(b).color; a.remove(); b.remove(); return r; };
-const h1s = d => [...d.querySelectorAll('body h1')];
-const ps = d => [...d.querySelectorAll('body p')];
-
-function makeProject(P){
-  const L = [
-    { ask:`Add an <code>&lt;h1&gt;</code> heading "${P.h1}" and put it in the <b>center</b>.`,
-      sc:'centre a heading with <code>text-align:center</code>',
-      hint:'<h1 style="text-align:center;">',
-      test:d => h1s(d).some(h => P.h1re.test(txt(h)) && al(h) === 'center') },
-    { ask:`Make your centred heading <b>${P.c1}</b>. Use two properties in one style.`,
-      sc:'use <code>text-align</code> and <code>color</code> in one style',
-      hint:'<h1 style="text-align:center; color:…;">',
-      test:d => h1s(d).some(h => al(h) === 'center' && isCol(h.style.color, P.c1)) },
-    { ask:`Add a paragraph with "${P.right}" and align it to the <b>right</b>.`,
-      sc:'align a paragraph to the <b>right</b>',
-      hint:'<p style="text-align:right;">',
-      test:d => ps(d).some(p => P.rightre.test(txt(p)) && al(p) === 'right') },
-    { ask:`Add an <code>&lt;hr&gt;</code> line, then write ${P.msg} in one short sentence in <b>justify</b>. Give the <code>&lt;body&gt;</code> a light background colour.`,
-      sc:'<b>justify</b> a paragraph, add <code>&lt;hr&gt;</code> and a page background',
-      hint:'<body style="background-color:…;">    <p style="text-align:justify;">',
-      test:d => !!d.querySelector('body hr') && ps(d).some(p => al(p) === 'justify' && txt(p).length >= 20) && !!(d.body && d.body.style.backgroundColor) },
-    { ask:`Add a centred <b>bold</b> line "${P.ban}" with <b>${P.bfg}</b> text on a <b>${P.bbg}</b> background. Use three properties in one style.`,
-      sc:'design a banner with <b>three</b> properties and <code>&lt;b&gt;</code>',
-      hint:'<p style="text-align:center; color:…; background-color:…;">',
-      test:d => [...d.querySelectorAll('body *')].some(e => P.banre.test(txt(e)) && al(e) === 'center' && isCol(e.style.color, P.bfg) && isCol(e.style.backgroundColor, P.bbg) && !!(e.matches('b,strong') || e.querySelector('b,strong') || e.closest('b,strong'))) }
-  ];
-  // cumulative example outputs
-  const s1 = `<h1 style="text-align:center;">${P.h1}</h1>`;
-  const s2 = `<h1 style="text-align:center; color:${P.c1};">${P.h1}</h1>`;
-  const s3 = s2 + `<p style="text-align:right;">${P.right}</p>`;
-  const s4 = s3 + `<hr><p style="text-align:justify;">${P.sample}</p>`;
-  const s5 = s4 + `<p style="text-align:center; color:${P.bfg}; background-color:${P.bbg};"><b>${P.ban}</b></p>`;
-  [s1, s2, s3, s4, s5].forEach((s, k) => { L[k].ex = s; L[k].bg = k >= 3 ? P.bg : ''; });
-  return { ...P, L };
-}
-const PROJECTS = [
-  makeProject({ name:'UAE National Day Invitation', sub:'Invite your class to celebrate', file:'invitation',
-    h1:'Happy UAE National Day!', h1re:/national day/i, c1:'red', right:'2 December 2026, 9:00 am', rightre:/december/i,
-    msg:'an invitation', bg:'lightyellow', ban:'Long Live the UAE!', banre:/long live/i, bfg:'white', bbg:'green',
-    sample:'You are invited to our National Day party in Class 6.' }),
-  makeProject({ name:'School Notice Board', sub:'Announce a school event', file:'notice',
-    h1:'Notice Board', h1re:/notice/i, c1:'blue', right:'Date: 5 November 2026', rightre:/date|november/i,
-    msg:'a notice about the Science Exhibition', bg:'lightblue', ban:'Bring your ID card', banre:/id card/i, bfg:'white', bbg:'red',
-    sample:'The Science Exhibition is in the school hall.' }),
-  makeProject({ name:'The Sharjah Times', sub:'Design a newspaper front page', file:'newspaper',
-    h1:'The Sharjah Times', h1re:/sharjah times/i, c1:'navy', right:'Friday, 6 November 2026', rightre:/november|friday/i,
-    msg:'a news article about the Sharjah International Book Fair', bg:'lightgray', ban:'Breaking News: Book Fair opens today!', banre:/breaking/i, bfg:'white', bbg:'black',
-    sample:'The Sharjah Book Fair opens at Expo Centre today.' }),
-  makeProject({ name:'Healthy Food Menu', sub:'Make a menu card for the canteen', file:'menu',
-    h1:'Healthy Food Menu', h1re:/menu/i, c1:'green', right:'Fruit Salad – 10 AED', rightre:/aed/i,
-    msg:'your healthy meal', bg:'honeydew', ban:'Eat Healthy, Stay Strong!', banre:/eat healthy/i, bfg:'white', bbg:'orange',
-    sample:'Fresh fruit salad with mango, apple and dates.' })
+const body = d => [...d.querySelectorAll('body *')];
+const MUST = [
+  { lab:'A heading <code>&lt;h1&gt;</code> in the <b>center</b>', hint:'<h1 style="text-align:center;">', test:d => [...d.querySelectorAll('body h1')].some(h => txt(h) && al(h) === 'center') },
+  { lab:'Heading <b>colour</b> + center in one style', hint:'<h1 style="text-align:center; color:…;">', test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center' && h.style.color) },
+  { lab:'A paragraph aligned <b>right</b>', hint:'<p style="text-align:right;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p) && al(p) === 'right') },
+  { lab:'A paragraph in <b>justify</b>', hint:'<p style="text-align:justify;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p).length >= 20 && al(p) === 'justify') },
+  { lab:'A line <code>&lt;hr&gt;</code>', hint:'<hr>', test:d => !!d.querySelector('body hr') },
+  { lab:'Bold text <code>&lt;b&gt;</code>', hint:'<b>', test:d => [...d.querySelectorAll('body b, body strong')].some(b => txt(b)) },
+  { lab:'Page <b>background colour</b>', hint:'<body style="background-color:…;">', test:d => !!(d.body && d.body.style.backgroundColor) },
+  { lab:'⭐ BONUS: a banner with <b>3 properties</b>', hint:'<p style="text-align:center; color:…; background-color:…;">', bonus:true, test:d => body(d).some(e => al(e) === 'center' && e.style.color && e.style.backgroundColor && txt(e)) }
 ];
-
-const PREVIEW_CSS = '<style>:host{all:initial;display:block;font-family:Times New Roman,serif;color:#000;font-size:16px} .pg{padding:8px 12px;min-height:280px} h1{margin:.3em 0;font-size:2em} p{margin:.6em 0} hr{margin:8px 0}</style>';
-const shotRoot = $('qShot').attachShadow({mode:'open'});
-
-const LOOK = [['🇦🇪','#C8102E','#E8553E'],['📌','#1D4ED8','#3B82F6'],['📰','#1F2937','#4B5563'],['🥗','#15803D','#16A34A']];
-$('projects').innerHTML = PROJECTS.map((P,i) => `<button class="proj" data-i="${i}" aria-pressed="${i===0}" style="--p1:${LOOK[i][1]};--p2:${LOOK[i][2]}"><span class="ic" aria-hidden="true">${LOOK[i][0]}</span><b>${esc(P.name)}</b><span>${esc(P.sub)}</span></button>`).join('');
-
-/* celebration burst */
-function confetti(n){
-  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const c = document.createElement('canvas'); c.className = 'confetti'; document.body.appendChild(c);
-  const x = c.getContext('2d'), W = c.width = innerWidth, H = c.height = innerHeight;
-  const cols = ['#FF6347','#F5B700','#2EC4B6','#6C4BD8','#00843D','#2F6FDB'];
-  const ps = Array.from({length:n}, () => ({ x:W/2 + (Math.random()-.5)*W*.5, y:H*.4, vx:(Math.random()-.5)*16, vy:-Math.random()*15-5, s:7+Math.random()*7, r:Math.random()*6, vr:(Math.random()-.5)*.35, c:cols[Math.random()*cols.length|0] }));
-  let f = 0;
-  (function tick(){
-    x.clearRect(0,0,W,H);
-    ps.forEach(p => { p.vy += .42; p.x += p.vx; p.y += p.vy; p.r += p.vr; x.save(); x.translate(p.x,p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2); x.restore(); });
-    if (++f < 120) requestAnimationFrame(tick); else c.remove();
-  })();
-}
-$('projects').addEventListener('click', e => { const b = e.target.closest('.proj'); if (b) pickProject(+b.dataset.i); });
-$('path').innerHTML = LEVELS.map((n,k) => `<div class="lvl" id="lvl${k}"><span class="num">${k+1}</span><span class="nm">${n}</span><span class="st">★★★</span></div>`).join('');
-
-const SKELETON = '<!DOCTYPE html>\n<html>\n<head>\n  <title>My Project</title>\n</head>\n<body>\n\n</body>\n</html>\n';
-const KEY = i => 'align-studio-draft-' + i;
+const THEMES = [
+  { ic:'🇦🇪', name:'UAE National Day', file:'invitation', title:'National Day Invitation',
+    lines:['<h1>Happy UAE National Day!</h1>','<p>2 December 2026</p>','<p>You are invited to our National Day party in Class 6.</p>'] },
+  { ic:'📌', name:'School Notice Board', file:'notice', title:'Notice Board',
+    lines:['<h1>Notice Board</h1>','<p>Date: 5 November 2026</p>','<p>The Science Exhibition is in the school hall on Friday.</p>'] },
+  { ic:'📰', name:'The Sharjah Times', file:'newspaper', title:'The Sharjah Times',
+    lines:['<h1>The Sharjah Times</h1>','<p>Friday, 6 November 2026</p>','<p>The Sharjah International Book Fair opens at Expo Centre today.</p>'] },
+  { ic:'🥗', name:'Healthy Food Menu', file:'menu', title:'Healthy Food Menu',
+    lines:['<h1>Healthy Food Menu</h1>','<p>Fruit Salad – 10 AED</p>','<p>Fresh fruit salad with mango, apple and dates.</p>'] }
+];
+const starter = T => `<!DOCTYPE html>\n<html>\n<head>\n  <title>${T.title}</title>\n</head>\n<body>\n${T.lines.join('\n')}\n\n</body>\n</html>\n`;
+const KEY = i => 'wdq-mini-' + i;
 const load = i => { try { return localStorage.getItem(KEY(i)); } catch(e){ return null; } };
 const store = (i, v) => { try { localStorage.setItem(KEY(i), v); } catch(e){} };
-const doneOf = i => st.levels[i] || (st.levels[i] = [0,0,0,0,0]);
-st.sel = {};
-const selLevel = () => (st.sel[st.proj] ?? curLevel());
 
-function pickProject(i){
-  store(st.proj, $('editor').value);
-  st.proj = i;
-  document.querySelectorAll('.proj').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.i === i)));
-  $('fileName').textContent = PROJECTS[i].file + '.html · type your code here';
-  $('editor').value = load(i) || SKELETON;
-  $('result').hidden = true; blankOut(); update(); drawGame();
+$('themes').innerHTML = THEMES.map((T,i) => `<button class="theme" data-i="${i}" aria-pressed="${i===0}"><span aria-hidden="true">${T.ic}</span>${esc(T.name)}</button>`).join('');
+$('themes').addEventListener('click', e => { const b = e.target.closest('.theme'); if (b) pickTheme(+b.dataset.i); });
+function drawMust(fresh){
+  const d = tickArr(st.theme);
+  $('must').innerHTML = MUST.map((M,j) => `<li class="${d[j] ? 'met' : ''}${M.bonus ? ' bonus' : ''}"><span class="bx"></span><span>${M.lab}</span></li>`).join('');
+  $('progFill').style.width = (sum(d) / MUST.length * 100) + '%';
+  if (fresh) fresh.forEach(j => $('must').children[j].classList.add('bump'));
 }
-function curLevel(){ const d = doneOf(st.proj); const k = d.findIndex(x => !x); return k === -1 ? 5 : k; }
-function drawGame(justDone){
-  const P = PROJECTS[st.proj], d = doneOf(st.proj), k = curLevel(), xp = d.reduce((a,b)=>a+b,0) * 100;
-  LEVELS.forEach((n,j) => { const el = $('lvl'+j); el.className = 'lvl' + (d[j] ? ' done' : '') + (j === k ? ' now' : '') + (!d[j] && j > k ? ' locked' : '') + (justDone && justDone.includes(j) ? ' justdone' : ''); });
-  $('gXP').textContent = `${xp} / 500 XP`;
-  $('sc').innerHTML = P.L.map((L,j) => `<li class="${d[j] ? 'met' : ''}"><span class="box"></span><span><span class="lv">Level ${j+1} · ${LEVELS[j]}</span>${L.sc}</span></li>`).join('');
-  $('gTitle').textContent = k === 5 ? 'All 5 levels complete!' : `Level ${k+1} · ${LEVELS[k]}`;
-  const s = selLevel();
-  $('lvMenu').innerHTML = LEVELS.map((n,j) => `<button data-l="${j}" class="${d[j] ? 'done' : ''}" aria-pressed="${j === s}">Level ${j+1} · ${n}</button>`).join('');
-  if (s === 5){
-    $('qTag').textContent = 'Project complete'; $('qAsk').innerHTML = `Brilliant! Your <b>${esc(P.name)}</b> is finished. Add more colours or another paragraph, or try a different project.`;
-    renderShot(P.L[4]); $('hintBtn').hidden = true; $('hintBox').hidden = true; return;
-  }
-  const L = P.L[s];
-  $('qTag').textContent = `${P.name} · Level ${s+1} of 5` + (d[s] ? ' · done ✓' : '');
-  $('qAsk').innerHTML = L.ask;
-  renderShot(L);
-  $('hintBtn').hidden = false; $('hintBox').hidden = true; $('hintBox').innerHTML = ''; $('hintBtn').textContent = 'Show hint';
+function pickTheme(i){
+  store(st.theme, $('editor').value);
+  st.theme = i;
+  document.querySelectorAll('.theme').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.i === i)));
+  $('editor').value = load(i) || starter(THEMES[i]);
+  $('result').hidden = true; $('hintBox').hidden = true; $('hintBtn').textContent = '💡 Show hint';
+  blankOut(); update(); drawMust();
 }
-function renderShot(L){ shotRoot.innerHTML = PREVIEW_CSS + `<div class="pg"${L.bg ? ` style="background-color:${L.bg}"` : ''}>${L.ex}</div>`; }
 
-/* hint = picture of code (cannot be selected or copied) */
+/* hint = picture of the start tag for the next missing item (cannot be copied) */
 function codePicture(code){
   const fs = 16, padX = 14, padY = 12, dpr = 2;
   const font = `600 ${fs}px "JetBrains Mono", Consolas, "Courier New", monospace`;
   const c = document.createElement('canvas'), x = c.getContext('2d');
   x.font = font; const w = Math.ceil(x.measureText(code).width) + padX * 2, h = fs + padY * 2 + 6;
   c.width = w * dpr; c.height = h * dpr; x.scale(dpr, dpr);
-  x.fillStyle = '#151C36'; x.beginPath(); x.roundRect ? x.roundRect(0, 0, w, h, 8) : x.rect(0, 0, w, h); x.fill();
+  x.fillStyle = '#161B38'; x.beginPath(); x.roundRect ? x.roundRect(0, 0, w, h, 8) : x.rect(0, 0, w, h); x.fill();
   x.font = font; x.textBaseline = 'middle';
   let px = padX; const y = h / 2 + 1;
   code.split(/("[^"]*")/).forEach(part => {
@@ -662,23 +673,26 @@ function codePicture(code){
   const img = new Image(); img.src = c.toDataURL('image/png'); img.alt = 'Hint picture'; img.draggable = false;
   img.style.width = w + 'px'; return img;
 }
-$('lvMenu').addEventListener('click', e => { const b = e.target.closest('button[data-l]'); if (!b) return; st.sel[st.proj] = +b.dataset.l; drawGame(); });
-$('path').addEventListener('click', e => { const b = e.target.closest('.lvl'); if (!b) return; st.sel[st.proj] = +b.id.slice(3); drawGame(); });
 $('hintBtn').onclick = () => {
-  const h = $('hintBox'), k = selLevel(); if (k === 5) return;
-  if (!h.innerHTML){ const p = document.createElement('p'); p.textContent = 'Start tag with the style syntax (fill in the rest yourself):'; h.append(p, codePicture(PROJECTS[st.proj].L[k].hint)); }
-  h.hidden = !h.hidden; $('hintBtn').textContent = h.hidden ? 'Show hint' : 'Hide hint';
+  const h = $('hintBox');
+  if (!h.hidden){ h.hidden = true; $('hintBtn').textContent = '💡 Show hint'; return; }
+  const d = tickArr(st.theme), j = d.findIndex(x => !x);
+  h.innerHTML = '';
+  const p = document.createElement('p');
+  if (j === -1){ p.textContent = 'Everything is ticked! Add more colours or try another theme.'; h.append(p); }
+  else { p.innerHTML = `Next: ${MUST[j].lab}. Start tag (fill in the rest yourself):`; h.append(p, codePicture(MUST[j].hint)); }
+  h.hidden = false; $('hintBtn').textContent = '💡 Hide hint';
 };
-['contextmenu','copy','dragstart'].forEach(ev => document.querySelector('.question').addEventListener(ev, e => e.preventDefault()));
+['contextmenu','copy','dragstart'].forEach(ev => $('hintBox').addEventListener(ev, e => e.preventDefault()));
 
-/* ---------- editor ---------- */
+/* editor */
 let t1;
 function update(){
   const v = $('editor').value;
   $('gutter').innerHTML = Array.from({length: v.split('\n').length}, (_,k) => k+1).join('\n');
-  clearTimeout(t1); t1 = setTimeout(() => store(st.proj, v), 400);
+  clearTimeout(t1); t1 = setTimeout(() => store(st.theme, v), 400);
 }
-function blankOut(){ $('out').srcdoc = '<body style="margin:0;height:100vh;display:grid;place-items:center;font:600 18px Arial,sans-serif;color:#8A93AE;text-align:center;padding:24px;box-sizing:border-box">Type your HTML on the left,<br>then press <b style="color:#FF6347">&nbsp;Check my code&nbsp;</b> to see your page here.</body>'; }
+function blankOut(){ $('out').srcdoc = '<body style="margin:0;height:100vh;display:grid;place-items:center;font:700 18px Arial,sans-serif;color:#8A93AE;text-align:center;padding:24px;box-sizing:border-box">Add the styles on the left,<br>then press <b style="color:#FF7A1A">&nbsp;Check my code&nbsp;</b> to see your page here.</body>'; }
 $('editor').addEventListener('input', update);
 $('editor').addEventListener('scroll', () => { $('gutter').scrollTop = $('editor').scrollTop; });
 $('editor').addEventListener('keydown', e => {
@@ -692,18 +706,18 @@ function noPaste(e){
 ['paste','drop'].forEach(ev => $('editor').addEventListener(ev, noPaste));
 $('editor').addEventListener('beforeinput', e => { if (e.inputType === 'insertFromPaste' || e.inputType === 'insertFromDrop') noPaste(e); });
 $('editor').addEventListener('contextmenu', e => e.preventDefault());
-$('resetBtn').onclick = () => { $('editor').value = SKELETON; $('result').hidden = true; update(); blankOut(); };
+$('resetBtn').onclick = () => { $('editor').value = starter(THEMES[st.theme]); $('result').hidden = true; update(); blankOut(); };
 
-/* ---------- code checker (errors in red with line numbers) ---------- */
+/* code checker (errors in red with line numbers) */
 const CONTAINER = ['html','head','title','body','h1','h2','h3','h4','h5','h6','p','b','i','u','strong','em','center','div','span','font','marquee','sub','sup','small','big','mark'];
 const EMPTY = ['br','hr','img','meta','link','!doctype'];
 const KNOWN = new Set([...CONTAINER, ...EMPTY]);
 const PROPS = ['color','background-color','text-align','font-size','font-family','font-weight','font-style'];
-const lineOf = (src, idx) => src.slice(0, idx).split('\n').length;
+const lineOf = (src, i) => src.slice(0, i).split('\n').length;
 function checkCode(src){
   const errs = [];
-  const add = (idx, msg) => errs.push({line: idx == null ? null : lineOf(src, idx), msg});
-  if (!src.trim()){ add(null, 'Your editor is empty. Press <b>Start again</b> to get the skeleton.'); return errs; }
+  const add = (i, msg) => errs.push({line: i == null ? null : lineOf(src, i), msg});
+  if (!src.trim()){ add(null, 'Your editor is empty. Press <b>Start again</b> to get the page back.'); return errs; }
   if (!/^\s*<!doctype\s+html\s*>/i.test(src)) add(0, 'Start your page with <code>&lt;!DOCTYPE html&gt;</code> on the first line.');
   const re = /<\/?([a-z!][a-z0-9]*)?/gi; let m;
   while ((m = re.exec(src))){
@@ -760,7 +774,6 @@ function styleLint(attrs, at, add){
   });
 }
 
-/* ---------- check button: levels up ---------- */
 $('checkBtn').onclick = () => {
   const box = $('result'); box.hidden = false;
   if (!needId(t => { box.className = 'result bad'; box.innerHTML = `<h3>${t}</h3>`; })) return;
@@ -769,25 +782,22 @@ $('checkBtn').onclick = () => {
   const errs = checkCode(src);
   if (errs.length){
     box.className = 'result bad';
-    box.innerHTML = `<h3>Found ${errs.length} error${errs.length > 1 ? 's' : ''} to fix</h3><p style="color:var(--bad)">Fix these first – you level up when your code has no errors.</p>
+    box.innerHTML = `<h3>Found ${errs.length} error${errs.length > 1 ? 's' : ''} to fix</h3><p style="color:var(--bad)">Fix these first – your ticks are counted when the code has no errors.</p>
       <ul class="errs">${errs.map(e => `<li>${e.line ? `<span class="ln" data-line="${e.line}">Line ${e.line}</span>` : '<span></span>'}<span>${e.msg}</span></li>`).join('')}</ul>`;
     const lines = new Set(errs.filter(e => e.line).map(e => e.line));
     $('gutter').innerHTML = src.split('\n').map((_, k) => lines.has(k+1) ? `<span class="err">${k+1}</span>` : String(k+1)).join('\n');
     return;
   }
   update();
-  const doc = new DOMParser().parseFromString(src, 'text/html'), P = PROJECTS[st.proj], d = doneOf(st.proj);
-  const newly = [];
-  P.L.forEach((L, j) => { let ok = false; try { ok = !!L.test(doc); } catch(e){} if (ok && !d[j]){ d[j] = 1; newly.push(j); } });
-  if (st.sel[st.proj] != null && d[st.sel[st.proj]]) delete st.sel[st.proj];
-  drawGame(newly);
-  const n = d.reduce((a,b)=>a+b,0), k = curLevel();
+  const doc = new DOMParser().parseFromString(src, 'text/html'), d = tickArr(st.theme), fresh = [];
+  MUST.forEach((M, j) => { let ok = false; try { ok = !!M.test(doc); } catch(e){} if (ok && !d[j]){ d[j] = 1; fresh.push(j); } });
+  drawMust(fresh); drawXP();
+  const n = sum(d), left = MUST.filter((_, j) => !d[j]);
   box.className = 'result ok';
-  if (newly.length){ confetti(k === 5 ? 220 : 120); const g = $('gXP'); g.classList.remove('bump'); void g.offsetWidth; g.classList.add('bump'); }
-  if (k === 5) box.innerHTML = '<h3>🏆 Level 5 complete – you are a Master Designer! 500 XP</h3><p>Your project is finished. Go to the Exit Ticket, or try another project.</p>';
-  else box.innerHTML = `<h3>${newly.length ? `🎉 Level up! +${newly.length * 100} XP` : '✅ No errors – keep going!'}</h3><p>${n} of 5 levels done. Now: <b>Level ${k+1} · ${LEVELS[k]}</b> – ${P.L[k].ask}</p>`;
-  if (newly.length) save('Level ' + (Math.max(...newly) + 1));
-  if (k === 5) markTab('proj');
+  if (fresh.length) confetti(n === MUST.length ? 220 : 110);
+  if (n === MUST.length){ box.innerHTML = '<h3>🏆 All ticks done – you are a Master Designer!</h3><p>Your page is finished. Go to the Plenary, or try another theme.</p>'; markDone('mini'); }
+  else box.innerHTML = `<h3>${fresh.length ? `🎉 +${fresh.length * 10} XP – ${fresh.length} new tick${fresh.length > 1 ? 's' : ''}!` : '✅ No errors – keep building!'}</h3><p>${n} of ${MUST.length} done. Next: ${left[0].lab}.</p>`;
+  if (fresh.length) save('Mini Project');
 };
 $('result').addEventListener('click', e => {
   const ln = e.target.closest('.ln'); if (!ln) return;
@@ -797,28 +807,46 @@ $('result').addEventListener('click', e => {
   ta.scrollTop = Math.max(0, (n - 4) * 26.4);
 });
 
-/* ---------- summary + saving ---------- */
-const sum = a => a.reduce((x,y)=>x+y,0);
-function bestProj(){ let b = st.proj; PROJECTS.forEach((P,i) => { if (sum(doneOf(i)) > sum(doneOf(b))) b = i; }); return b; }
-function showSummary(){
-  const bp = bestProj(), d = doneOf(bp), n = sum(d);
-  $('summary').hidden = false; $('hotBox').hidden = false;
-  $('summary').innerHTML = `<div style="font-size:3rem;line-height:1" aria-hidden="true">🏆</div><h3>Well done, ${esc(st.name)}!</h3><p>Starter Quiz ${st.start}/3 · Project "${esc(PROJECTS[bp].name)}" Level ${n}/5 (${n*100} XP) · Exit Ticket ${st.exit}/3</p>`;
+/* ---------- HOT: menu toggle ---------- */
+$('menuBtns').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  $('menuBtns').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  $('menuCard').classList.toggle('cent', b.dataset.m === '1');
+});
+
+/* ---------- Trophies ---------- */
+function drawTrophies(){
+  const bt = bestTheme(), d = tickArr(bt), main = sum(d.slice(0, 7));
+  const T = [
+    ['🔥','Warm-up Star','3 / 3 in the Warm-up', warmPts() === 3],
+    ['📘','Fast Learner','Visited Goals and Learn', seen.has('goals') && seen.has('learn')],
+    ['🎮','Align Ace','6 or more in Play', playPts() >= 6],
+    ['🏗️','Web Designer','All 7 main ticks in the Mini Project', main === 7],
+    ['⭐','Bonus Hunter','Made the 3-property banner', !!d[7]],
+    ['🎯','Exit Champion','3 / 3 in the Exit Ticket', exitPts() === 3]
+  ];
+  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/8</b>Play</div><div><b>${sum(d)}/8</b>Mini Project</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
+  $('troBox').innerHTML = T.map(([ic,n,how,got]) => `<div class="tro${got ? ' got' : ''}"><span class="ic">${ic}</span><b>${n}</b><span>${got ? 'Earned! 🎉' : how}</span></div>`).join('');
+  if (T.some(t => t[3])) confetti(80);
+  if (st.sid){ markDone('tro'); save('Trophies'); }
 }
+
+/* ---------- saving to Google Sheet ---------- */
 function save(what){
   if (!SCORE_URL || !st.sid) return;
   st.seq++;
-  const bp = bestProj(), d = doneOf(bp), n = sum(d);
+  const bt = bestTheme(), d = tickArr(bt), answered = a => a.some(v => v !== '');
   const data = { sid:st.sid, seq:st.seq, name:st.name, cls:st.div,
-    s1:st.startQ[0], s2:st.startQ[1], s3:st.startQ[2], start: st.startQ.some(v => v !== '') ? st.start : '',
-    project: PROJECTS[bp].name, l1:d[0], l2:d[1], l3:d[2], l4:d[3], l5:d[4], levels:n, xp:n*100,
-    q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: st.exitQ.some(v => v !== '') ? st.exit : '',
-    seconds: Math.round((Date.now() - st.t0) / 1000), what };
+    s1:st.warmQ[0], s2:st.warmQ[1], s3:st.warmQ[2], start: answered(st.warmQ) ? warmPts() : '',
+    play: st.play.length ? playPts() : '',
+    theme: THEMES[bt].name, t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], t7:d[6], t8:d[7], ticks:sum(d),
+    q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: answered(st.exitQ) ? exitPts() : '',
+    xp:xp(), rank:rank().replace(/^\S+\s/, ''), seconds: Math.round((Date.now() - st.t0) / 1000), what };
   fetch(SCORE_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).catch(() => {});
 }
 
-$('editor').value = load(0) || SKELETON;
-update(); blankOut(); drawGame();
+$('editor').value = load(0) || starter(THEMES[0]);
+update(); blankOut(); drawMust(); drawXP(); showSec(0);
 </script>
 
 </body>
