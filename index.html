@@ -200,6 +200,59 @@ mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301
 .gamebox .lvl .st{font-size:.62rem;letter-spacing:1px}
 @keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
 .lvl.justdone{animation:pop .5s}
+/* ===== Game theme for Grade 6 ===== */
+body{background:#EEF3FF radial-gradient(circle at 8% 0%,#FFE0D4 0,transparent 32%),radial-gradient(circle at 96% 8%,#D9E8FF 0,transparent 34%),radial-gradient(circle at 50% 100%,#DFFBEA 0,transparent 40%);background-attachment:fixed}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(#C3CFEA 1.2px,transparent 1.3px);background-size:24px 24px;opacity:.55}
+header.top{background:linear-gradient(90deg,#1B1F4B,#3A1C71 60%,#5B2A86);box-shadow:0 4px 0 #FFC93C}
+.brand .rk{font-size:1.4rem}
+nav.tabs button{transition:background .15s,color .15s}
+nav.tabs button:hover{background:rgba(255,255,255,.12);color:#fff}
+nav.tabs button[aria-selected="true"]{background:#FFC93C;color:#1B1F4B;box-shadow:0 3px 0 #C99A00}
+nav.tabs button[aria-selected="true"] .n{background:#FF6347}
+.card{border:2px solid #E1E8F6;border-radius:18px;box-shadow:0 6px 0 #E1E8F6}
+.title{background:linear-gradient(90deg,#FF6347,#F59E0B 35%,#10B5A6 65%,#6C4BD8);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:4px;width:fit-content;max-width:100%}
+.eyebrow{font-size:.85rem}
+.btn{box-shadow:0 4px 0 #0A0F24;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #0A0F24}
+.btn.big{background:linear-gradient(180deg,#FF7D60,#FF5733)}
+.btn.ghost{box-shadow:0 4px 0 var(--line)}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-10px) rotate(6deg)}}
+.hero-ico{font-size:4rem;line-height:1;animation:float 3s ease-in-out infinite}
+.start .title{font-size:clamp(2.4rem,6.5vw,3.9rem)}
+.motto{color:#3A4466}
+.perks{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.perks span{font:800 1.05rem var(--body);padding:8px 16px;border-radius:999px;background:#fff;border:2px solid currentColor;box-shadow:0 4px 0 currentColor}
+.perks .p1{color:#E0482D}.perks .p2{color:#1D6FD1}.perks .p3{color:#B88400}
+.start .card{border-color:#FFC93C;box-shadow:0 8px 0 #FFC93C}
+.grid3 > .q:nth-child(3n+1){--acc:#FF6347}.grid3 > .q:nth-child(3n+2){--acc:#10A99B}.grid3 > .q:nth-child(3n){--acc:#6C4BD8}
+.q{border-top:7px solid var(--acc)}
+.q .eyebrow{color:var(--acc)}
+.opt{display:flex;gap:12px;align-items:center;box-shadow:0 4px 0 var(--line);transition:transform .1s,border-color .1s}
+.opt:hover{transform:translateY(-2px);border-color:var(--acc)}
+.opt .ltr{flex:none;width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:var(--acc);color:#fff;font:800 1.05rem var(--display)}
+.opt.right .ltr{background:var(--ok)}.opt.wrong .ltr{background:var(--bad)}
+.lo{box-shadow:0 6px 0 var(--ink)}
+.sc-box{box-shadow:0 6px 0 var(--ok)}
+.alignbtns button[data-v="left"]{--c:#2F6FDB}.alignbtns button[data-v="center"]{--c:#D7263D}.alignbtns button[data-v="right"]{--c:#E07A00}.alignbtns button[data-v="justify"]{--c:#0E8A6A}
+.alignbtns button{border-color:var(--c);color:var(--c);box-shadow:0 4px 0 var(--c);font-size:1.1rem;padding:10px 18px}
+.alignbtns button[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.stage{border-color:#C9D5EE;box-shadow:0 6px 0 #E1E8F6}
+.conn{border-width:2px;box-shadow:0 5px 0 rgba(22,32,59,.08)}
+.proj{grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:center;border:0;border-radius:16px;padding:14px;color:#fff;background:linear-gradient(135deg,var(--p1),var(--p2));box-shadow:0 5px 0 rgba(0,0,0,.22);transition:transform .12s}
+.proj .ic{grid-row:1/3;font-size:2.1rem;line-height:1}
+.proj b{font-size:1.08rem}
+.proj span:not(.ic){color:rgba(255,255,255,.92);font-weight:700}
+.proj:hover{transform:translateY(-3px)}
+.proj[aria-pressed="true"]{box-shadow:0 0 0 4px #FFC93C,0 5px 0 rgba(0,0,0,.22);transform:translateY(-3px)}
+.gamebox{background:linear-gradient(135deg,#1B1F4B,#5B2A86);box-shadow:0 5px 0 #FFC93C}
+#gXP{background:#FFC93C;color:#1B1F4B}
+@keyframes xp{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+#gXP.bump{animation:xp .6s}
+.question{border-color:#D9CFFB;box-shadow:0 6px 0 #D9CFFB}
+.result.ok{background:linear-gradient(135deg,#DDF5EC,#FFF4CC)}
+#summary{border-color:#FFC93C;box-shadow:0 6px 0 #FFC93C;text-align:center}
+#summary h3{font-size:1.5rem}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -223,8 +276,10 @@ mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301
 <!-- ============ 1 START ============ -->
 <section class="panel" id="p-start">
   <div class="start">
+    <div class="hero-ico" aria-hidden="true">🚀</div>
     <h1 class="title">Ready, Web Designers?</h1>
     <p class="motto">Every great website starts with one line of code. Let's build something amazing today!</p>
+    <div class="perks"><span class="p1">🎮 5 levels</span><span class="p2">🏗️ 4 projects</span><span class="p3">⭐ 500 XP</span></div>
     <div class="card">
       <div class="field"><label for="sname">Your full name</label><input id="sname" maxlength="40" placeholder="Type your name" autocomplete="off"></div>
       <div class="field"><label for="scls">Your class</label><select id="scls"><option value="">Select your class</option></select></div>
@@ -236,7 +291,7 @@ mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301
 
 <!-- ============ 2 STARTER QUIZ ============ -->
 <section class="panel" id="p-quiz" hidden>
-  <div><span class="eyebrow">Starter · what do you remember?</span><h1 class="title">Starter Quiz</h1>
+  <div><span class="eyebrow">⚡ Starter · what do you remember?</span><h1 class="title">Starter Quiz</h1>
   <p class="lead">Three quick questions from the last lesson. 1 point for each question you answer correctly on the first try.</p></div>
   <div class="grid3" id="quizBox"></div>
   <div class="msg" id="quizMsg"></div>
@@ -262,7 +317,7 @@ mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301
     </div>
   </div>
 
-  <div><span class="eyebrow">New today</span><h1 class="title">text-align</h1>
+  <div><span class="eyebrow">✨ New today</span><h1 class="title">text-align</h1>
   <p class="big">Moves your text to the <b class="k-l">left</b>, <b class="k-c">center</b>, <b class="k-r">right</b>, or makes both edges straight with <b class="k-j">justify</b>.</p></div>
 
   <div class="formula"><span class="t">&lt;h1 </span><span class="a">style</span>=<span class="v">"text-align:center;"</span><span class="t">&gt;</span>Happy UAE National Day!<span class="t">&lt;/h1&gt;</span></div>
@@ -321,7 +376,7 @@ mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301
 <!-- ============ 4 PROJECT ============ -->
 <section class="panel" id="p-proj" hidden>
   <div>
-    <span class="eyebrow">Main activity · choose any project</span>
+    <span class="eyebrow">🎮 Main activity · choose any project</span>
     <div class="projects" id="projects" role="group" aria-label="Projects" style="margin-top:8px"></div>
   </div>
 
@@ -373,7 +428,7 @@ mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301
 
 <!-- ============ 5 EXIT TICKET ============ -->
 <section class="panel" id="p-exit" hidden>
-  <div><span class="eyebrow">Plenary</span><h1 class="title">Exit Ticket</h1>
+  <div><span class="eyebrow">🎯 Plenary</span><h1 class="title">Exit Ticket</h1>
   <p class="lead">Three questions about today's lesson. 1 point for each question you answer correctly on the first try.</p></div>
   <div class="grid3" id="exitBox"></div>
   <div class="msg" id="exitMsg"></div>
@@ -432,7 +487,7 @@ function needId(show){
 /* ---------- quizzes ---------- */
 function makeQuiz(box, doneMsg, items, marks, key, label, tab){
   const pre = key + 'q';
-  $(box).innerHTML = items.map((e,i) => `<div class="card q"><span class="eyebrow">Question ${i+1}</span><h3>${e.q}</h3><div class="opts">${e.o.map((o,j)=>`<button class="opt" data-q="${i}" data-j="${j}"><code>${esc(o)}</code></button>`).join('')}</div><div class="msg" id="${pre}${i}"></div></div>`).join('');
+  $(box).innerHTML = items.map((e,i) => `<div class="card q"><span class="eyebrow">Question ${i+1}</span><h3>${e.q}</h3><div class="opts">${e.o.map((o,j)=>`<button class="opt" data-q="${i}" data-j="${j}"><span class="ltr">${'ABC'[j]}</span><code>${esc(o)}</code></button>`).join('')}</div><div class="msg" id="${pre}${i}"></div></div>`).join('');
   const done = new Set(), tried = new Set();
   $(box).addEventListener('click', ev => {
     const b = ev.target.closest('.opt'); if (!b) return;
@@ -443,7 +498,7 @@ function makeQuiz(box, doneMsg, items, marks, key, label, tab){
     if (j === E.a){
       b.classList.add('right'); done.add(i); marks[i] = first ? 1 : 0; if (first) st[key]++;
       m.className = 'msg ok'; m.textContent = (first ? 'Correct! +1 point. ' : 'Correct! ') + E.why;
-      if (done.size === items.length){ $(doneMsg).className = 'msg ok'; $(doneMsg).textContent = `${label} done: ${st[key]} / ${items.length} points.`; markTab(tab); save(label); if (key === 'exit') showSummary(); }
+      if (done.size === items.length){ confetti(90); $(doneMsg).className = 'msg ok'; $(doneMsg).textContent = `🎉 ${label} done: ${st[key]} / ${items.length} points.`; markTab(tab); save(label); if (key === 'exit') showSummary(); }
       else save(`${label} Q${i+1}`);
     } else { b.classList.add('wrong'); m.className = 'msg bad'; m.textContent = 'Not quite. Try again (no point for this question now).'; }
   });
@@ -532,7 +587,23 @@ const PROJECTS = [
 const PREVIEW_CSS = '<style>:host{all:initial;display:block;font-family:Times New Roman,serif;color:#000;font-size:16px} .pg{padding:8px 12px;min-height:280px} h1{margin:.3em 0;font-size:2em} p{margin:.6em 0} hr{margin:8px 0}</style>';
 const shotRoot = $('qShot').attachShadow({mode:'open'});
 
-$('projects').innerHTML = PROJECTS.map((P,i) => `<button class="proj" data-i="${i}" aria-pressed="${i===0}"><b>${i+1}. ${esc(P.name)}</b><span>${esc(P.sub)}</span></button>`).join('');
+const LOOK = [['🇦🇪','#C8102E','#E8553E'],['📌','#1D4ED8','#3B82F6'],['📰','#1F2937','#4B5563'],['🥗','#15803D','#16A34A']];
+$('projects').innerHTML = PROJECTS.map((P,i) => `<button class="proj" data-i="${i}" aria-pressed="${i===0}" style="--p1:${LOOK[i][1]};--p2:${LOOK[i][2]}"><span class="ic" aria-hidden="true">${LOOK[i][0]}</span><b>${esc(P.name)}</b><span>${esc(P.sub)}</span></button>`).join('');
+
+/* celebration burst */
+function confetti(n){
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = document.createElement('canvas'); c.className = 'confetti'; document.body.appendChild(c);
+  const x = c.getContext('2d'), W = c.width = innerWidth, H = c.height = innerHeight;
+  const cols = ['#FF6347','#F5B700','#2EC4B6','#6C4BD8','#00843D','#2F6FDB'];
+  const ps = Array.from({length:n}, () => ({ x:W/2 + (Math.random()-.5)*W*.5, y:H*.4, vx:(Math.random()-.5)*16, vy:-Math.random()*15-5, s:7+Math.random()*7, r:Math.random()*6, vr:(Math.random()-.5)*.35, c:cols[Math.random()*cols.length|0] }));
+  let f = 0;
+  (function tick(){
+    x.clearRect(0,0,W,H);
+    ps.forEach(p => { p.vy += .42; p.x += p.vx; p.y += p.vy; p.r += p.vr; x.save(); x.translate(p.x,p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2); x.restore(); });
+    if (++f < 120) requestAnimationFrame(tick); else c.remove();
+  })();
+}
 $('projects').addEventListener('click', e => { const b = e.target.closest('.proj'); if (b) pickProject(+b.dataset.i); });
 $('path').innerHTML = LEVELS.map((n,k) => `<div class="lvl" id="lvl${k}"><span class="num">${k+1}</span><span class="nm">${n}</span><span class="st">★★★</span></div>`).join('');
 
@@ -712,8 +783,9 @@ $('checkBtn').onclick = () => {
   drawGame(newly);
   const n = d.reduce((a,b)=>a+b,0), k = curLevel();
   box.className = 'result ok';
-  if (k === 5) box.innerHTML = '<h3>Level 5 complete – you are a Master Designer! 500 XP</h3><p>Your project is finished. Go to the Exit Ticket, or try another project.</p>';
-  else box.innerHTML = `<h3>${newly.length ? `Level up! +${newly.length * 100} XP` : 'No errors – keep going!'}</h3><p>${n} of 5 levels done. Now: <b>Level ${k+1} · ${LEVELS[k]}</b> – ${P.L[k].ask}</p>`;
+  if (newly.length){ confetti(k === 5 ? 220 : 120); const g = $('gXP'); g.classList.remove('bump'); void g.offsetWidth; g.classList.add('bump'); }
+  if (k === 5) box.innerHTML = '<h3>🏆 Level 5 complete – you are a Master Designer! 500 XP</h3><p>Your project is finished. Go to the Exit Ticket, or try another project.</p>';
+  else box.innerHTML = `<h3>${newly.length ? `🎉 Level up! +${newly.length * 100} XP` : '✅ No errors – keep going!'}</h3><p>${n} of 5 levels done. Now: <b>Level ${k+1} · ${LEVELS[k]}</b> – ${P.L[k].ask}</p>`;
   if (newly.length) save('Level ' + (Math.max(...newly) + 1));
   if (k === 5) markTab('proj');
 };
@@ -731,7 +803,7 @@ function bestProj(){ let b = st.proj; PROJECTS.forEach((P,i) => { if (sum(doneOf
 function showSummary(){
   const bp = bestProj(), d = doneOf(bp), n = sum(d);
   $('summary').hidden = false; $('hotBox').hidden = false;
-  $('summary').innerHTML = `<h3>Well done, ${esc(st.name)}!</h3><p>Starter Quiz ${st.start}/3 · Project "${esc(PROJECTS[bp].name)}" Level ${n}/5 (${n*100} XP) · Exit Ticket ${st.exit}/3</p>`;
+  $('summary').innerHTML = `<div style="font-size:3rem;line-height:1" aria-hidden="true">🏆</div><h3>Well done, ${esc(st.name)}!</h3><p>Starter Quiz ${st.start}/3 · Project "${esc(PROJECTS[bp].name)}" Level ${n}/5 (${n*100} XP) · Exit Ticket ${st.exit}/3</p>`;
 }
 function save(what){
   if (!SCORE_URL || !st.sid) return;
@@ -748,5 +820,6 @@ function save(what){
 $('editor').value = load(0) || SKELETON;
 update(); blankOut(); drawGame();
 </script>
+
 </body>
 </html>
