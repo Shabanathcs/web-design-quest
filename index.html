@@ -197,6 +197,19 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 .errs .ln{font:700 .8rem var(--mono);background:var(--bad);color:#fff;border-radius:6px;padding:2px 7px;white-space:nowrap;cursor:pointer}
 .errs code{background:#fff;color:var(--bad)}
 
+.dq{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,var(--navy),#3A2A7A);color:#fff;border-radius:16px;padding:14px 18px;font:700 clamp(1.15rem,2.4vw,1.45rem) var(--display);box-shadow:0 4px 0 var(--gold)}
+.dq > span{font-size:2rem}
+.dq b{display:block;font:800 .78rem var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.brief{margin-top:12px;background:#FFF8EC;border:2px dashed #F2C58A;border-radius:12px;padding:12px 16px;font-size:1.08rem;display:grid;gap:4px}
+.brief .from{font:800 .8rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:#B04A00}
+.plan{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:700px){.plan{grid-template-columns:minmax(0,1fr)}}
+.plan label{display:grid;gap:6px;background:#F5F3FA;border-radius:10px;padding:10px 12px}
+.plan select{padding:8px 10px;font-size:1rem}
+.revlist{display:flex;gap:10px;flex-wrap:wrap}
+.revlist label{display:flex;gap:8px;align-items:center;background:#F5F3FA;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
+.revlist input{width:20px;height:20px;accent-color:var(--ok)}
+
 /* ---------- HOT, AE connect ---------- */
 .hotq{font:700 clamp(1.3rem,2.8vw,1.75rem) var(--display);line-height:1.3}
 .menuc{border:2px dashed #D9D2E8;border-radius:12px;background:#fff;padding:12px 16px;font-family:"Times New Roman",serif;color:#000;font-size:1.15rem;display:grid;gap:4px}
@@ -359,11 +372,16 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 6 MINI PROJECT -->
 <section class="panel" id="p-mini" hidden>
-  <div class="shead"><span class="snum">6</span><div><h1>🏗️ Mini Project: My Aligned Web Page</h1><div class="tags"><span class="tag">Main activity · mini project</span>Each tick = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="shead"><span class="snum">6</span><div><h1>🏗️ Mini Project: My Aligned Web Page</h1><div class="tags"><span class="tag">Main activity · project-based learning</span>Each tick = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="dq"><span aria-hidden="true">❓</span><div><b>Driving question</b>How can text alignment make a web page easy to read?</div></div>
   <div class="card">
-    <div class="step"><span class="k">1</span>Pick your theme</div>
+    <div class="step"><span class="k">1</span>Pick your theme and read the brief</div>
     <div class="themes" id="themes" role="group" aria-label="Themes"></div>
-    <div class="step" style="margin-top:16px"><span class="k">2</span>Build it — your page must have:</div>
+    <div class="brief" id="brief"></div>
+    <div class="step" style="margin-top:16px"><span class="k">2</span>Plan it — choose an alignment for each part</div>
+    <div class="plan" id="plan"></div>
+    <div class="msg" id="planMsg" style="margin-top:8px"></div>
+    <div class="step" style="margin-top:16px"><span class="k">3</span>Build it — your page must have:</div>
     <div class="prog" aria-hidden="true"><i id="progFill"></i></div>
     <ul class="must" id="must"></ul>
   </div>
@@ -386,6 +404,17 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
       <span class="lab">🖥️ Your web page</span>
       <iframe class="out" id="out" title="Your web page" sandbox=""></iframe>
     </div>
+  </div>
+  <div class="card review">
+    <div class="step"><span class="k">4</span>Review it — check your own page <span class="xptag" style="margin-left:6px">+10 XP</span></div>
+    <div class="revlist" id="revList">
+      <label><input type="checkbox"> My title is easy to see</label>
+      <label><input type="checkbox"> My page matches my plan</label>
+      <label><input type="checkbox"> My page is easy for the reader</label>
+    </div>
+    <div class="field" style="margin-top:12px"><label for="improve">One thing I would improve:</label><input id="improve" maxlength="120" placeholder="Example: I would make the date bigger" autocomplete="off"></div>
+    <div class="actions"><button class="btn big" id="revBtn">Submit my review</button></div>
+    <div class="msg" id="revMsg" style="margin-top:10px"></div>
   </div>
 </section>
 
@@ -473,13 +502,13 @@ const seen = new Set();
 function markDone(k){ seen.add(k); $('tab-'+k).classList.add('done'); }
 
 /* ---------- XP + rank ---------- */
-const MAX_XP = 220;
+const MAX_XP = 240;
 const RANKS = [[0,'🥉 Rookie'],[50,'🧭 Explorer'],[100,'🧱 Builder'],[150,'🎨 Designer'],[200,'👑 Master']];
 const warmPts = () => st.warmQ.filter(v => v === 1).length, exitPts = () => st.exitQ.filter(v => v === 1).length;
 const playPts = () => st.play.filter(v => v === 1).length;
-const tickArr = i => st.ticks[i] || (st.ticks[i] = [0,0,0,0,0,0,0,0]);
+const tickArr = i => st.ticks[i] || (st.ticks[i] = [0,0,0,0,0,0,0,0,0]);
 const bestTheme = () => { let b = st.theme; THEMES.forEach((_,i) => { if (sum(tickArr(i)) > sum(tickArr(b))) b = i; }); return b; };
-const xp = () => (warmPts() + playPts() + sum(tickArr(bestTheme())) + exitPts()) * 10;
+const xp = () => (warmPts() + playPts() + sum(tickArr(bestTheme())) + (st.review ? 1 : 0) + exitPts()) * 10;
 const rank = () => RANKS.filter(r => xp() >= r[0]).pop()[1];
 let lastXP = 0;
 function drawXP(){
@@ -621,18 +650,40 @@ const MUST = [
   { lab:'A line <code>&lt;hr&gt;</code>', hint:'<hr>', test:d => !!d.querySelector('body hr') },
   { lab:'Bold text <code>&lt;b&gt;</code>', hint:'<b>', test:d => [...d.querySelectorAll('body b, body strong')].some(b => txt(b)) },
   { lab:'Page <b>background colour</b>', hint:'<body style="background-color:…;">', test:d => !!(d.body && d.body.style.backgroundColor) },
+  { lab:'<b>Your own words:</b> change a line or add a new one', hint:'<p>…your own sentence…</p>', test:d => { const orig = new Set(THEMES[st.theme].lines.map(l => l.replace(/<[^>]+>/g,'').trim())); return [...d.querySelectorAll('body h1, body h2, body p')].some(e => txt(e).length >= 3 && !orig.has(txt(e))); } },
   { lab:'⭐ BONUS: a banner with <b>3 properties</b>', hint:'<p style="text-align:center; color:…; background-color:…;">', bonus:true, test:d => body(d).some(e => al(e) === 'center' && e.style.color && e.style.backgroundColor && txt(e)) }
 ];
 const THEMES = [
   { ic:'🇦🇪', name:'UAE National Day', file:'invitation', title:'National Day Invitation',
+    from:'The School Events Team', brief:'We need an invitation web page for our UAE National Day celebration. Parents and students will read it. Make the title stand out, show the date clearly and write a friendly message.',
+    parts:['Title','Date','Message'],
     lines:['<h1>Happy UAE National Day!</h1>','<p>2 December 2026</p>','<p>You are invited to our National Day party in Class 6.</p>'] },
   { ic:'📌', name:'School Notice Board', file:'notice', title:'Notice Board',
+    from:'The Principal’s Office', brief:'We need a notice web page about the Science Exhibition for all students. Make the heading easy to spot, put the date where notices usually show it, and keep the message neat.',
+    parts:['Heading','Date','Notice'],
     lines:['<h1>Notice Board</h1>','<p>Date: 5 November 2026</p>','<p>The Science Exhibition is in the school hall on Friday.</p>'] },
   { ic:'📰', name:'The Sharjah Times', file:'newspaper', title:'The Sharjah Times',
+    from:'The Editor', brief:'Design the front page of The Sharjah Times for our readers. The newspaper name should catch the eye, the date should be easy to find and the news article should look neat like a real newspaper.',
+    parts:['Newspaper name','Date','News article'],
     lines:['<h1>The Sharjah Times</h1>','<p>Friday, 6 November 2026</p>','<p>The Sharjah International Book Fair opens at Expo Centre today.</p>'] },
   { ic:'🥗', name:'Healthy Food Menu', file:'menu', title:'Healthy Food Menu',
+    from:'The School Canteen', brief:'Make a healthy menu web page for students. The title should catch the eye, the prices should line up neatly and the description should be easy to read.',
+    parts:['Title','Price','Description'],
     lines:['<h1>Healthy Food Menu</h1>','<p>Fruit Salad – 10 AED</p>','<p>Fresh fruit salad with mango, apple and dates.</p>'] }
 ];
+st.plan = {}; st.review = '';
+function drawBrief(){
+  const T = THEMES[st.theme], P = st.plan[st.theme] || (st.plan[st.theme] = ['','','']);
+  $('brief').innerHTML = `<span class="from">📩 Brief from: ${esc(T.from)}</span><span>${esc(T.brief)}</span>`;
+  $('plan').innerHTML = T.parts.map((p,k) => `<label>${esc(p)}<select data-k="${k}"><option value="">Choose…</option>${AL.map(v => `<option${P[k] === v ? ' selected' : ''}>${v}</option>`).join('')}</select></label>`).join('');
+  $('planMsg').className = 'msg'; $('planMsg').textContent = '';
+}
+const planText = i => (st.plan[i] || []).map((v,k) => v ? `${THEMES[i].parts[k]}: ${v}` : '').filter(Boolean).join(', ');
+$('plan').addEventListener('change', e => {
+  const s = e.target.closest('select'); if (!s) return;
+  const P = st.plan[st.theme]; P[+s.dataset.k] = s.value;
+  if (P.every(Boolean)){ $('planMsg').className = 'msg ok'; $('planMsg').textContent = 'Plan saved ✓ Now build your page to match your plan.'; save('Plan'); }
+});
 const starter = T => `<!DOCTYPE html>\n<html>\n<head>\n  <title>${T.title}</title>\n</head>\n<body>\n${T.lines.join('\n')}\n\n</body>\n</html>\n`;
 const KEY = i => 'wdq-mini-' + i;
 const load = i => { try { return localStorage.getItem(KEY(i)); } catch(e){ return null; } };
@@ -652,8 +703,21 @@ function pickTheme(i){
   document.querySelectorAll('.theme').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.i === i)));
   $('editor').value = load(i) || starter(THEMES[i]);
   $('result').hidden = true; $('hintBox').hidden = true; $('hintBtn').textContent = '💡 Show hint';
-  blankOut(); update(); drawMust();
+  blankOut(); update(); drawMust(); drawBrief();
 }
+
+/* self-review */
+$('revBtn').onclick = () => {
+  const m = $('revMsg');
+  if (!needId(t => { m.className = 'msg bad'; m.textContent = t; })) return;
+  const ticked = [...$('revList').querySelectorAll('input')].filter(c => c.checked).length, imp = $('improve').value.trim();
+  if (!ticked){ m.className = 'msg bad'; m.textContent = 'Tick what is true about your page first.'; return; }
+  if (imp.length < 8){ m.className = 'msg bad'; m.textContent = 'Write one thing you would improve (a short sentence).'; return; }
+  const first = !st.review; st.review = imp;
+  m.className = 'msg ok'; m.textContent = first ? '🎉 Review submitted! +10 XP. Great designers always check their work.' : 'Review updated ✓';
+  if (first) confetti(80);
+  drawXP(); save('Review');
+};
 
 /* hint = picture of the start tag for the next missing item (cannot be copied) */
 function codePicture(code){
@@ -816,16 +880,17 @@ $('menuBtns').addEventListener('click', e => {
 
 /* ---------- Trophies ---------- */
 function drawTrophies(){
-  const bt = bestTheme(), d = tickArr(bt), main = sum(d.slice(0, 7));
+  const bt = bestTheme(), d = tickArr(bt), main = sum(d.slice(0, 8));
   const T = [
     ['🔥','Warm-up Star','3 / 3 in the Warm-up', warmPts() === 3],
     ['📘','Fast Learner','Visited Goals and Learn', seen.has('goals') && seen.has('learn')],
     ['🎮','Align Ace','6 or more in Play', playPts() >= 6],
-    ['🏗️','Web Designer','All 7 main ticks in the Mini Project', main === 7],
-    ['⭐','Bonus Hunter','Made the 3-property banner', !!d[7]],
+    ['🏗️','Web Designer','All 8 main ticks in the Mini Project', main === 8],
+    ['⭐','Bonus Hunter','Made the 3-property banner', !!d[8]],
+    ['📝','Reflective Designer','Submitted the self-review', !!st.review],
     ['🎯','Exit Champion','3 / 3 in the Exit Ticket', exitPts() === 3]
   ];
-  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/8</b>Play</div><div><b>${sum(d)}/8</b>Mini Project</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
+  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/8</b>Play</div><div><b>${sum(d)}/9</b>Mini Project</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
   $('troBox').innerHTML = T.map(([ic,n,how,got]) => `<div class="tro${got ? ' got' : ''}"><span class="ic">${ic}</span><b>${n}</b><span>${got ? 'Earned! 🎉' : how}</span></div>`).join('');
   if (T.some(t => t[3])) confetti(80);
   if (st.sid){ markDone('tro'); save('Trophies'); }
@@ -839,14 +904,14 @@ function save(what){
   const data = { sid:st.sid, seq:st.seq, name:st.name, cls:st.div,
     s1:st.warmQ[0], s2:st.warmQ[1], s3:st.warmQ[2], start: answered(st.warmQ) ? warmPts() : '',
     play: st.play.length ? playPts() : '',
-    theme: THEMES[bt].name, t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], t7:d[6], t8:d[7], ticks:sum(d),
+    theme: THEMES[bt].name, t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], t7:d[6], t8:d[7], t9:d[8], ticks:sum(d), plan:planText(bt), review:st.review,
     q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: answered(st.exitQ) ? exitPts() : '',
     xp:xp(), rank:rank().replace(/^\S+\s/, ''), seconds: Math.round((Date.now() - st.t0) / 1000), what };
   fetch(SCORE_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).catch(() => {});
 }
 
 $('editor').value = load(0) || starter(THEMES[0]);
-update(); blankOut(); drawMust(); drawXP(); showSec(0);
+update(); blankOut(); drawMust(); drawBrief(); drawXP(); showSec(0);
 </script>
 
 </body>
