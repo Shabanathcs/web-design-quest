@@ -369,7 +369,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 5 PLAY -->
 <section class="panel" id="p-play" hidden>
-  <div class="shead"><span class="snum">5</span><div><h1>🎮 Play: Align It!</h1><div class="tags"><span class="tag">Quick game · 4 rounds</span>Right on the first try = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="shead"><span class="snum">6</span><div><h1>🎮 Play: Align It!</h1><div class="tags"><span class="tag">Quick game · 4 rounds</span>Right on the first try = <span class="xptag">+10 XP</span></div></div></div>
   <div class="playbox">
     <div class="card">
       <span class="round" id="pRound">Round 1 of 4</span>
@@ -385,7 +385,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 6 MINI PROJECT -->
 <section class="panel" id="p-mini" hidden>
-  <div class="shead"><span class="snum">6</span><div><h1>🏗️ Mini Project: My Aligned Web Page</h1><div class="tags"><span class="tag">Main activity · project-based learning</span>Each tick = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="shead"><span class="snum">7</span><div><h1>🏗️ Mini Project: My Aligned Web Page</h1><div class="tags"><span class="tag">Main activity · project-based learning</span>Each tick = <span class="xptag">+10 XP</span></div></div></div>
   <div class="dq"><span aria-hidden="true">❓</span><div><b>Driving question</b>How can text alignment make a web page easy to read?</div></div>
   <div class="sbox s1" id="box1">
     <div class="step"><span class="k">1</span>Pick your theme and read the brief <span class="todo" id="todo1">👉 Tap a theme</span></div>
@@ -437,7 +437,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 7 PLENARY -->
 <section class="panel" id="p-plen" hidden>
-  <div class="shead"><span class="snum">7</span><div><h1>🎯 Plenary: Exit Ticket</h1><div class="tags"><span class="tag">What did you learn today?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="shead"><span class="snum">8</span><div><h1>🎯 Plenary: Exit Ticket</h1><div class="tags"><span class="tag">What did you learn today?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
   <p class="lead">Three questions about today's lesson. You get XP if you are right on the first try.</p>
   <div class="grid3" id="exitBox"></div>
   <div class="msg" id="exitMsg"></div>
@@ -445,7 +445,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 8 HOT -->
 <section class="panel" id="p-hot" hidden>
-  <div class="shead"><span class="snum">8</span><div><h1>🧠 HOT: Think Deeper</h1><div class="tags"><span class="tag">Higher-order thinking</span></div></div></div>
+  <div class="shead"><span class="snum">9</span><div><h1>🧠 HOT: Think Deeper</h1><div class="tags"><span class="tag">Higher-order thinking</span></div></div></div>
   <div class="grid2">
     <div class="card" style="display:grid;gap:14px;align-content:start">
       <p class="hotq">On a restaurant menu, the food names are on the left and the prices are on the right. Why are prices right-aligned? What would happen if they were centred?</p>
@@ -466,7 +466,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 9 AE CONNECT -->
 <section class="panel" id="p-uae" hidden>
-  <div class="shead"><span class="snum">9</span><div><h1>🇦🇪 AE Connect</h1><div class="tags"><span class="tag">UAE · cross-curricular · real life</span></div></div></div>
+  <div class="shead"><span class="snum">5</span><div><h1>🇦🇪 AE Connect</h1><div class="tags"><span class="tag">UAE · cross-curricular · real life</span></div></div></div>
   <div class="grid3">
     <div class="conn uae"><h3>🇦🇪 UAE Connect</h3><p>Arabic is written right to left, so Arabic web pages such as <b>u.ae</b> are <b>right-aligned</b>.</p><div class="arabic" lang="ar">عيد الاتحاد الإماراتي</div></div>
     <div class="conn cross"><h3>📚 Cross-curricular</h3><ul><li><b>Arabic:</b> right to left</li><li><b>English:</b> newspaper columns use justify</li><li><b>Art &amp; Maths:</b> balance and symmetry (center)</li></ul></div>
@@ -497,7 +497,7 @@ const sum = a => a.reduce((x,y)=>x+y,0);
 const st = { sid:'', seq:0, name:'', div:'', t0:0, warmQ:['','',''], exitQ:['','',''], play:[], theme:0, ticks:{} };
 
 /* ---------- sections ---------- */
-const SECS = [['home','🏠 Home'],['warm','🔥 Warm-up'],['goals','🎯 Goals'],['learn','📘 Learn'],['play','🎮 Play'],['mini','🏗️ Mini Project'],['plen','📝 Plenary'],['hot','🧠 HOT'],['uae','🇦🇪 AE Connect'],['tro','🏆 Trophies']];
+const SECS = [['home','🏠 Home'],['warm','🔥 Warm-up'],['goals','🎯 Goals'],['learn','📘 Learn'],['uae','🇦🇪 AE Connect'],['play','🎮 Play'],['mini','🏗️ Mini Project'],['plen','📝 Plenary'],['hot','🧠 HOT'],['tro','🏆 Trophies']];
 let cur = 0;
 $('tabs').innerHTML = SECS.map(([k,n],i) => `<button role="tab" data-i="${i}" id="tab-${k}" aria-selected="${i===0}">${n}</button>`).join('');
 function showSec(i){
