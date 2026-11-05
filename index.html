@@ -165,7 +165,6 @@ mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301
 /* ---------- mini project (like Junior Web Studio) ---------- */
 .themes{display:flex;gap:8px;flex-wrap:wrap}
 .theme{font:800 .95rem var(--body);border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;color:var(--ink);display:flex;gap:6px;align-items:center}
-.theme[aria-pressed="true"]{border-color:var(--orange);background:#FFF1E6;color:#B04A00}
 .prog{height:12px;border-radius:999px;background:#EFEAF6;overflow:hidden;margin-bottom:10px}
 .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#21C08B,#7BE0B5);transition:width .5s}
 .must{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
@@ -209,6 +208,20 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 .revlist{display:flex;gap:10px;flex-wrap:wrap}
 .revlist label{display:flex;gap:8px;align-items:center;background:#F5F3FA;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
 .revlist input{width:20px;height:20px;accent-color:var(--ok)}
+
+.sbox{border-radius:16px;padding:16px 20px;border:2px solid var(--sc);border-left-width:10px;background:var(--sb);box-shadow:0 4px 0 var(--sc)}
+.sbox .step .k{background:var(--sc);width:30px;height:30px;font-size:1.05rem}
+.sbox .step{font-size:1.2rem}
+.s1{--sc:#FF7A1A;--sb:#FFF4EA}.s2{--sc:#2F6FDB;--sb:#EEF4FF}.s3{--sc:#11956F;--sb:#EBFAF3}.s4{--sc:#6C4BD8;--sb:#F3EFFF}
+.sbox .must li{background:#fff}.sbox .plan label{background:#fff}.sbox .brief{background:#fff}
+.todo{font:800 .85rem var(--body);background:var(--sc);color:#fff;border-radius:999px;padding:3px 12px;margin-left:6px;animation:nudge 1.2s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(255,122,26,.6)}100%{box-shadow:0 0 0 14px rgba(255,122,26,0)}}
+.sbox.alert{animation:ring 1s 2}
+.theme{border-color:var(--tc);color:var(--tc)}
+.theme[aria-pressed="true"]{background:var(--tc);border-color:var(--tc);color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.themes.unpicked .theme{background:#fff;color:var(--tc)}
+.hintpic .where{font-size:1.05rem}
 
 /* ---------- HOT, AE connect ---------- */
 .hotq{font:700 clamp(1.3rem,2.8vw,1.75rem) var(--display);line-height:1.3}
@@ -373,14 +386,18 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 <section class="panel" id="p-mini" hidden>
   <div class="shead"><span class="snum">6</span><div><h1>🏗️ Mini Project: My Aligned Web Page</h1><div class="tags"><span class="tag">Main activity · project-based learning</span>Each tick = <span class="xptag">+10 XP</span></div></div></div>
   <div class="dq"><span aria-hidden="true">❓</span><div><b>Driving question</b>How can text alignment make a web page easy to read?</div></div>
-  <div class="card">
-    <div class="step"><span class="k">1</span>Pick your theme and read the brief</div>
+  <div class="sbox s1" id="box1">
+    <div class="step"><span class="k">1</span>Pick your theme and read the brief <span class="todo" id="todo1">👉 Tap a theme</span></div>
     <div class="themes" id="themes" role="group" aria-label="Themes"></div>
     <div class="brief" id="brief"></div>
-    <div class="step" style="margin-top:16px"><span class="k">2</span>Plan it — choose an alignment for each part</div>
+  </div>
+  <div class="sbox s2" id="box2">
+    <div class="step"><span class="k">2</span>Plan it — choose an alignment for each part <span class="todo" id="todo2">👉 Choose all three</span></div>
     <div class="plan" id="plan"></div>
     <div class="msg" id="planMsg" style="margin-top:8px"></div>
-    <div class="step" style="margin-top:16px"><span class="k">3</span>Build it — your page must have:</div>
+  </div>
+  <div class="sbox s3">
+    <div class="step"><span class="k">3</span>Build it — do these on your page:</div>
     <div class="prog" aria-hidden="true"><i id="progFill"></i></div>
     <ul class="must" id="must"></ul>
   </div>
@@ -404,7 +421,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
       <iframe class="out" id="out" title="Your web page" sandbox=""></iframe>
     </div>
   </div>
-  <div class="card review">
+  <div class="sbox s4 review">
     <div class="step"><span class="k">4</span>Review it — check your own page <span class="xptag" style="margin-left:6px">+10 XP</span></div>
     <div class="revlist" id="revList">
       <label><input type="checkbox"> My title is easy to see</label>
@@ -637,64 +654,72 @@ drawRound();
 const txt = el => (el ? el.textContent : '').replace(/\s+/g,' ').trim();
 const al = el => el && el.style.textAlign;
 const body = d => [...d.querySelectorAll('body *')];
+const firstWords = l => l.replace(/<[^>]+>/g,'').split(' ').slice(0,4).join(' ');
 const MUST = [
-  { lab:'A heading <code>&lt;h1&gt;</code> in the <b>center</b>', hint:'<h1 style="text-align:center;">', test:d => [...d.querySelectorAll('body h1')].some(h => txt(h) && al(h) === 'center') },
-  { lab:'Heading <b>colour</b> + center in one style', hint:'<h1 style="text-align:center; color:…;">', test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center' && h.style.color) },
-  { lab:'A paragraph aligned <b>right</b>', hint:'<p style="text-align:right;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p) && al(p) === 'right') },
-  { lab:'A paragraph in <b>justify</b>', hint:'<p style="text-align:justify;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p).length >= 20 && al(p) === 'justify') },
-  { lab:'A line <code>&lt;hr&gt;</code>', hint:'<hr>', test:d => !!d.querySelector('body hr') },
-  { lab:'Bold text <code>&lt;b&gt;</code>', hint:'<b>', test:d => [...d.querySelectorAll('body b, body strong')].some(b => txt(b)) },
-  { lab:'Page <b>background colour</b>', hint:'<body style="background-color:…;">', test:d => !!(d.body && d.body.style.backgroundColor) },
-  { lab:'<b>Your own words:</b> change a line or add a new one', hint:'<p>…your own sentence…</p>', test:d => { const orig = new Set(THEMES[st.theme].lines.map(l => l.replace(/<[^>]+>/g,'').trim())); return [...d.querySelectorAll('body h1, body h2, body p')].some(e => txt(e).length >= 3 && !orig.has(txt(e))); } },
-  { lab:'⭐ BONUS: a banner with <b>3 properties</b>', hint:'<p style="text-align:center; color:…; background-color:…;">', bonus:true, test:d => body(d).some(e => al(e) === 'center' && e.style.color && e.style.backgroundColor && txt(e)) }
+  { lab:T => `Center the heading <code>&lt;h1&gt;</code>`, where:T => `Find the line <b>${esc(T.lines[0])}</b> Change its start tag to:`, hint:T => '<h1 style="text-align:center;">', test:d => [...d.querySelectorAll('body h1')].some(h => txt(h) && al(h) === 'center') },
+  { lab:T => `Give the heading a <b>colour</b>`, where:T => 'Add a colour inside the <b>same</b> style of &lt;h1&gt; (any colour you like):', hint:T => `<h1 style="text-align:center; color:${T.c1};">`, test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center' && h.style.color) },
+  { lab:T => `Move the <b>${T.parts[1].toLowerCase()}</b> to the <b>right</b>`, where:T => `Find the line <b>${esc(firstWords(T.lines[1]))}…</b> Change its &lt;p&gt; to:`, hint:T => '<p style="text-align:right;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p) && al(p) === 'right') },
+  { lab:T => `<b>Justify</b> the ${T.parts[2].toLowerCase()}`, where:T => `Find the line <b>${esc(firstWords(T.lines[2]))}…</b> Change its &lt;p&gt; to:`, hint:T => '<p style="text-align:justify;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p).length >= 20 && al(p) === 'justify') },
+  { lab:T => `Add a line <code>&lt;hr&gt;</code> under the heading`, where:T => 'Type this on a new line just after <b>&lt;/h1&gt;</b>:', hint:T => '<hr>', test:d => !!d.querySelector('body hr') },
+  { lab:T => `Make one word <b>bold</b> with <code>&lt;b&gt;</code>`, where:T => `Put &lt;b&gt; before a word and &lt;/b&gt; after it. Example with the word <b>${T.bold}</b>:`, hint:T => `<b>${T.bold}</b>`, test:d => [...d.querySelectorAll('body b, body strong')].some(b => txt(b)) },
+  { lab:T => `Colour the page <b>background</b>`, where:T => 'Find <b>&lt;body&gt;</b>. Change it to (any light colour):', hint:T => `<body style="background-color:${T.bg};">`, test:d => !!(d.body && d.body.style.backgroundColor) },
+  { lab:T => `Write <b>your own words</b> (change a line or add one)`, where:T => 'Change one sentence to your own words, or type a new line before <b>&lt;/body&gt;</b>. Example:', hint:T => `<p>${T.own}</p>`, test:d => { const orig = new Set(THEMES[st.theme].lines.map(l => l.replace(/<[^>]+>/g,'').trim())); return [...d.querySelectorAll('body h1, body h2, body p')].some(e => txt(e).length >= 3 && !orig.has(txt(e))); } },
+  { lab:T => `⭐ BONUS: add a banner with <b>center + color + background</b>`, where:T => 'Type a new line before <b>&lt;/body&gt;</b>. Start it like this, then add your text and <b>&lt;/p&gt;</b>:', hint:T => `<p style="text-align:center; color:white; background-color:${T.ban};">`, bonus:true, test:d => body(d).some(e => al(e) === 'center' && e.style.color && e.style.backgroundColor && txt(e)) }
 ];
 const THEMES = [
   { ic:'🇦🇪', name:'UAE National Day', file:'invitation', title:'National Day Invitation',
     from:'The School Events Team', brief:'We need an invitation web page for our UAE National Day celebration. Parents and students will read it. Make the title stand out, show the date clearly and write a friendly message.',
-    parts:['Title','Date','Message'],
+    parts:['Title','Date','Message'], tc:'#C8102E', c1:'red', bg:'lightyellow', ban:'green', bold:'party', own:'We will sing the national anthem together.',
     lines:['<h1>Happy UAE National Day!</h1>','<p>2 December 2026</p>','<p>You are invited to our National Day party in Class 6.</p>'] },
   { ic:'📌', name:'School Notice Board', file:'notice', title:'Notice Board',
     from:'The Principal’s Office', brief:'We need a notice web page about the Science Exhibition for all students. Make the heading easy to spot, put the date where notices usually show it, and keep the message neat.',
-    parts:['Heading','Date','Notice'],
+    parts:['Heading','Date','Notice'], tc:'#1D4ED8', c1:'blue', bg:'lightblue', ban:'red', bold:'Friday', own:'Please bring your project on time.',
     lines:['<h1>Notice Board</h1>','<p>Date: 5 November 2026</p>','<p>The Science Exhibition is in the school hall on Friday.</p>'] },
   { ic:'📰', name:'The Sharjah Times', file:'newspaper', title:'The Sharjah Times',
     from:'The Editor', brief:'Design the front page of The Sharjah Times for our readers. The newspaper name should catch the eye, the date should be easy to find and the news article should look neat like a real newspaper.',
-    parts:['Newspaper name','Date','News article'],
+    parts:['Newspaper name','Date','News article'], tc:'#374151', c1:'navy', bg:'lightgray', ban:'black', bold:'today', own:'Many students visited with their families.',
     lines:['<h1>The Sharjah Times</h1>','<p>Friday, 6 November 2026</p>','<p>The Sharjah International Book Fair opens at Expo Centre today.</p>'] },
   { ic:'🥗', name:'Healthy Food Menu', file:'menu', title:'Healthy Food Menu',
     from:'The School Canteen', brief:'Make a healthy menu web page for students. The title should catch the eye, the prices should line up neatly and the description should be easy to read.',
-    parts:['Title','Price','Description'],
+    parts:['Title','Price','Description'], tc:'#15803D', c1:'green', bg:'honeydew', ban:'orange', bold:'mango', own:'Drink water every day to stay strong.',
     lines:['<h1>Healthy Food Menu</h1>','<p>Fruit Salad – 10 AED</p>','<p>Fresh fruit salad with mango, apple and dates.</p>'] }
 ];
 st.plan = {}; st.review = '';
 function drawBrief(){
   const T = THEMES[st.theme], P = st.plan[st.theme] || (st.plan[st.theme] = ['','','']);
-  $('brief').innerHTML = `<span class="from">📩 Brief from: ${esc(T.from)}</span><span>${esc(T.brief)}</span>`;
+  $('brief').innerHTML = st.picked ? `<span class="from">📩 Brief from: ${esc(T.from)}</span><span>${esc(T.brief)}</span>` : '<span class="from">📩 Your brief</span><span>Tap a theme above to read the brief from your client.</span>';
   $('plan').innerHTML = T.parts.map((p,k) => `<label>${esc(p)}<select data-k="${k}"><option value="">Choose…</option>${AL.map(v => `<option${P[k] === v ? ' selected' : ''}>${v}</option>`).join('')}</select></label>`).join('');
   $('planMsg').className = 'msg'; $('planMsg').textContent = '';
+  $('todo2').hidden = P.every(Boolean);
 }
 const planText = i => (st.plan[i] || []).map((v,k) => v ? `${THEMES[i].parts[k]}: ${v}` : '').filter(Boolean).join(', ');
 $('plan').addEventListener('change', e => {
   const s = e.target.closest('select'); if (!s) return;
   const P = st.plan[st.theme]; P[+s.dataset.k] = s.value;
-  if (P.every(Boolean)){ $('planMsg').className = 'msg ok'; $('planMsg').textContent = 'Plan saved ✓ Now build your page to match your plan.'; save('Plan'); }
+  if (P.every(Boolean)){
+    $('todo2').hidden = true; save('Plan');
+    const T = THEMES[st.theme], key = ['center','right','justify'], diff = key.map((v,k) => P[k] !== v ? k : -1).filter(k => k >= 0);
+    $('planMsg').className = 'msg ok';
+    $('planMsg').textContent = diff.length ? `Plan saved ✓ Tip: read the brief again. Most designers use ${diff.map(k => `${key[k]} for the ${T.parts[k].toLowerCase()}`).join(' and ')}.` : 'Great plan ✓ Now build your page to match your plan.';
+  }
 });
 const starter = T => `<!DOCTYPE html>\n<html>\n<head>\n  <title>${T.title}</title>\n</head>\n<body>\n${T.lines.join('\n')}\n\n</body>\n</html>\n`;
 const KEY = i => 'wdq-mini-' + i;
 const load = i => { try { return localStorage.getItem(KEY(i)); } catch(e){ return null; } };
 const store = (i, v) => { try { localStorage.setItem(KEY(i), v); } catch(e){} };
 
-$('themes').innerHTML = THEMES.map((T,i) => `<button class="theme" data-i="${i}" aria-pressed="${i===0}"><span aria-hidden="true">${T.ic}</span>${esc(T.name)}</button>`).join('');
+$('themes').innerHTML = THEMES.map((T,i) => `<button class="theme" data-i="${i}" aria-pressed="false" style="--tc:${T.tc}"><span aria-hidden="true">${T.ic}</span>${esc(T.name)}</button>`).join('');
+$('themes').classList.add('unpicked'); st.picked = false;
 $('themes').addEventListener('click', e => { const b = e.target.closest('.theme'); if (b) pickTheme(+b.dataset.i); });
 function drawMust(fresh){
   const d = tickArr(st.theme);
-  $('must').innerHTML = MUST.map((M,j) => `<li class="${d[j] ? 'met' : ''}${M.bonus ? ' bonus' : ''}"><span class="bx"></span><span>${M.lab}</span></li>`).join('');
   $('progFill').style.width = (sum(d) / MUST.length * 100) + '%';
+  $('must').innerHTML = MUST.map((M,j) => `<li class="${d[j] ? 'met' : ''}${M.bonus ? ' bonus' : ''}"><span class="bx"></span><span>${M.lab(THEMES[st.theme])}</span></li>`).join('');
   if (fresh) fresh.forEach(j => $('must').children[j].classList.add('bump'));
 }
 function pickTheme(i){
   store(st.theme, $('editor').value);
-  st.theme = i;
+  st.theme = i; st.picked = true; $('themes').classList.remove('unpicked'); $('todo1').hidden = true;
   document.querySelectorAll('.theme').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.i === i)));
   $('editor').value = load(i) || starter(THEMES[i]);
   $('result').hidden = true; $('hintBox').hidden = true; $('hintBtn').textContent = '💡 Show hint';
@@ -739,7 +764,7 @@ $('hintBtn').onclick = () => {
   h.innerHTML = '';
   const p = document.createElement('p');
   if (j === -1){ p.textContent = 'Everything is ticked! Add more colours or try another theme.'; h.append(p); }
-  else { p.innerHTML = `Next: ${MUST[j].lab}. Start tag (fill in the rest yourself):`; h.append(p, codePicture(MUST[j].hint)); }
+  else { const T = THEMES[st.theme]; p.className = 'where'; p.innerHTML = `<b>Next: ${MUST[j].lab(T)}</b><br>${MUST[j].where(T)}`; h.append(p, codePicture(MUST[j].hint(T))); }
   h.hidden = false; $('hintBtn').textContent = '💡 Hide hint';
 };
 ['contextmenu','copy','dragstart'].forEach(ev => $('hintBox').addEventListener(ev, e => e.preventDefault()));
@@ -836,6 +861,13 @@ function styleLint(attrs, at, add){
 $('checkBtn').onclick = () => {
   const box = $('result'); box.hidden = false;
   if (!needId(t => { box.className = 'result bad'; box.innerHTML = `<h3>${t}</h3>`; })) return;
+  const planOK = st.plan[st.theme] && st.plan[st.theme].every(Boolean);
+  if (!st.picked || !planOK){
+    const bx = !st.picked ? 'box1' : 'box2';
+    box.className = 'result bad'; box.innerHTML = `<h3>${!st.picked ? '👉 First choose your theme in Step 1' : '👉 First finish your plan in Step 2'}</h3><p>Then press Check my code again.</p>`;
+    $(bx).scrollIntoView({behavior:'smooth', block:'center'}); $(bx).classList.remove('alert'); void $(bx).offsetWidth; $(bx).classList.add('alert');
+    return;
+  }
   const src = $('editor').value;
   $('out').srcdoc = src;
   const errs = checkCode(src);
@@ -855,7 +887,7 @@ $('checkBtn').onclick = () => {
   box.className = 'result ok';
   if (fresh.length) confetti(n === MUST.length ? 220 : 110);
   if (n === MUST.length){ box.innerHTML = '<h3>🏆 All ticks done – you are a Master Designer!</h3><p>Your page is finished. Go to the Plenary, or try another theme.</p>'; markDone('mini'); }
-  else box.innerHTML = `<h3>${fresh.length ? `🎉 +${fresh.length * 10} XP – ${fresh.length} new tick${fresh.length > 1 ? 's' : ''}!` : '✅ No errors – keep building!'}</h3><p>${n} of ${MUST.length} done. Next: ${left[0].lab}.</p>`;
+  else box.innerHTML = `<h3>${fresh.length ? `🎉 +${fresh.length * 10} XP – ${fresh.length} new tick${fresh.length > 1 ? 's' : ''}!` : '✅ No errors – keep building!'}</h3><p>${n} of ${MUST.length} done. Next: ${left[0].lab(THEMES[st.theme])}. Stuck? Press <b>💡 Show hint</b>.</p>`;
   if (fresh.length) save('Mini Project');
 };
 $('result').addEventListener('click', e => {
