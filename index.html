@@ -966,7 +966,7 @@ function update(){
   $('gutter').innerHTML = Array.from({length: v.split('\n').length}, (_,k) => k+1).join('\n');
   clearTimeout(t1); t1 = setTimeout(() => store(st.theme, v), 400);
 }
-function blankOut(){ $('out').srcdoc = '<body style="margin:0;height:100vh;display:grid;place-items:center;font:700 18px Arial,sans-serif;color:#8A93AE;text-align:center;padding:24px;box-sizing:border-box"><div>Add the styles on the left,<br>then press <b style="color:#FF7A1A">Check my code</b> to see your page here.</div></body>'; }
+function blankOut(){ $('out').srcdoc = $('editor').value; }
 $('editor').addEventListener('input', update);
 $('editor').addEventListener('scroll', () => { $('gutter').scrollTop = $('editor').scrollTop; });
 $('editor').addEventListener('keydown', e => {
@@ -1174,7 +1174,7 @@ function boardView(){ $('qBoard').hidden = false; $('qWork').hidden = true; $('m
 $('qBack').onclick = boardView; $('mBack').onclick = boardView;
 ['qWork','miniWrap'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) boardView(); }));
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && (!$('qWork').hidden || !$('miniWrap').hidden)) boardView(); });
-function openMini(){ $('qBoard').hidden = false; $('qWork').hidden = true; $('miniWrap').hidden = false; qOpen = 'mini'; document.body.classList.add('locked'); $('miniWrap').scrollTop = 0; persist(); }
+function openMini(){ $('qBoard').hidden = false; $('qWork').hidden = true; $('miniWrap').hidden = false; qOpen = 'mini'; blankOut(); document.body.classList.add('locked'); $('miniWrap').scrollTop = 0; persist(); }
 
 function drawQuest(fresh){
   const Q = QB[qOpen], t = st.qt[Q.id] || (st.qt[Q.id] = Q.checks.map(() => 0));
@@ -1199,7 +1199,7 @@ function qUpdate(){
   if (qOpen !== null && qOpen !== 'mini'){ st.qcode['v4:' + QB[qOpen].id] = v; clearTimeout(qT); qT = setTimeout(persist, 400); }
 }
 const qRender = src => '<!DOCTYPE html><html><body style="font-family:Arial,Helvetica,sans-serif;font-size:18px;margin:14px">' + src + '</body></html>';
-function qBlank(){ $('qOut').srcdoc = '<body style="margin:0;height:100vh;display:grid;place-items:center;font:700 18px Arial,sans-serif;color:#8A93AE;text-align:center;padding:24px;box-sizing:border-box"><div>Do the quest on the left,<br>then press <b style="color:#FF7A1A">Check my code</b> to see your page here.</div></body>'; }
+function qBlank(){ $('qOut').srcdoc = qRender($('qEditor').value); }
 $('qEditor').addEventListener('input', qUpdate);
 $('qEditor').addEventListener('scroll', () => { $('qGutter').scrollTop = $('qEditor').scrollTop; });
 $('qEditor').addEventListener('keydown', e => { if (e.key === 'Tab'){ e.preventDefault(); const t = e.target, s = t.selectionStart; t.setRangeText('  ', s, t.selectionEnd, 'end'); qUpdate(); } });
