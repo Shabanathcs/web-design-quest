@@ -554,7 +554,7 @@ body.locked{overflow:hidden}
   <div class="modal" id="miniWrap" hidden role="dialog" aria-modal="true" aria-label="Mini Project">
    <div class="mbox">
     <button class="mclose" id="mBack" aria-label="Close mini project">✕</button>
-    <div class="mhead"><div class="t"><span class="qic" aria-hidden="true">🏗️</span><h2>Mini Project</h2></div><div class="qmeta"><span class="tag">For everyone</span><span class="xptag">up to +80 XP</span></div></div>
+    <div class="mhead"><div class="t"><span class="qic" aria-hidden="true">🏗️</span><h2>Mini Project</h2></div><div class="qmeta"><span class="xptag">up to +80 XP</span></div></div>
     <div class="dq"><span aria-hidden="true">❓</span><div><b>Driving question</b>How can text alignment make a web page easy to read?</div></div>
   <div class="sbox s1" id="box1">
       <div class="step"><span class="k">1</span>Pick your theme and read the brief <span class="todo" id="todo1">👉 Tap a theme</span></div>
@@ -1164,7 +1164,7 @@ function drawBoard(){
   const miniTicks = sum(tickArr(bestTheme()));
   $('qCards').innerHTML = QB.map((Q,k) => (qFilt && Q.lvl !== qFilt) ? '' :
     `<button class="qcard l${Q.lvl}${st.qd[Q.id] ? ' done' : ''}" data-k="${k}"><span class="qic" aria-hidden="true">${Q.ic}</span><b>${esc(Q.name)}</b><span class="qmeta"><span class="stars">${LV[Q.lvl].s}</span><span class="xptag">+${LV[Q.lvl].xp} XP</span>${st.qd[Q.id] ? '<span class="clr">✓ Cleared</span>' : ''}</span><span class="qstory">${esc(Q.story)}</span></button>`).join('') +
-    (qFilt ? '' : `<button class="qcard mini${miniTicks === MUST.length ? ' done' : ''}" data-k="mini"><span class="qic" aria-hidden="true">🏗️</span><b>Mini Project</b><span class="qmeta"><span class="tag" style="background:#fff;color:var(--violet)">For everyone</span><span class="xptag">up to +80 XP</span>${miniTicks ? `<span class="clr">${miniTicks} / ${MUST.length} ticks</span>` : ''}</span><span class="qstory">Design your own UAE web page for a real client: choose a brief, plan it, build it and review it.</span></button>`);
+    (qFilt ? '' : `<button class="qcard mini${miniTicks === MUST.length ? ' done' : ''}" data-k="mini"><span class="qic" aria-hidden="true">🏗️</span><b>Mini Project</b><span class="qmeta"><span class="xptag">up to +80 XP</span>${miniTicks ? `<span class="clr">${miniTicks} / ${MUST.length} ticks</span>` : ''}</span><span class="qstory">Design your own UAE web page for a real client: choose a brief, plan it, build it and review it.</span></button>`);
   const n = qCleared();
   $('qSum').innerHTML = n ? `🏆 You cleared <b>${n}</b> of ${QB.length} quests! Try a harder one or the Mini Project.` : 'Tap any quest card to start!';
   $('qSum').className = 'qsum' + (n ? ' ok' : '');
