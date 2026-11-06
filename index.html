@@ -442,7 +442,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 7 QUEST BOARD (quests + mini project at the end) -->
 <section class="panel" id="p-quest" hidden>
-  <div class="shead"><span class="snum">7</span><div><h1>🗺️ Quest Board: Pick Your Challenge!</h1><div class="tags"><span class="tag">Main activity</span><span>Choose quests you like. Clear at least <b>3</b>!</span></div></div></div>
+  <div class="shead"><span class="snum">7</span><div><h1>🗺️ Quest Board: Pick Your Challenge!</h1><div class="tags"><span class="tag">Main activity</span><span>Choose any quest you like!</span></div></div></div>
 
   <div id="qBoard">
     <div class="qfilter" id="qFilter" role="group" aria-label="Filter quests">
@@ -1066,8 +1066,8 @@ function drawBoard(){
     `<button class="qcard l${Q.lvl}${st.qd[Q.id] ? ' done' : ''}" data-k="${k}"><span class="qic" aria-hidden="true">${Q.ic}</span><b>${esc(Q.name)}</b><span class="qmeta"><span class="stars">${LV[Q.lvl].s}</span><span class="xptag">+${LV[Q.lvl].xp} XP</span>${st.qd[Q.id] ? '<span class="clr">✓ Cleared</span>' : ''}</span><span class="qstory">${esc(Q.story)}</span></button>`).join('') +
     (qFilt && qFilt !== 3 ? '' : `<button class="qcard mini${miniTicks === MUST.length ? ' done' : ''}" data-k="mini"><span class="qic" aria-hidden="true">🏗️</span><b>Final Mission: Mini Project</b><span class="qmeta"><span class="stars">★★★</span><span class="xptag">up to +70 XP</span>${miniTicks ? `<span class="clr">${miniTicks} / ${MUST.length} ticks</span>` : ''}</span><span class="qstory">Design your own UAE web page for a real client: choose a brief, plan it, build it and review it.</span></button>`);
   const n = qCleared();
-  $('qSum').innerHTML = n >= 3 ? `🏆 You cleared <b>${n}</b> quests – goal reached! Try a harder one or the Final Mission.` : `Cleared <b>${n}</b> of 3 quests. Keep going!`;
-  $('qSum').className = 'qsum' + (n >= 3 ? ' ok' : '');
+  $('qSum').innerHTML = n ? `🏆 You cleared <b>${n}</b> of ${QB.length} quests! Try a harder one or the Final Mission.` : 'Tap any quest card to start!';
+  $('qSum').className = 'qsum' + (n ? ' ok' : '');
 }
 $('qFilter').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
@@ -1144,9 +1144,9 @@ $('qCheck').onclick = () => {
     confetti(160);
     const n = qCleared();
     box.className = 'result ok';
-    box.innerHTML = `<h3>🎉 Quest cleared! +${LV[Q.lvl].xp} XP</h3><p>${n >= 3 ? `You have cleared ${n} quests – goal reached! 🧑‍🏫 You are an Expert Helper: help a friend, or pick a harder quest.` : `Cleared ${n} of 3. Pick your next quest!`}</p><div class="actions"><button class="btn big" id="qToBoard">◀ Back to Quest Board</button></div>`;
+    box.innerHTML = `<h3>🎉 Quest cleared! +${LV[Q.lvl].xp} XP</h3><p>You have cleared ${n} of ${QB.length} quests. Pick another quest, or help a friend as an 🧑‍🏫 Expert Helper!</p><div class="actions"><button class="btn big" id="qToBoard">◀ Back to Quest Board</button></div>`;
     $('qToBoard').onclick = boardView;
-    if (n >= 3) markDone('quest');
+    markDone('quest');
     save('Quest: ' + Q.name);
   } else if (all){ box.className = 'result ok'; box.innerHTML = '<h3>✅ Already cleared – great work!</h3>'; }
   else {
