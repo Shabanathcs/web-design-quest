@@ -187,7 +187,7 @@ mark.m1{background:#E1ECFF;color:#1E4FB0}mark.m2{background:#FFE1DC;color:#B4301
 .gutter{background:var(--gutter);color:var(--gutter-fg);font:500 16px/1.65 var(--mono);padding:14px 10px 14px 14px;text-align:right;overflow:hidden;user-select:none;white-space:pre}
 .gutter .err{color:#FF8A80;font-weight:700}
 textarea.code{border:0;margin:0;resize:none;width:100%;height:100%;background:transparent;color:var(--code-fg);font:500 16px/1.65 var(--mono);padding:14px;tab-size:2;white-space:pre;overflow:auto;caret-color:var(--orange)}
-iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min(58vh,520px);min-height:330px;background:#fff;display:block}
+.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min(58vh,520px);min-height:330px;background:#fff;display:block;overflow:auto}
 .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
 .hintpic{margin-top:12px;background:#FFF7DB;border:1px solid #F1DE9B;border-radius:12px;padding:10px 12px;display:grid;gap:8px;user-select:none;-webkit-user-select:none;font-weight:700}
 .hintpic img{display:block;max-width:100%;height:auto;pointer-events:none;-webkit-user-drag:none}
@@ -294,7 +294,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 .mhead h2{font-size:clamp(1.5rem,3vw,2rem)}
 .mhead .qmeta{display:flex;gap:10px;align-items:center}
 .mtask{background:#FFF6DC;border-left:6px solid var(--orange);border-radius:12px;padding:14px 18px;font-size:1.2rem;font-weight:700}
-.mbench .codebox,.mbench iframe.out{height:320px;min-height:260px}
+.mbench .codebox,.mbench .out{height:320px;min-height:260px}
 .mbench textarea.code{font-size:17px;white-space:pre-wrap;word-break:break-word;overflow-x:hidden}
 .mbench .gutter{display:none}
 .mbench .codebox{grid-template-columns:minmax(0,1fr)}
@@ -536,7 +536,7 @@ body.locked{overflow:hidden}
         </div>
         <div>
           <span class="lab">🖥️ Output</span>
-          <iframe class="out" id="qOut" title="Quest output" sandbox=""></iframe>
+          <div class="out" id="qOut" role="region" aria-label="Quest output"></div>
         </div>
       </div>
       <div class="mbtns">
@@ -587,7 +587,7 @@ body.locked{overflow:hidden}
       </div>
       <div>
         <span class="lab">🖥️ Your web page</span>
-        <iframe class="out" id="out" title="Your web page" sandbox=""></iframe>
+        <div class="out" id="out" role="region" aria-label="Your web page"></div>
       </div>
     </div>
     <div>
@@ -966,7 +966,7 @@ function update(){
   $('gutter').innerHTML = Array.from({length: v.split('\n').length}, (_,k) => k+1).join('\n');
   clearTimeout(t1); t1 = setTimeout(() => store(st.theme, v), 400);
 }
-function blankOut(){ const f = $('out'), v = $('editor').value; f.srcdoc = ''; requestAnimationFrame(() => { f.srcdoc = v; }); }
+function blankOut(){ showOut('out', $('editor').value); }
 $('editor').addEventListener('input', update);
 $('editor').addEventListener('scroll', () => { $('gutter').scrollTop = $('editor').scrollTop; });
 $('editor').addEventListener('keydown', e => {
@@ -981,6 +981,19 @@ function noPaste(e){
 $('editor').addEventListener('beforeinput', e => { if (e.inputType === 'insertFromPaste' || e.inputType === 'insertFromDrop') noPaste(e); });
 $('editor').addEventListener('contextmenu', e => e.preventDefault());
 $('resetBtn').onclick = () => { $('editor').value = starter(THEMES[st.theme]); $('result').hidden = true; update(); blankOut(); };
+
+/* draw the student's HTML in the output box (no iframe – works in every browser) */
+function showOut(id, src){
+  const host = $(id), root = host.shadowRoot || host.attachShadow({mode:'open'});
+  const d = new DOMParser().parseFromString(src || '', 'text/html');
+  d.querySelectorAll('script,iframe,object,embed,link,meta,base,form,style').forEach(e => e.remove());
+  d.querySelectorAll('*').forEach(e => [...e.attributes].forEach(a => { if (/^on/i.test(a.name) || /^\s*javascript:/i.test(a.value)) e.removeAttribute(a.name); }));
+  const bodyStyle = d.body ? (d.body.getAttribute('style') || '') : '';
+  root.innerHTML = `<style>:host{display:block}.pg{min-height:100%;box-sizing:border-box;padding:12px 16px;font-family:"Times New Roman",serif;font-size:16px;color:#000;line-height:normal}.pg h1{font-size:2em;margin:.67em 0}.pg h2{font-size:1.5em;margin:.75em 0}.pg p{margin:1em 0}.pg hr{border:0;border-top:1px solid #999;margin:.5em 0}</style><div class="pg"></div>`;
+  const pg = root.querySelector('.pg');
+  pg.setAttribute('style', bodyStyle);
+  pg.innerHTML = d.body ? d.body.innerHTML : '';
+}
 
 /* code checker (errors in red with line numbers) */
 const CONTAINER = ['html','head','title','body','h1','h2','h3','h4','h5','h6','p','b','i','u','strong','em','center','div','span','font','marquee','sub','sup','small','big','mark'];
@@ -1052,7 +1065,7 @@ function styleLint(attrs, at, add){
 
 $('checkBtn').onclick = () => {
   const box = $('result'); box.hidden = false;
-  $('out').srcdoc = $('editor').value;
+  showOut('out', $('editor').value);
   if (!needId(t => { box.className = 'result bad'; box.innerHTML = `<h3>${t}</h3>`; })) return;
   const planOK = st.plan[st.theme] && st.plan[st.theme].every(Boolean);
   if (!st.picked || !planOK){
@@ -1199,7 +1212,7 @@ function qUpdate(){
   if (qOpen !== null && qOpen !== 'mini'){ st.qcode['v4:' + QB[qOpen].id] = v; clearTimeout(qT); qT = setTimeout(persist, 400); }
 }
 const qRender = src => '<!DOCTYPE html><html><body style="font-family:Arial,Helvetica,sans-serif;font-size:18px;margin:14px">' + src + '</body></html>';
-function qBlank(){ const f = $('qOut'), v = qRender($('qEditor').value); f.srcdoc = ''; requestAnimationFrame(() => { f.srcdoc = v; setTimeout(() => { if (f.srcdoc !== v) f.srcdoc = v; }, 150); }); }
+function qBlank(){ showOut('qOut', $('qEditor').value); $('qOut').shadowRoot.querySelector('.pg').style.fontFamily = 'Arial,Helvetica,sans-serif'; $('qOut').shadowRoot.querySelector('.pg').style.fontSize = '18px'; }
 $('qEditor').addEventListener('input', qUpdate);
 $('qEditor').addEventListener('scroll', () => { $('qGutter').scrollTop = $('qEditor').scrollTop; });
 $('qEditor').addEventListener('keydown', e => { if (e.key === 'Tab'){ e.preventDefault(); const t = e.target, s = t.selectionStart; t.setRangeText('  ', s, t.selectionEnd, 'end'); qUpdate(); } });
@@ -1207,7 +1220,7 @@ function qNoPaste(e){ e.preventDefault(); const b = $('qResult'); b.hidden = fal
 ['paste','drop'].forEach(ev => $('qEditor').addEventListener(ev, qNoPaste));
 $('qEditor').addEventListener('beforeinput', e => { if (e.inputType === 'insertFromPaste' || e.inputType === 'insertFromDrop') qNoPaste(e); });
 $('qEditor').addEventListener('contextmenu', e => e.preventDefault());
-$('qReset').onclick = () => { const Q = QB[qOpen]; $('qEditor').value = Q.code; $('qResult').hidden = true; qUpdate(); $('qOut').srcdoc = qRender(Q.code); };
+$('qReset').onclick = () => { const Q = QB[qOpen]; $('qEditor').value = Q.code; $('qResult').hidden = true; qUpdate(); qBlank(); };
 $('qHintBtn').onclick = () => {
   const h = $('qHint');
   if (!h.hidden){ h.hidden = true; $('qHintBtn').textContent = '💡 Hint'; return; }
@@ -1219,7 +1232,7 @@ $('qHintBtn').onclick = () => {
 ['contextmenu','copy','dragstart'].forEach(ev => $('qHint').addEventListener(ev, e => e.preventDefault()));
 $('qCheck').onclick = () => {
   const box = $('qResult'); box.hidden = false;
-  $('qOut').srcdoc = qRender($('qEditor').value);
+  qBlank();
   if (!needId(t => { box.className = 'result bad'; box.innerHTML = `<h3>${t}</h3>`; })) return;
   const Q = QB[qOpen], src = $('qEditor').value;
   const errs = checkCode(src, true);
