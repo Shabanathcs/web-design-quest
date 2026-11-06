@@ -703,8 +703,8 @@ const seen = new Set();
 function markDone(k){ seen.add(k); $('tab-'+k).classList.add('done'); }
 
 /* ---------- XP + rank ---------- */
-const MAX_XP = 360;
-const RANKS = [[0,'🥉 Rookie'],[70,'🧭 Explorer'],[150,'🧱 Builder'],[230,'🎨 Designer'],[310,'👑 Master']];
+const MAX_XP = 340;
+const RANKS = [[0,'🥉 Rookie'],[70,'🧭 Explorer'],[140,'🧱 Builder'],[220,'🎨 Designer'],[290,'👑 Master']];
 const warmPts = () => st.warmQ.filter(v => v === 1).length, exitPts = () => st.exitQ.filter(v => v === 1).length;
 const playPts = () => st.play.filter(v => v === 1).length;
 const tickArr = i => { const a = st.ticks[i] || (st.ticks[i] = []); while (a.length < 7) a.push(0); return a; };
@@ -1125,11 +1125,6 @@ const QB = [
     task:'Put the title in the <b>center</b> and give it a <b>colour</b>.',
     code:'<h1>Burj Khalifa</h1>\n<p>The Burj Khalifa in Dubai is 828 metres tall. It is the tallest building in the world.</p>',
     checks:[ { ...C.h1c, lab:'Title is in the center', where:'Line 1: change <code>&lt;h1&gt;</code> to:' }, { ...C.h1col, lab:'Title has a colour (same style)', hint:'<h1 style="text-align:center; color:blue;">', where:'Line 1: add a colour after <code>center;</code>' } ] },
-  { id:'menu', ic:'🍽️', name:'Emirati Food Menu', lvl:2, story:'Like a real menu: food names on the left, prices on the right.',
-    task:'Center the menu title and move <b>every price</b> to the <b>right</b>. The food names (in bold) stay on the left, like a real menu.',
-    code:'<h1>Emirati Food Menu</h1>\n<b>Luqaimat</b>\n<p>10 AED</p>\n<b>Machboos</b>\n<p>25 AED</p>\n<b>Harees</b>\n<p>18 AED</p>',
-    checks:[ { ...C.h1c, lab:'Title is in the center', where:'Line 1: change <code>&lt;h1&gt;</code> to:' },
-             { lab:'All 3 prices are on the right', hint:'<p style="text-align:right;">', where:'Lines 3, 5 and 7 (prices): change <b>each</b> <code>&lt;p&gt;</code> to:', test:d => pWith(d,/AED/).filter(p => al(p) === 'right').length >= 3 } ] },
   { id:'news', ic:'📰', name:'Gulf News Story', lvl:2, story:'Make the news story neat on both edges, like a real newspaper.',
     task:'Center the headline and make the story <b>justify</b> – straight on both edges.',
     code:'<h1>Louvre Abu Dhabi Welcomes Students</h1>\n<p>Hundreds of students from schools across the UAE visited the Louvre Abu Dhabi this week. They saw art from many countries, joined drawing workshops and learnt how museums protect old treasures for the future.</p>',
