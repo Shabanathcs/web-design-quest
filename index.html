@@ -700,7 +700,7 @@ $('tabs').addEventListener('click', e => { const b = e.target.closest('button[da
 $('prevBtn').onclick = () => showSec(cur - 1);
 $('nextBtn').onclick = () => showSec(cur + 1);
 const seen = new Set();
-function markDone(k){ seen.add(k); $('tab-'+k).classList.add('done'); }
+function markDone(k){ seen.add(k); const t = $('tab-' + k); if (t) t.classList.add('done'); }
 
 /* ---------- XP + rank ---------- */
 const MAX_XP = 340;
@@ -864,10 +864,10 @@ const THEMES = [
     from:'The Editor', brief:'Design the front page of The Sharjah Times for our readers. The newspaper name should catch the eye, the date should be easy to find and the news article should look neat like a real newspaper.',
     parts:['Newspaper name','Date','News article'], tc:'#374151', c1:'navy', bg:'lightgray', ban:'black', bold:'today', own:'Many students visited with their families.',
     lines:['<h1>The Sharjah Times</h1>','<p>Friday, 6 November 2026</p>','<p>The Sharjah International Book Fair opens at Expo Centre today with books in Arabic, English and many other languages.</p>'] },
-  { ic:'☕', name:'Emirati Caf\u00e9 Menu', file:'menu', title:'Emirati Cafe Menu',
-    from:'The Heritage Village Caf\u00e9', brief:'Make a menu web page for our Emirati caf\u00e9. Visitors from many countries will read it. The title should catch the eye, the prices should line up neatly and the description should be easy to read.',
-    parts:['Title','Price','Description'], tc:'#15803D', c1:'brown', bg:'honeydew', ban:'orange', bold:'dates', own:'Try our fresh luqaimat with date syrup!',
-    lines:['<h1>Emirati Caf\u00e9 Menu</h1>','<p>Karak Tea – 3 AED</p>','<p>Our karak tea is made with milk, cardamom and saffron and served with fresh dates.</p>'] }
+  { ic:'🐢', name:'Kalba Beach Clean-up', file:'cleanup', title:'Beach Clean-up',
+    from:'The School Eco Club', brief:'We need a poster web page for our beach clean-up at Kalba in Sharjah. Students and parents will read it. Make the title stand out, show the date clearly and keep the message neat and easy to read.',
+    parts:['Title','Date','Message'], tc:'#0F766E', c1:'teal', bg:'lightcyan', ban:'teal', bold:'turtles', own:'Every piece of plastic we pick up saves a sea animal.',
+    lines:['<h1>Kalba Beach Clean-up</h1>','<p>Saturday, 21 November 2026</p>','<p>Join our class to clean Kalba beach in Sharjah and protect the turtles and fish. Bring gloves, a hat and a water bottle.</p>'] }
 ];
 st.plan = {}; st.review = '';
 function drawBrief(){
@@ -889,7 +889,7 @@ $('plan').addEventListener('change', e => {
   }
 });
 const starter = T => `<!DOCTYPE html>\n<html>\n<head>\n  <title>${T.title}</title>\n</head>\n<body>\n${T.lines.join('\n')}\n\n</body>\n</html>\n`;
-const KEY = i => 'wdq3-mini-' + i;
+const KEY = i => 'wdq4-mini-' + i;
 const load = i => { try { return localStorage.getItem(KEY(i)); } catch(e){ return null; } };
 const store = (i, v) => { try { localStorage.setItem(KEY(i), v); } catch(e){} };
 
