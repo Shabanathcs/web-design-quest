@@ -86,8 +86,10 @@ section.panel{display:grid;gap:16px}
 .home h1{font-size:clamp(2.3rem,6vw,3.6rem);background:linear-gradient(90deg,#FF7A1A,#F5A700 40%,#10B5A6 70%,#6C4BD8);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:4px}
 .motto{font:700 clamp(1.15rem,2.4vw,1.4rem) var(--display);color:#3A4466;max-width:40ch}
 .perks{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.perks span{font:800 1rem var(--body);padding:7px 15px;border-radius:999px;background:#fff;border:2px solid currentColor;box-shadow:0 4px 0 currentColor}
-.perks .p1{color:#E0602D}.perks .p2{color:#1D6FD1}.perks .p3{color:#B88400}
+.perks button{font:800 1.05rem var(--body);padding:10px 18px;border-radius:999px;background:#fff;border:2px solid currentColor;box-shadow:0 4px 0 currentColor;cursor:pointer;transition:transform .1s}
+.perks button:hover{transform:translateY(-2px);background:currentColor}
+.perks button:hover span{color:#fff}
+.perks .p1{color:#E0602D}.perks .p2{color:#6C4BD8}.perks .p3{color:#1D6FD1}.perks .p4{color:#B88400}
 .home .card{width:100%;display:grid;gap:14px;text-align:left;border:2px solid var(--gold);box-shadow:0 6px 0 var(--gold)}
 .field{display:grid;gap:6px}
 label{font-weight:800}
@@ -365,7 +367,7 @@ body.locked{overflow:hidden}
     <div class="hero-ico" aria-hidden="true">🚀</div>
     <h1>Ready, Web Designers?</h1>
     <p class="motto">Every great website starts with one line of code. Let's build something amazing today!</p>
-    <div class="perks"><span class="p1">🎮 Play</span><span class="p2">🏗️ Mini Project</span><span class="p3">🏆 Trophies</span></div>
+    <div class="perks" id="perks"><button class="p1" data-go="play"><span>🎮 Play</span></button><button class="p2" data-go="quest"><span>🗺️ Quests</span></button><button class="p3" data-go="mini"><span>🏗️ Mini Project</span></button><button class="p4" data-go="tro"><span>🏆 Trophies</span></button></div>
     <div class="card">
       <div class="field"><label for="sname">Your full name</label><input id="sname" maxlength="40" placeholder="Type your name" autocomplete="off"></div>
       <div class="field"><label for="scls">Your class</label><select id="scls"><option value="">Select your class</option></select></div>
@@ -1275,6 +1277,12 @@ $('newBtn').onclick = () => {
   location.reload();
 };
 let confirmNew = false;
+$('perks').addEventListener('click', e => {
+  const b = e.target.closest('button[data-go]'); if (!b) return;
+  if (!st.sid){ $('startMsg').className = 'msg bad'; $('startMsg').textContent = 'Type your name and select your class first, then press Let\u2019s begin.'; $('sname').focus(); return; }
+  const g = b.dataset.go;
+  if (g === 'mini'){ showSec(idx('quest')); openMini(); } else showSec(idx(g));
+});
 addEventListener('pagehide', persist);
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') persist(); });
 
