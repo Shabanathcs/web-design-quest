@@ -512,7 +512,7 @@ body.locked{overflow:hidden}
   <div class="modal" id="miniWrap" hidden role="dialog" aria-modal="true" aria-label="Final Mission: Mini Project">
    <div class="mbox">
     <button class="mclose" id="mBack" aria-label="Close mini project">✕</button>
-    <div class="mhead"><div class="t"><span class="qic" aria-hidden="true">🏗️</span><h2>Final Mission: Mini Project</h2></div><div class="qmeta"><span class="stars">★★★</span><span class="xptag">up to +70 XP</span></div></div>
+    <div class="mhead"><div class="t"><span class="qic" aria-hidden="true">🏗️</span><h2>Final Mission: Mini Project</h2></div><div class="qmeta"><span class="stars">★★★</span><span class="xptag">up to +80 XP</span></div></div>
     <div class="dq"><span aria-hidden="true">❓</span><div><b>Final Mission · Driving question</b>How can text alignment make a web page easy to read?</div></div>
   <div class="sbox s1" id="box1">
       <div class="step"><span class="k">1</span>Pick your theme and read the brief <span class="todo" id="todo1">👉 Tap a theme</span></div>
@@ -651,11 +651,11 @@ const seen = new Set();
 function markDone(k){ seen.add(k); $('tab-'+k).classList.add('done'); }
 
 /* ---------- XP + rank ---------- */
-const MAX_XP = 320;
-const RANKS = [[0,'🥉 Rookie'],[60,'🧭 Explorer'],[130,'🧱 Builder'],[200,'🎨 Designer'],[270,'👑 Master']];
+const MAX_XP = 360;
+const RANKS = [[0,'🥉 Rookie'],[70,'🧭 Explorer'],[150,'🧱 Builder'],[230,'🎨 Designer'],[310,'👑 Master']];
 const warmPts = () => st.warmQ.filter(v => v === 1).length, exitPts = () => st.exitQ.filter(v => v === 1).length;
 const playPts = () => st.play.filter(v => v === 1).length;
-const tickArr = i => st.ticks[i] || (st.ticks[i] = [0,0,0,0,0,0]);
+const tickArr = i => { const a = st.ticks[i] || (st.ticks[i] = []); while (a.length < 7) a.push(0); return a; };
 const bestTheme = () => { let b = st.theme; THEMES.forEach((_,i) => { if (sum(tickArr(i)) > sum(tickArr(b))) b = i; }); return b; };
 const xp = () => (warmPts() + playPts() + sum(tickArr(bestTheme())) + (st.review ? 1 : 0) + exitPts()) * 10 + questXP();
 const rank = () => RANKS.filter(r => xp() >= r[0]).pop()[1];
@@ -800,6 +800,7 @@ const MUST = [
   { lab:T => `Move the <b>${T.parts[1].toLowerCase()}</b> to the <b>right</b>`, where:T => `Find the line <b>${esc(firstWords(T.lines[1]))}…</b> Change its &lt;p&gt; to:`, hint:T => '<p style="text-align:right;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p) && al(p) === 'right') },
   { lab:T => `<b>Justify</b> the ${T.parts[2].toLowerCase()}`, where:T => `Find the line <b>${esc(firstWords(T.lines[2]))}…</b> Change its &lt;p&gt; to:`, hint:T => '<p style="text-align:justify;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p).length >= 20 && al(p) === 'justify') },
   { lab:T => `Write <b>your own words</b> (change a line or add one)`, where:T => 'Change one sentence to your own words, or type a new line before <b>&lt;/body&gt;</b>. Example:', hint:T => `<p>${T.own}</p>`, test:d => { const orig = new Set(THEMES[st.theme].lines.map(l => l.replace(/<[^>]+>/g,'').trim())); return [...d.querySelectorAll('body h1, body h2, body p')].some(e => txt(e).length >= 3 && !orig.has(txt(e))); } },
+  { lab:T => `Add a moving line with <code>&lt;marquee&gt;</code>`, where:T => 'Type a new line before <b>&lt;/body&gt;</b>. Start it like this, then add your text and <b>&lt;/marquee&gt;</b>:', hint:T => '<marquee direction="left">', test:d => [...d.querySelectorAll('body marquee')].some(m => txt(m)) },
   { lab:T => `⭐ BONUS: add a banner with <b>center + color + background</b>`, where:T => 'Type a new line before <b>&lt;/body&gt;</b>. Start it like this, then add your text and <b>&lt;/p&gt;</b>:', hint:T => `<p style="text-align:center; color:white; background-color:${T.ban};">`, bonus:true, test:d => body(d).some(e => al(e) === 'center' && e.style.color && e.style.backgroundColor && txt(e)) }
 ];
 const THEMES = [
@@ -1080,6 +1081,13 @@ const QB = [
              { lab:'Date is on the right', hint:'<p style="text-align:right;">', where:'Line 2 (the date): change <code>&lt;p&gt;</code> to:', test:d => pWith(d,/December/).some(p => al(p) === 'right') },
              { lab:'Message is justified', hint:'<p style="text-align:justify;">', where:'Line 3 (the message): change <code>&lt;p&gt;</code> to:', test:d => pWith(d,/invited/).some(p => al(p) === 'justify') },
              { lab:'Message has a background colour (same style)', hint:'<p style="text-align:justify; background-color:lightyellow;">', where:'Line 3: add a background colour after <code>justify;</code>', test:d => pWith(d,/invited/).some(p => al(p) === 'justify' && p.style.backgroundColor) } ] },
+  { id:'mars', ic:'🚀', name:'Hope Probe News', lvl:3, story:'Breaking news from the Emirates Mars Mission! Make the news line move across the screen.',
+    task:'Center the title, make the <b>breaking news</b> line <b>move to the right</b> with <code>&lt;marquee&gt;</code>, and <b>justify</b> the last paragraph.',
+    code:'<h1>Emirates Mars Mission</h1>\n<p>Breaking news: the Hope Probe sends new pictures of Mars!</p>\n<p>The Hope Probe was launched by the UAE in 2020. It studies the weather on Mars and shares its pictures with scientists around the world.</p>',
+    checks:[ { ...C.h1c, lab:'Title is in the center', where:'Line 1: change <code>&lt;h1&gt;</code> to:' },
+             { lab:'Breaking news moves (inside &lt;marquee&gt;)', hint:'<marquee>Breaking news: the Hope Probe sends new pictures of Mars!</marquee>', where:'Line 2: change <code>&lt;p&gt;</code> to <code>&lt;marquee&gt;</code> and <code>&lt;/p&gt;</code> to <code>&lt;/marquee&gt;</code>:', test:d => [...d.querySelectorAll('body marquee')].some(m => /Breaking|Hope|Mars/.test(txt(m))) },
+             { lab:'direction is "right"', hint:'<marquee direction="right">', where:'Line 2: add the direction inside the start tag:', test:d => [...d.querySelectorAll('body marquee')].some(m => (m.getAttribute('direction') || '').toLowerCase() === 'right') },
+             { lab:'Last paragraph is justified', hint:'<p style="text-align:justify;">', where:'Line 3: change <code>&lt;p&gt;</code> to:', test:d => pWith(d,/launched/).some(p => al(p) === 'justify') } ] },
   { id:'arabic', ic:'🌴', name:'Welcome to Sharjah', lvl:3, story:'Arabic reads right to left! Align the Arabic and English the right way.',
     task:'Center the title, move the <b>Arabic</b> line to the <b>right</b> and the <b>English</b> line to the <b>left</b>.',
     code:'<h1>Welcome to Sharjah</h1>\n<p>أهلاً وسهلاً بكم في الشارقة</p>\n<p>Sharjah is the cultural capital of the UAE.</p>',
@@ -1096,7 +1104,7 @@ function drawBoard(){
   const miniTicks = sum(tickArr(bestTheme()));
   $('qCards').innerHTML = QB.map((Q,k) => (qFilt && Q.lvl !== qFilt) ? '' :
     `<button class="qcard l${Q.lvl}${st.qd[Q.id] ? ' done' : ''}" data-k="${k}"><span class="qic" aria-hidden="true">${Q.ic}</span><b>${esc(Q.name)}</b><span class="qmeta"><span class="stars">${LV[Q.lvl].s}</span><span class="xptag">+${LV[Q.lvl].xp} XP</span>${st.qd[Q.id] ? '<span class="clr">✓ Cleared</span>' : ''}</span><span class="qstory">${esc(Q.story)}</span></button>`).join('') +
-    (qFilt && qFilt !== 3 ? '' : `<button class="qcard mini${miniTicks === MUST.length ? ' done' : ''}" data-k="mini"><span class="qic" aria-hidden="true">🏗️</span><b>Final Mission: Mini Project</b><span class="qmeta"><span class="stars">★★★</span><span class="xptag">up to +70 XP</span>${miniTicks ? `<span class="clr">${miniTicks} / ${MUST.length} ticks</span>` : ''}</span><span class="qstory">Design your own UAE web page for a real client: choose a brief, plan it, build it and review it.</span></button>`);
+    (qFilt && qFilt !== 3 ? '' : `<button class="qcard mini${miniTicks === MUST.length ? ' done' : ''}" data-k="mini"><span class="qic" aria-hidden="true">🏗️</span><b>Final Mission: Mini Project</b><span class="qmeta"><span class="stars">★★★</span><span class="xptag">up to +80 XP</span>${miniTicks ? `<span class="clr">${miniTicks} / ${MUST.length} ticks</span>` : ''}</span><span class="qstory">Design your own UAE web page for a real client: choose a brief, plan it, build it and review it.</span></button>`);
   const n = qCleared();
   $('qSum').innerHTML = n ? `🏆 You cleared <b>${n}</b> of ${QB.length} quests! Try a harder one or the Final Mission.` : 'Tap any quest card to start!';
   $('qSum').className = 'qsum' + (n ? ' ok' : '');
@@ -1237,7 +1245,7 @@ function applyState(o, fromSheet){
     const pl = +o.play || 0; if (pl > playPts()) st.play = Array.from({length:4}, (_,i) => i < pl ? 1 : 0);
     QB.forEach(Q => { if (+o['q_' + Q.id]) { st.qd[Q.id] = 1; st.qt[Q.id] = Q.checks.map(() => 1); } });
     const ti = THEMES.findIndex(T => T.name === o.theme);
-    if (ti >= 0){ const d = tickArr(ti); ['t1','t2','t3','t4','t5','t6'].forEach((k,j) => d[j] = mx(d[j], o[k])); st.theme = ti; st.picked = true; }
+    if (ti >= 0){ const d = tickArr(ti); ['t1','t2','t3','t4','t5','t6','t7'].forEach((k,j) => d[j] = mx(d[j], o[k])); st.theme = ti; st.picked = true; }
     if (o.review && !st.review) st.review = o.review;
   }
 }
@@ -1279,20 +1287,20 @@ $('menuBtns').addEventListener('click', e => {
 
 /* ---------- Trophies ---------- */
 function drawTrophies(){
-  const bt = bestTheme(), d = tickArr(bt), main = sum(d.slice(0, 5)), n = qCleared();
+  const bt = bestTheme(), d = tickArr(bt), main = sum(d.slice(0, 6)), n = qCleared();
   const T = [
     ['🔥','Warm-up Star','3 / 3 in the Warm-up', warmPts() === 3],
     ['📘','Fast Learner','Visited Goals and Learn', seen.has('goals') && seen.has('learn')],
     ['🎮','Align Ace','4 / 4 in Play', playPts() === 4],
     ['🗺️','Quest Hero','Cleared 3 quests', n >= 3],
     ['🔥','Hard Mode','Cleared a ★★★ quest', QB.some(Q => Q.lvl === 3 && st.qd[Q.id])],
-    ['🧑‍🏫','Quest Master','Cleared all 8 quests', n === QB.length],
-    ['🏗️','Final Mission','All 5 main ticks in the Mini Project', main === 5],
-    ['⭐','Bonus Hunter','Made the 3-property banner', !!d[5]],
+    ['🧑‍🏫','Quest Master','Cleared all quests', n === QB.length],
+    ['🏗️','Final Mission','All 6 main ticks in the Mini Project', main === 6],
+    ['⭐','Bonus Hunter','Made the 3-property banner', !!d[6]],
     ['📝','Reflective Designer','Submitted the self-review', !!st.review],
     ['🎯','Exit Champion','3 / 3 in the Exit Ticket', exitPts() === 3]
   ];
-  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/4</b>Play</div><div><b>${n}/${QB.length}</b>Quests</div><div><b>${sum(d)}/6</b>Mini Project</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
+  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/4</b>Play</div><div><b>${n}/${QB.length}</b>Quests</div><div><b>${sum(d)}/7</b>Mini Project</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
   $('troBox').innerHTML = T.map(([ic,nm,how,got]) => `<div class="tro${got ? ' got' : ''}"><span class="ic">${ic}</span><b>${nm}</b><span>${got ? 'Earned! 🎉' : how}</span></div>`).join('');
   if (T.some(t => t[3])) confetti(80);
   if (st.sid){ markDone('tro'); save('Trophies'); }
@@ -1308,7 +1316,7 @@ function save(what){
     s1:st.warmQ[0], s2:st.warmQ[1], s3:st.warmQ[2], start: answered(st.warmQ) ? warmPts() : '',
     play: st.play.length ? playPts() : '',
     ...Object.fromEntries(QB.map(Q => ['q_' + Q.id, st.qd[Q.id] ? 1 : 0])), quests:qCleared(), questxp:questXP(),
-    theme: sum(d) ? THEMES[bt].name : '', t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], ticks:sum(d), plan:planText(bt), review:st.review,
+    theme: sum(d) ? THEMES[bt].name : '', t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], t7:d[6], ticks:sum(d), plan:planText(bt), review:st.review,
     q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: answered(st.exitQ) ? exitPts() : '',
     xp:xp(), rank:rank().replace(/^\S+\s/, ''), seconds: Math.round((Date.now() - st.t0) / 1000), what };
   fetch(SCORE_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).catch(() => {});
