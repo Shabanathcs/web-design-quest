@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-/* Sections: Home · Warm-up · Goals · Learn · Play · Mini Project · Plenary · HOT · AE Connect · Trophies */
+/* Sections: Home · Warm-up · Goals · Learn · Play · Quests · Exit Ticket · HOT · AE Connect · Trophies */
 :root{
   --paper:#FFF3E8; --card:#FFFFFF; --ink:#1A1F3D; --muted:#5D6585; --line:#E8E3F0;
   --navy:#1B2140; --navy2:#262E57; --orange:#FF7A1A; --orange-d:#E0600A; --violet:#6C4BD8; --lav:#E9E4FF;
@@ -567,7 +567,7 @@ body.locked{overflow:hidden}
 
 <!-- 7 PLENARY -->
 <section class="panel" id="p-plen" hidden>
-  <div class="shead"><span class="snum">8</span><div><h1>🎯 Plenary: Exit Ticket</h1><div class="tags"><span class="tag">What did you learn today?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="shead"><span class="snum">8</span><div><h1>📝 Exit Ticket</h1><div class="tags"><span class="tag">What did you learn today?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
   <p class="lead">Three questions about today's lesson. You get XP if you are right on the first try.</p>
   <div class="grid3" id="exitBox"></div>
   <div class="msg" id="exitMsg"></div>
@@ -627,7 +627,7 @@ const sum = a => a.reduce((x,y)=>x+y,0);
 const st = { sid:'', seq:0, name:'', div:'', t0:0, warmQ:['','',''], exitQ:['','',''], play:[], theme:0, ticks:{} };
 
 /* ---------- sections ---------- */
-const SECS = [['home','🏠 Home'],['warm','🔥 Warm-up'],['goals','🎯 Goals'],['learn','📘 Learn'],['uae','🇦🇪 AE Connect'],['play','🎮 Play'],['quest','🗺️ Quests'],['plen','📝 Plenary'],['hot','🧠 HOT'],['tro','🏆 Trophies']];
+const SECS = [['home','🏠 Home'],['warm','🔥 Warm-up'],['goals','🎯 Goals'],['learn','📘 Learn'],['uae','🇦🇪 AE Connect'],['play','🎮 Play'],['quest','🗺️ Quests'],['plen','📝 Exit Ticket'],['hot','🧠 HOT'],['tro','🏆 Trophies']];
 let cur = 0;
 $('tabs').innerHTML = SECS.map(([k,n],i) => `<button role="tab" data-i="${i}" id="tab-${k}" aria-selected="${i===0}">${n}</button>`).join('');
 function showSec(i){
@@ -1023,7 +1023,7 @@ $('checkBtn').onclick = () => {
   const n = sum(d), left = MUST.filter((_, j) => !d[j]);
   box.className = 'result ok';
   if (fresh.length) confetti(n === MUST.length ? 220 : 110);
-  if (n === MUST.length){ box.innerHTML = '<h3>🏆 All ticks done – you are a Master Designer!</h3><p>Your page is finished. Go to the Plenary, or try another theme.</p>'; markDone('mini'); }
+  if (n === MUST.length){ box.innerHTML = '<h3>🏆 All ticks done – you are a Master Designer!</h3><p>Your page is finished. Go to the Exit Ticket, or try another theme.</p>'; markDone('mini'); }
   else box.innerHTML = `<h3>${fresh.length ? `🎉 +${fresh.length * 10} XP – ${fresh.length} new tick${fresh.length > 1 ? 's' : ''}!` : '✅ No errors – keep building!'}</h3><p>${n} of ${MUST.length} done. Next: ${left[0].lab(THEMES[st.theme])}. Stuck? Press <b>💡 Show hint</b>.</p>`;
   if (fresh.length) save('Mini Project');
 };
