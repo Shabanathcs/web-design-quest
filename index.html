@@ -249,6 +249,37 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 .qtask p{font-size:1.2rem;font-weight:700}
 .qtask code{font-size:1.05em}
 
+/* quest board */
+.qfilter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.qfilter button{font:800 .95rem var(--body);border:0;border-radius:12px;padding:8px 16px;background:var(--lav);color:var(--violet);cursor:pointer;box-shadow:0 4px 0 #D6CCFF}
+.qfilter button[aria-pressed="true"]{background:var(--violet);color:#fff;box-shadow:0 4px 0 #4B2FB0}
+.qcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.qcard{--lc:#2EAD6B;text-align:left;background:#fff;border:2px solid var(--line);border-top:7px solid var(--lc);border-radius:18px;padding:16px 18px;cursor:pointer;display:grid;gap:8px;align-content:start;box-shadow:0 6px 0 #E6E0F0;font-family:var(--body);color:var(--ink);transition:transform .12s}
+.qcard:hover{transform:translateY(-4px)}
+.qcard.l2{--lc:#2F6FDB}.qcard.l3{--lc:#E0482D}
+.qcard .qic{font-size:2.6rem;line-height:1}
+.qcard b{font:800 1.3rem var(--display)}
+.qmeta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stars{color:#FF7A1A;font-size:1.05rem;letter-spacing:1px}
+.qstory{color:var(--muted);font-weight:700;font-size:1.08rem;line-height:1.45}
+.qcard .clr{font:800 .8rem var(--body);background:var(--ok);color:#fff;border-radius:999px;padding:2px 10px}
+.qcard.done{border-color:var(--ok);background:#F2FCF7}
+.qcard.mini{grid-column:span 2;background:linear-gradient(135deg,#1B2140,#4A2A8A);color:#fff;border:0;border-top:7px solid var(--gold);box-shadow:0 6px 0 var(--gold)}
+.qcard.mini .qstory{color:#E3DEFF}.qcard.mini .stars{color:var(--gold)}
+@media (max-width:620px){.qcard.mini{grid-column:auto}}
+.qsum{margin-top:16px;font:800 1.15rem var(--body);background:#fff;border:2px dashed #D9D2E8;border-radius:14px;padding:12px 16px;text-align:center}
+.qsum.ok{background:var(--ok-soft);border-color:var(--ok);color:#0A6E52}
+.backbtn{justify-self:start;font:800 1rem var(--body);border:0;border-radius:12px;padding:10px 16px;background:var(--lav);color:var(--violet);cursor:pointer;box-shadow:0 4px 0 #D6CCFF;margin-bottom:12px}
+#qWork,#miniWrap{display:grid;gap:16px}
+#qWork[hidden],#miniWrap[hidden]{display:none!important}
+.qhead{--lc:#2EAD6B;display:flex;gap:16px;align-items:center;background:#fff;border:3px solid var(--lc);border-radius:18px;padding:16px 20px;box-shadow:0 5px 0 var(--lc)}
+.qhead.l2{--lc:#2F6FDB}.qhead.l3{--lc:#E0482D}
+.qhead .qic{font-size:3.2rem;line-height:1}
+.qhead .qn{font:800 .85rem var(--body);color:var(--lc);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.qhead h2{font-size:clamp(1.4rem,3vw,1.9rem)}
+.qhead p{font-size:1.18rem;font-weight:700;margin-top:4px}
+.qmust{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+
 /* ---------- HOT, AE connect ---------- */
 .hotq{font:700 clamp(1.3rem,2.8vw,1.75rem) var(--display);line-height:1.3}
 .menuc{border:2px dashed #D9D2E8;border-radius:12px;background:#fff;padding:12px 16px;font-family:"Times New Roman",serif;color:#000;font-size:1.15rem;display:grid;gap:4px}
@@ -312,6 +343,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
       <div class="field"><label for="sname">Your full name</label><input id="sname" maxlength="40" placeholder="Type your name" autocomplete="off"></div>
       <div class="field"><label for="scls">Your class</label><select id="scls"><option value="">Select your class</option></select></div>
       <button class="btn big" id="goBtn">Let's begin →</button>
+      <button class="btn ghost" id="newBtn" hidden>Not you? Start as a new student</button>
       <div class="msg" id="startMsg"></div>
     </div>
   </div>
@@ -408,95 +440,105 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
   </div>
 </section>
 
-<!-- 7 QUESTS -->
+<!-- 7 QUEST BOARD (quests + mini project at the end) -->
 <section class="panel" id="p-quest" hidden>
-  <div class="shead"><span class="snum">7</span><div><h1>🗺️ Quests: Build the National Day Invitation</h1><div class="tags"><span class="tag">Main activity · step by step</span>Each quest = <span class="xptag">+10 XP</span></div></div></div>
-  <div class="qpath" id="qPath"></div>
-  <div class="qtask" id="qTask"></div>
-  <div class="bench">
-    <div>
-      <span class="lab">💻 Your code</span>
-      <div class="codebox">
-        <div class="gutter" id="qGutter" aria-hidden="true">1</div>
-        <textarea class="code" id="qEditor" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Quest code editor"></textarea>
-      </div>
-      <div class="actions edrow">
-        <button class="btn big" id="qCheck">▶ Check my code</button>
-        <button class="btn hint" id="qHintBtn">💡 Show hint</button>
-        <button class="btn ghost" id="qReset">↺ Start again</button>
-        <div class="edxp" id="qXP" aria-live="polite"></div>
-      </div>
-    </div>
-    <div>
-      <span class="lab">🖥️ Your web page</span>
-      <iframe class="out" id="qOut" title="Your quest web page" sandbox=""></iframe>
-    </div>
-  </div>
-  <div>
-    <div class="hintpic" id="qHint" hidden style="margin-top:0"></div>
-    <div class="result" id="qResult" hidden></div>
-  </div>
-</section>
+  <div class="shead"><span class="snum">7</span><div><h1>🗺️ Quest Board: Pick Your Challenge!</h1><div class="tags"><span class="tag">Main activity</span><span>Choose quests you like. Clear at least <b>3</b>!</span></div></div></div>
 
-<!-- 8 CHALLENGE (MINI PROJECT LITE) -->
-<section class="panel" id="p-mini" hidden>
-  <div class="shead"><span class="snum">8</span><div><h1>⭐ Challenge: Mini Project</h1><div class="tags"><span class="tag">For quest champions · G&amp;T</span>Each tick = <span class="xptag">+10 XP</span></div></div></div>
-  <p class="lead" id="chLead">Finished all 6 Quests? Design a new web page for a real client. Choose your theme, plan it and build it!</p>
-  <div class="dq"><span aria-hidden="true">❓</span><div><b>Driving question</b>How can text alignment make a web page easy to read?</div></div>
+  <div id="qBoard">
+    <div class="qfilter" id="qFilter" role="group" aria-label="Filter quests">
+      <button data-f="0" aria-pressed="true">All</button><button data-f="1" aria-pressed="false">★ Easy</button><button data-f="2" aria-pressed="false">★★ Medium</button><button data-f="3" aria-pressed="false">★★★ Hard</button>
+    </div>
+    <div class="qcards" id="qCards"></div>
+    <div class="qsum" id="qSum"></div>
+  </div>
+
+  <div id="qWork" hidden>
+    <button class="backbtn" id="qBack">◀ Back to Quest Board</button>
+    <div class="qhead" id="qHead"></div>
+    <ul class="must qmust" id="qMust"></ul>
+    <div class="bench">
+      <div>
+        <span class="lab">💻 Your code</span>
+        <div class="codebox">
+          <div class="gutter" id="qGutter" aria-hidden="true">1</div>
+          <textarea class="code" id="qEditor" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Quest code editor"></textarea>
+        </div>
+        <div class="actions edrow">
+          <button class="btn big" id="qCheck">▶ Check my code</button>
+          <button class="btn hint" id="qHintBtn">💡 Show hint</button>
+          <button class="btn ghost" id="qReset">↺ Start again</button>
+          <div class="edxp" id="qXP" aria-live="polite"></div>
+        </div>
+      </div>
+      <div>
+        <span class="lab">🖥️ Your web page</span>
+        <iframe class="out" id="qOut" title="Your quest web page" sandbox=""></iframe>
+      </div>
+    </div>
+    <div>
+      <div class="hintpic" id="qHint" hidden style="margin-top:0"></div>
+      <div class="result" id="qResult" hidden></div>
+    </div>
+  </div>
+
+  <div id="miniWrap" hidden>
+    <button class="backbtn" id="mBack">◀ Back to Quest Board</button>
+    <div class="dq"><span aria-hidden="true">❓</span><div><b>Final Mission · Driving question</b>How can text alignment make a web page easy to read?</div></div>
   <div class="sbox s1" id="box1">
-    <div class="step"><span class="k">1</span>Pick your theme and read the brief <span class="todo" id="todo1">👉 Tap a theme</span></div>
-    <div class="themes" id="themes" role="group" aria-label="Themes"></div>
-    <div class="brief" id="brief"></div>
-  </div>
-  <div class="sbox s2" id="box2">
-    <div class="step"><span class="k">2</span>Plan it — choose an alignment for each part <span class="todo" id="todo2">👉 Choose all three</span></div>
-    <div class="plan" id="plan"></div>
-    <div class="msg" id="planMsg" style="margin-top:8px"></div>
-  </div>
-  <div class="sbox s3">
-    <div class="step"><span class="k">3</span>Build it — do these on your page:</div>
-    <div class="prog" aria-hidden="true"><i id="progFill"></i></div>
-    <ul class="must" id="must"></ul>
-  </div>
-  <div class="bench">
-    <div>
-      <span class="lab">💻 Your code</span>
-      <div class="codebox">
-        <div class="gutter" id="gutter" aria-hidden="true">1</div>
-        <textarea class="code" id="editor" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="HTML code editor"></textarea>
+      <div class="step"><span class="k">1</span>Pick your theme and read the brief <span class="todo" id="todo1">👉 Tap a theme</span></div>
+      <div class="themes" id="themes" role="group" aria-label="Themes"></div>
+      <div class="brief" id="brief"></div>
+    </div>
+    <div class="sbox s2" id="box2">
+      <div class="step"><span class="k">2</span>Plan it — choose an alignment for each part <span class="todo" id="todo2">👉 Choose all three</span></div>
+      <div class="plan" id="plan"></div>
+      <div class="msg" id="planMsg" style="margin-top:8px"></div>
+    </div>
+    <div class="sbox s3">
+      <div class="step"><span class="k">3</span>Build it — do these on your page:</div>
+      <div class="prog" aria-hidden="true"><i id="progFill"></i></div>
+      <ul class="must" id="must"></ul>
+    </div>
+    <div class="bench">
+      <div>
+        <span class="lab">💻 Your code</span>
+        <div class="codebox">
+          <div class="gutter" id="gutter" aria-hidden="true">1</div>
+          <textarea class="code" id="editor" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="HTML code editor"></textarea>
+        </div>
+        <div class="actions edrow">
+          <button class="btn big" id="checkBtn">▶ Check my code</button>
+          <button class="btn hint" id="hintBtn">💡 Show hint</button>
+          <button class="btn ghost" id="resetBtn">↺ Start again</button>
+          <div class="edxp" id="edXP" aria-live="polite"></div>
+        </div>
       </div>
-      <div class="actions edrow">
-        <button class="btn big" id="checkBtn">▶ Check my code</button>
-        <button class="btn hint" id="hintBtn">💡 Show hint</button>
-        <button class="btn ghost" id="resetBtn">↺ Start again</button>
-        <div class="edxp" id="edXP" aria-live="polite"></div>
+      <div>
+        <span class="lab">🖥️ Your web page</span>
+        <iframe class="out" id="out" title="Your web page" sandbox=""></iframe>
       </div>
     </div>
     <div>
-      <span class="lab">🖥️ Your web page</span>
-      <iframe class="out" id="out" title="Your web page" sandbox=""></iframe>
+      <div class="hintpic" id="hintBox" hidden style="margin-top:0"></div>
+      <div class="result" id="result" hidden></div>
     </div>
-  </div>
-  <div>
-    <div class="hintpic" id="hintBox" hidden style="margin-top:0"></div>
-    <div class="result" id="result" hidden></div>
-  </div>
-  <div class="sbox s4 review">
-    <div class="step"><span class="k">4</span>Review it — check your own page <span class="xptag" style="margin-left:6px">+10 XP</span></div>
-    <div class="revlist" id="revList">
-      <label><input type="checkbox"> My title is easy to see</label>
-      <label><input type="checkbox"> My page matches my plan</label>
-      <label><input type="checkbox"> My page is easy for the reader</label>
+    <div class="sbox s4 review">
+      <div class="step"><span class="k">4</span>Review it — check your own page <span class="xptag" style="margin-left:6px">+10 XP</span></div>
+      <div class="revlist" id="revList">
+        <label><input type="checkbox"> My title is easy to see</label>
+        <label><input type="checkbox"> My page matches my plan</label>
+        <label><input type="checkbox"> My page is easy for the reader</label>
+      </div>
+      <div class="field" style="margin-top:12px"><label for="improve">One thing I would improve:</label><input id="improve" maxlength="120" placeholder="Example: I would make the date bigger" autocomplete="off"></div>
+      <div class="actions"><button class="btn big" id="revBtn">Submit my review</button></div>
+      <div class="msg" id="revMsg" style="margin-top:10px"></div>
     </div>
-    <div class="field" style="margin-top:12px"><label for="improve">One thing I would improve:</label><input id="improve" maxlength="120" placeholder="Example: I would make the date bigger" autocomplete="off"></div>
-    <div class="actions"><button class="btn big" id="revBtn">Submit my review</button></div>
-    <div class="msg" id="revMsg" style="margin-top:10px"></div>
   </div>
 </section>
 
 <!-- 7 PLENARY -->
 <section class="panel" id="p-plen" hidden>
-  <div class="shead"><span class="snum">9</span><div><h1>🎯 Plenary: Exit Ticket</h1><div class="tags"><span class="tag">What did you learn today?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="shead"><span class="snum">8</span><div><h1>🎯 Plenary: Exit Ticket</h1><div class="tags"><span class="tag">What did you learn today?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
   <p class="lead">Three questions about today's lesson. You get XP if you are right on the first try.</p>
   <div class="grid3" id="exitBox"></div>
   <div class="msg" id="exitMsg"></div>
@@ -504,7 +546,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 8 HOT -->
 <section class="panel" id="p-hot" hidden>
-  <div class="shead"><span class="snum">10</span><div><h1>🧠 HOT: Think Deeper</h1><div class="tags"><span class="tag">Higher-order thinking</span></div></div></div>
+  <div class="shead"><span class="snum">9</span><div><h1>🧠 HOT: Think Deeper</h1><div class="tags"><span class="tag">Higher-order thinking</span></div></div></div>
   <div class="grid2">
     <div class="card" style="display:grid;gap:14px;align-content:start">
       <p class="hotq">On a restaurant menu, the food names are on the left and the prices are on the right. Why are prices right-aligned? What would happen if they were centred?</p>
@@ -537,7 +579,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 10 TROPHIES -->
 <section class="panel" id="p-tro" hidden>
-  <div class="shead"><span class="snum">11</span><div><h1>🏆 Trophies</h1><div class="tags"><span class="tag">Your results today</span></div></div></div>
+  <div class="shead"><span class="snum">10</span><div><h1>🏆 Trophies</h1><div class="tags"><span class="tag">Your results today</span></div></div></div>
   <div class="scoreboard" id="board"></div>
   <div class="trophies" id="troBox"></div>
 </section>
@@ -556,7 +598,7 @@ const sum = a => a.reduce((x,y)=>x+y,0);
 const st = { sid:'', seq:0, name:'', div:'', t0:0, warmQ:['','',''], exitQ:['','',''], play:[], theme:0, ticks:{} };
 
 /* ---------- sections ---------- */
-const SECS = [['home','🏠 Home'],['warm','🔥 Warm-up'],['goals','🎯 Goals'],['learn','📘 Learn'],['uae','🇦🇪 AE Connect'],['play','🎮 Play'],['quest','🗺️ Quests'],['mini','⭐ Challenge'],['plen','📝 Plenary'],['hot','🧠 HOT'],['tro','🏆 Trophies']];
+const SECS = [['home','🏠 Home'],['warm','🔥 Warm-up'],['goals','🎯 Goals'],['learn','📘 Learn'],['uae','🇦🇪 AE Connect'],['play','🎮 Play'],['quest','🗺️ Quests'],['plen','📝 Plenary'],['hot','🧠 HOT'],['tro','🏆 Trophies']];
 let cur = 0;
 $('tabs').innerHTML = SECS.map(([k,n],i) => `<button role="tab" data-i="${i}" id="tab-${k}" aria-selected="${i===0}">${n}</button>`).join('');
 function showSec(i){
@@ -578,14 +620,13 @@ const seen = new Set();
 function markDone(k){ seen.add(k); $('tab-'+k).classList.add('done'); }
 
 /* ---------- XP + rank ---------- */
-const MAX_XP = 230;
-const RANKS = [[0,'🥉 Rookie'],[40,'🧭 Explorer'],[90,'🧱 Builder'],[140,'🎨 Designer'],[190,'👑 Master']];
+const MAX_XP = 320;
+const RANKS = [[0,'🥉 Rookie'],[60,'🧭 Explorer'],[130,'🧱 Builder'],[200,'🎨 Designer'],[270,'👑 Master']];
 const warmPts = () => st.warmQ.filter(v => v === 1).length, exitPts = () => st.exitQ.filter(v => v === 1).length;
 const playPts = () => st.play.filter(v => v === 1).length;
 const tickArr = i => st.ticks[i] || (st.ticks[i] = [0,0,0,0,0,0]);
 const bestTheme = () => { let b = st.theme; THEMES.forEach((_,i) => { if (sum(tickArr(i)) > sum(tickArr(b))) b = i; }); return b; };
-const questPts = () => (st.qd || []).filter(Boolean).length;
-const xp = () => (warmPts() + playPts() + questPts() + sum(tickArr(bestTheme())) + (st.review ? 1 : 0) + exitPts()) * 10;
+const xp = () => (warmPts() + playPts() + sum(tickArr(bestTheme())) + (st.review ? 1 : 0) + exitPts()) * 10 + questXP();
 const rank = () => RANKS.filter(r => xp() >= r[0]).pop()[1];
 let lastXP = 0;
 function drawXP(){
@@ -619,11 +660,8 @@ $('goBtn').onclick = () => {
   if (n.length < 2){ $('startMsg').className = 'msg bad'; $('startMsg').textContent = 'Type your full name first.'; return; }
   st.div = $('scls').value;
   if (!st.div){ $('startMsg').className = 'msg bad'; $('startMsg').textContent = 'Now select your class.'; return; }
-  st.name = n; st.sid = Date.now().toString(36) + Math.random().toString(36).slice(2, 8); st.t0 = Date.now();
-  $('sname').disabled = true; $('scls').disabled = true;
-  $('whoTag').textContent = `${st.name} · ${st.div}`;
-  $('startMsg').className = 'msg ok'; $('startMsg').textContent = `Welcome, ${st.name}! Your work is saved for ${st.div}.`;
-  markDone('home'); save('Start'); showSec(1);
+  st.name = n.replace(/\s+/g,' '); st.sid = (st.div + '-' + st.name.toLowerCase()).replace(/[^a-z0-9\u0600-\u06FF]+/gi,'-'); st.t0 = Date.now();
+  loginDone(false); persist(); save('Start'); pullFromSheet(); showSec(1);
 };
 function needId(show){
   if (st.sid) return true;
@@ -650,13 +688,21 @@ function makeQuiz(box, doneMsg, items, marks, label, tabKey){
       else save(`${label} Q${i+1}`);
     } else { b.classList.add('wrong'); m.className = 'msg bad'; m.textContent = 'Not quite. Try again (no XP for this question now).'; }
   });
+  return () => items.forEach((E,i) => {
+    if (marks[i] === '' || done.has(i)) return;
+    done.add(i); tried.add(i);
+    const ob = $(box).querySelector(`.opt[data-q="${i}"][data-j="${E.a}"]`); if (ob) ob.classList.add('right');
+    const m = $(box + i); m.className = 'msg ok'; m.textContent = 'Answered ✓ ' + E.why;
+    if (done.size === items.length) markDone(tabKey);
+  });
 }
-makeQuiz('warmBox', 'warmMsg', [
+const restoreQuiz = {};
+restoreQuiz.warm = makeQuiz('warmBox', 'warmMsg', [
   {q:'Which code makes the text red?', o:['<p style="color=red">','<p style="color:red;">','<p colour="red">'], a:1, why:'style, then property:value inside double quotes.'},
   {q:'Where do we write the style attribute?', o:['Inside the start tag','Inside the end tag','After the end tag'], a:0, why:'Attributes always go inside the start tag.'},
   {q:'How do we put two properties in one style?', o:['style="color:white background-color:red"','style="color:white; background-color:red;"','style="color:white, background-color:red"'], a:1, why:'A semicolon separates the two properties.'}
 ], st.warmQ, 'Warm-up', 'warm');
-makeQuiz('exitBox', 'exitMsg', [
+restoreQuiz.exit = makeQuiz('exitBox', 'exitMsg', [
   {q:'Which value puts text in the middle of the line?', o:['middle','centre','center'], a:2, why:'CSS uses the spelling center.'},
   {q:'Which syntax is correct?', o:['<p align="right">','<p style="text-align:right;">','<p style="text align:right;">'], a:1, why:'text-align goes inside style, with a hyphen.'},
   {q:'Which alignment makes both edges of a long paragraph straight?', o:['left','justify','right'], a:1, why:'justify stretches the lines so both edges are straight, like a newspaper.'}
@@ -709,6 +755,7 @@ $('pChoices').addEventListener('click', e => {
   } else { pTried = true; $('pMsg').className = 'msg bad'; $('pMsg').textContent = `Look at the page: ${v} does not fit here. Try another value.`; }
 });
 $('pNext').onclick = () => { pr = pr < ROUNDS.length - 1 ? pr + 1 : 0; drawRound(); };
+function drawRoundFresh(){ const k = ROUNDS.findIndex((_,i) => st.play[i] == null); pr = k === -1 ? 0 : k; if (k === -1 && st.play.length) markDone('play'); drawRound(); }
 drawRound();
 
 /* ---------- Mini Project ---------- */
@@ -725,18 +772,18 @@ const MUST = [
   { lab:T => `⭐ BONUS: add a banner with <b>center + color + background</b>`, where:T => 'Type a new line before <b>&lt;/body&gt;</b>. Start it like this, then add your text and <b>&lt;/p&gt;</b>:', hint:T => `<p style="text-align:center; color:white; background-color:${T.ban};">`, bonus:true, test:d => body(d).some(e => al(e) === 'center' && e.style.color && e.style.backgroundColor && txt(e)) }
 ];
 const THEMES = [
-  { ic:'📌', name:'School Notice Board', file:'notice', title:'Notice Board',
-    from:'The Principal’s Office', brief:'We need a notice web page about the Science Exhibition for all students. Make the heading easy to spot, put the date where notices usually show it, and keep the message neat.',
-    parts:['Heading','Date','Notice'], tc:'#1D4ED8', c1:'blue', bg:'lightblue', ban:'red', bold:'Friday', own:'Please bring your project on time.',
-    lines:['<h1>Notice Board</h1>','<p>Date: 5 November 2026</p>','<p>The Science Exhibition is in the school hall on Friday.</p>'] },
+  { ic:'📌', name:'National Day Notice', file:'notice', title:'Notice Board',
+    from:'The Principal\u2019s Office', brief:'We need a notice web page about our UAE National Day celebration for all students. Make the heading easy to spot, put the date where notices usually show it, and keep the message neat.',
+    parts:['Heading','Date','Notice'], tc:'#C8102E', c1:'red', bg:'lightyellow', ban:'green', bold:'Monday', own:'Wear the UAE colours: red, green, white and black.',
+    lines:['<h1>Notice Board</h1>','<p>Date: 30 November 2026</p>','<p>Our UAE National Day celebration is in the school hall on Monday. Families are welcome.</p>'] },
   { ic:'📰', name:'The Sharjah Times', file:'newspaper', title:'The Sharjah Times',
     from:'The Editor', brief:'Design the front page of The Sharjah Times for our readers. The newspaper name should catch the eye, the date should be easy to find and the news article should look neat like a real newspaper.',
     parts:['Newspaper name','Date','News article'], tc:'#374151', c1:'navy', bg:'lightgray', ban:'black', bold:'today', own:'Many students visited with their families.',
-    lines:['<h1>The Sharjah Times</h1>','<p>Friday, 6 November 2026</p>','<p>The Sharjah International Book Fair opens at Expo Centre today.</p>'] },
-  { ic:'🥗', name:'Healthy Food Menu', file:'menu', title:'Healthy Food Menu',
-    from:'The School Canteen', brief:'Make a healthy menu web page for students. The title should catch the eye, the prices should line up neatly and the description should be easy to read.',
-    parts:['Title','Price','Description'], tc:'#15803D', c1:'green', bg:'honeydew', ban:'orange', bold:'mango', own:'Drink water every day to stay strong.',
-    lines:['<h1>Healthy Food Menu</h1>','<p>Fruit Salad – 10 AED</p>','<p>Fresh fruit salad with mango, apple and dates.</p>'] }
+    lines:['<h1>The Sharjah Times</h1>','<p>Friday, 6 November 2026</p>','<p>The Sharjah International Book Fair opens at Expo Centre today with books in Arabic, English and many other languages.</p>'] },
+  { ic:'☕', name:'Emirati Caf\u00e9 Menu', file:'menu', title:'Emirati Cafe Menu',
+    from:'The Heritage Village Caf\u00e9', brief:'Make a menu web page for our Emirati caf\u00e9. Visitors from many countries will read it. The title should catch the eye, the prices should line up neatly and the description should be easy to read.',
+    parts:['Title','Price','Description'], tc:'#15803D', c1:'brown', bg:'honeydew', ban:'orange', bold:'dates', own:'Try our fresh luqaimat with date syrup!',
+    lines:['<h1>Emirati Caf\u00e9 Menu</h1>','<p>Karak Tea – 3 AED</p>','<p>Our karak tea is made with milk, cardamom and saffron and served with fresh dates.</p>'] }
 ];
 st.plan = {}; st.review = '';
 function drawBrief(){
@@ -758,7 +805,7 @@ $('plan').addEventListener('change', e => {
   }
 });
 const starter = T => `<!DOCTYPE html>\n<html>\n<head>\n  <title>${T.title}</title>\n</head>\n<body>\n${T.lines.join('\n')}\n\n</body>\n</html>\n`;
-const KEY = i => 'wdq2-mini-' + i;
+const KEY = i => 'wdq3-mini-' + i;
 const load = i => { try { return localStorage.getItem(KEY(i)); } catch(e){ return null; } };
 const store = (i, v) => { try { localStorage.setItem(KEY(i), v); } catch(e){} };
 
@@ -776,8 +823,8 @@ function drawMust(fresh){
   $('must').innerHTML = MUST.map((M,j) => `<li class="${d[j] ? 'met' : ''}${M.bonus ? ' bonus' : ''}"><span class="bx"></span><span>${M.lab(THEMES[st.theme])}</span></li>`).join('');
   if (fresh) fresh.forEach(j => $('must').children[j].classList.add('bump'));
 }
-function pickTheme(i){
-  store(st.theme, $('editor').value);
+function pickTheme(i, noStore){
+  if (!noStore) store(st.theme, $('editor').value);
   st.theme = i; st.picked = true; $('themes').classList.remove('unpicked'); $('todo1').hidden = true;
   document.querySelectorAll('.theme').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.i === i)));
   $('editor').value = load(i) || starter(THEMES[i]);
@@ -958,77 +1005,105 @@ $('result').addEventListener('click', e => {
   ta.scrollTop = Math.max(0, (n - 4) * 26.4);
 });
 
-/* ---------- Quests: one invitation page, 6 small steps ---------- */
-const Q_START = `<!DOCTYPE html>
-<html>
-<head>
-  <title>National Day Invitation</title>
-</head>
-<body>
-<h1>Happy UAE National Day!</h1>
-<p>2 December 2026</p>
-<p>You are invited to our National Day party in Class 6. Come and celebrate with us!</p>
-</body>
-</html>
-`;
-const lineWith = (src, s) => { const k = src.split('\n').findIndex(l => l.includes(s)); return k + 1; };
-const QUESTS = [
-  { md:'bronze', name:'Center the heading', task:'Fill the blank <code>______</code> so the heading moves to the <b>middle</b>.',
-    prep:src => src.replace('<h1>Happy', '<h1 style="text-align:______;">Happy'),
-    where:src => `Line ${lineWith(src,'<h1')}: delete <code>______</code> and type the value. It should look like:`, hint:'<h1 style="text-align:center;">',
-    fail:'The heading is not in the middle yet. Type <code>center</code> in the blank.',
-    test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center') },
-  { md:'bronze', name:'Date to the right', task:'Fill the blank <code>______</code> so the <b>date</b> moves to the <b>right</b>.',
-    prep:src => src.replace('<p>2 December', '<p style="text-align:______;">2 December'),
-    where:src => `Line ${lineWith(src,'December')}: delete <code>______</code> and type the value. It should look like:`, hint:'<p style="text-align:right;">',
-    fail:'The date is not on the right yet. Type <code>right</code> in the blank.',
-    test:d => [...d.querySelectorAll('body p')].some(p => /December/.test(txt(p)) && al(p) === 'right') },
-  { md:'silver', name:'Colour the heading', task:'Give the heading a <b>colour</b>. Type it inside the same style, after <code>center;</code>',
-    where:src => `Line ${lineWith(src,'<h1')}: after <code>center;</code> add a space and a colour. It should look like:`, hint:'<h1 style="text-align:center; color:red;">',
-    fail:'The heading has no colour yet. After <code>center;</code> type a space and <code>color:red;</code> (or any colour).',
-    test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center' && h.style.color) },
-  { md:'silver', name:'Justify the message', task:'Type the style <b>yourself</b> on the message <code>&lt;p&gt;</code> to make it <b>justify</b>.',
-    where:src => `Line ${lineWith(src,'invited')}: inside <code>&lt;p&gt;</code> type the style. It should look like:`, hint:'<p style="text-align:justify;">',
-    fail:'The message is not justified yet. Change its <code>&lt;p&gt;</code> to <code>&lt;p style="text-align:justify;"&gt;</code>',
-    test:d => [...d.querySelectorAll('body p')].some(p => /invited/.test(txt(p)) && al(p) === 'justify') },
-  { md:'silver', name:'Line under the heading', task:'Add a line <code>&lt;hr&gt;</code> under the heading.',
-    where:src => `Make a new line after line ${lineWith(src,'</h1>')} (the heading) and type:`, hint:'<hr>',
-    fail:'There is no line yet. Type <code>&lt;hr&gt;</code> on a new line after <code>&lt;/h1&gt;</code>.',
-    test:d => !!d.querySelector('body hr') },
-  { md:'gold', name:'Colour the page', task:'Give the whole page a <b>background colour</b> in the <code>&lt;body&gt;</code> tag.',
-    where:src => `Line ${lineWith(src,'<body')}: change <code>&lt;body&gt;</code> to:`, hint:'<body style="background-color:lightyellow;">',
-    fail:'The page has no background colour yet. Change <code>&lt;body&gt;</code> to <code>&lt;body style="background-color:lightyellow;"&gt;</code>',
-    test:d => !!(d.body && d.body.style.backgroundColor) }
+/* ---------- Quest Board: UAE-themed quests + mini project at the end ---------- */
+const page = (title, body) => `<!DOCTYPE html>\n<html>\n<head>\n  <title>${title}</title>\n</head>\n<body>\n${body}\n</body>\n</html>\n`;
+const pWith = (d, re) => [...d.querySelectorAll('body p, body h2')].filter(p => re.test(txt(p)));
+const C = {
+  h1c:{ lab:'Center the heading', hint:'<h1 style="text-align:center;">', test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center') },
+  h1col:{ lab:'Give the heading a colour', hint:'<h1 style="text-align:center; color:green;">', test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center' && h.style.color) },
+  hr:{ lab:'Add a line <code>&lt;hr&gt;</code> under the heading', hint:'<hr>', test:d => !!d.querySelector('body hr') },
+  bg:{ lab:'Colour the page background', hint:'<body style="background-color:lightyellow;">', test:d => !!(d.body && d.body.style.backgroundColor) }
+};
+const QB = [
+  { id:'flag', ic:'🇦🇪', name:'Flag Day Banner', lvl:1, story:'The Flag Day title is stuck on the left! Move it to the middle.',
+    task:'Fill the blank <code>______</code> so the title moves to the <b>middle</b>.',
+    code: page('UAE Flag Day', '<h1 style="text-align:______;">UAE Flag Day</h1>\n<p>Every year on 3 November, we raise the UAE flag with pride.</p>'),
+    checks:[ { ...C.h1c, where:'On the <code>&lt;h1&gt;</code> line, delete <code>______</code> and type the value:' } ] },
+  { id:'camel', ic:'🐪', name:'Camel Race Date', lvl:1, story:'The race date should sit on the right, like on a real poster.',
+    task:'Fill the blank <code>______</code> so the <b>date</b> moves to the <b>right</b>.',
+    code: page('Camel Race', '<h1>Al Marmoom Camel Race</h1>\n<p style="text-align:______;">Date: 15 January 2027</p>\n<p>Come and watch the fastest camels in the UAE race in the desert.</p>'),
+    checks:[ { lab:'Move the date to the right', hint:'<p style="text-align:right;">', where:'On the line with <b>Date:</b>, delete <code>______</code> and type the value:', test:d => pWith(d,/Date/).some(p => al(p) === 'right') } ] },
+  { id:'burj', ic:'🏙️', name:'Burj Khalifa Fact', lvl:1, story:'Make the tallest tower in the world stand tall on your page!',
+    task:'Fill both blanks: put the title in the <b>center</b> and give it a <b>colour</b> (e.g. blue).',
+    code: page('Burj Khalifa', '<h1 style="text-align:______; color:______;">Burj Khalifa</h1>\n<p>The Burj Khalifa in Dubai is 828 metres tall. It is the tallest building in the world.</p>'),
+    checks:[ { ...C.h1c, where:'On the <code>&lt;h1&gt;</code> line, fill the first blank:' }, { ...C.h1col, hint:'<h1 style="text-align:center; color:blue;">', where:'Now fill the second blank with a colour:' } ] },
+  { id:'menu', ic:'🍽️', name:'Emirati Food Menu', lvl:2, story:'Line up the prices of tasty Emirati dishes neatly on the right.',
+    task:'Center the menu title, then type the style on <b>each</b> dish line to move it to the <b>right</b>.',
+    code: page('Emirati Food Menu', '<h1>Emirati Food Menu</h1>\n<p>Luqaimat – 10 AED</p>\n<p>Machboos – 25 AED</p>\n<p>Harees – 18 AED</p>'),
+    checks:[ { ...C.h1c, where:'On the <code>&lt;h1&gt;</code> line, change the start tag to:' },
+             { lab:'Move all 3 dishes to the right', hint:'<p style="text-align:right;">', where:'Change <b>each</b> dish <code>&lt;p&gt;</code> (3 lines) to:', test:d => pWith(d,/AED/).filter(p => al(p) === 'right').length >= 3 } ] },
+  { id:'news', ic:'📰', name:'Gulf News Story', lvl:2, story:'Make the news story neat on both edges, like a real newspaper.',
+    task:'Center the headline and <b>justify</b> the long news paragraph.',
+    code: page('Gulf News', '<h1>Louvre Abu Dhabi Welcomes Students</h1>\n<p>Hundreds of students from schools across the UAE visited the Louvre Abu Dhabi this week. They saw art from many countries, joined drawing workshops and learnt how museums protect old treasures for the future.</p>'),
+    checks:[ { ...C.h1c, where:'On the <code>&lt;h1&gt;</code> line, change the start tag to:' },
+             { lab:'Justify the news story', hint:'<p style="text-align:justify;">', where:'On the long story line, change <code>&lt;p&gt;</code> to:', test:d => pWith(d,/Louvre|students/).some(p => al(p) === 'justify' && txt(p).length > 40) } ] },
+  { id:'mosque', ic:'🕌', name:'Grand Mosque Trip', lvl:2, story:'Our class trip page needs a bright title with a line under it.',
+    task:'Center the title, give it a <b>colour</b>, and add a line <code>&lt;hr&gt;</code> under it.',
+    code: page('Class Trip', '<h1>Trip to Sheikh Zayed Grand Mosque</h1>\n<p>Our class will visit the Sheikh Zayed Grand Mosque in Abu Dhabi on Tuesday.</p>'),
+    checks:[ { ...C.h1c, where:'On the <code>&lt;h1&gt;</code> line, change the start tag to:' }, { ...C.h1col, where:'Add a colour in the same style:' }, { ...C.hr, where:'On a new line just after <code>&lt;/h1&gt;</code>, type:' } ] },
+  { id:'invite', ic:'🎉', name:'National Day Invitation', lvl:3, story:'Design a full invitation for UAE National Day on 2 December!',
+    task:'Style the whole invitation: coloured centre title, date on the right, justified message and a page background.',
+    code: page('National Day Invitation', '<h1>Happy UAE National Day!</h1>\n<p>2 December 2026</p>\n<p>You are invited to our National Day party in Class 6. Come and celebrate with us!</p>'),
+    checks:[ { ...C.h1c, where:'On the <code>&lt;h1&gt;</code> line, change the start tag to:' }, { ...C.h1col, hint:'<h1 style="text-align:center; color:red;">', where:'Add a colour in the same style:' },
+             { lab:'Move the date to the right', hint:'<p style="text-align:right;">', where:'On the date line, change <code>&lt;p&gt;</code> to:', test:d => pWith(d,/December/).some(p => al(p) === 'right') },
+             { lab:'Justify the message', hint:'<p style="text-align:justify;">', where:'On the message line, change <code>&lt;p&gt;</code> to:', test:d => pWith(d,/invited/).some(p => al(p) === 'justify') },
+             { ...C.bg, where:'Change <code>&lt;body&gt;</code> to:' } ] },
+  { id:'arabic', ic:'🌴', name:'Welcome to Sharjah', lvl:3, story:'Arabic reads right to left! Align the Arabic and English the right way.',
+    task:'Center the title, align the <b>Arabic</b> line to the <b>right</b> and the <b>English</b> line to the <b>left</b>.',
+    code: page('Welcome to Sharjah', '<h1>Welcome to Sharjah</h1>\n<p>أهلاً وسهلاً بكم في الشارقة</p>\n<p>Sharjah is the cultural capital of the UAE.</p>'),
+    checks:[ { ...C.h1c, where:'On the <code>&lt;h1&gt;</code> line, change the start tag to:' },
+             { lab:'Arabic line to the right', hint:'<p style="text-align:right;">', where:'On the Arabic line, change <code>&lt;p&gt;</code> to:', test:d => pWith(d,/[؀-ۿ]/).some(p => al(p) === 'right') },
+             { lab:'English line to the left', hint:'<p style="text-align:left;">', where:'On the English line, change <code>&lt;p&gt;</code> to:', test:d => pWith(d,/cultural/).some(p => al(p) === 'left') } ] }
 ];
-const MEDAL = { bronze:'🥉 Bronze', silver:'🥈 Silver', gold:'🥇 Gold' };
-st.qd = QUESTS.map(() => 0); st.qcur = 0;
-const QKEY = 'wdq2-quest';
-const qLoad = () => { try { return localStorage.getItem(QKEY); } catch(e){ return null; } };
-const qStore = v => { try { localStorage.setItem(QKEY, v); } catch(e){} };
-const qUnlocked = k => k === 0 || st.qd[k-1] || st.qd[k];
+const LV = {1:{s:'★☆☆', xp:10, n:'Easy'}, 2:{s:'★★☆', xp:20, n:'Medium'}, 3:{s:'★★★', xp:30, n:'Hard'}};
+st.qd = {}; st.qt = {}; st.qcode = {}; let qOpen = null, qFilt = 0;
+const qCleared = () => QB.filter(Q => st.qd[Q.id]).length;
+function questXP(){ return QB.reduce((a,Q) => a + (st.qd[Q.id] ? LV[Q.lvl].xp : 0), 0); }
 
-function drawQuests(){
-  $('qPath').innerHTML = QUESTS.map((Q,k) => `<button class="qstep ${Q.md}${st.qd[k] ? ' done' : ''}${k === st.qcur ? ' cur' : ''}" data-k="${k}" ${qUnlocked(k) ? '' : 'disabled'}><span class="md">${MEDAL[Q.md]} · Quest ${k+1}</span>${esc(Q.name)}</button>`).join('');
-  const Q = QUESTS[st.qcur], col = {bronze:'#CD7F32', silver:'#7D8BA6', gold:'#E0A800'}[Q.md];
-  $('qTask').style.setProperty('--m', col);
-  $('qTask').innerHTML = `<span class="qn">${MEDAL[Q.md]} · Quest ${st.qcur+1} of ${QUESTS.length}${st.qd[st.qcur] ? ' · done ✓' : ''}</span><h2>${esc(Q.name)}</h2><p>${Q.task}</p>`;
-  const n = questPts();
-  $('qXP').innerHTML = `<span class="t">✓ ${n} / ${QUESTS.length}</span><span class="x">⚡ ${n * 10} XP</span>`;
+function drawBoard(){
+  const miniTicks = sum(tickArr(bestTheme()));
+  $('qCards').innerHTML = QB.map((Q,k) => (qFilt && Q.lvl !== qFilt) ? '' :
+    `<button class="qcard l${Q.lvl}${st.qd[Q.id] ? ' done' : ''}" data-k="${k}"><span class="qic" aria-hidden="true">${Q.ic}</span><b>${esc(Q.name)}</b><span class="qmeta"><span class="stars">${LV[Q.lvl].s}</span><span class="xptag">+${LV[Q.lvl].xp} XP</span>${st.qd[Q.id] ? '<span class="clr">✓ Cleared</span>' : ''}</span><span class="qstory">${esc(Q.story)}</span></button>`).join('') +
+    (qFilt && qFilt !== 3 ? '' : `<button class="qcard mini${miniTicks === MUST.length ? ' done' : ''}" data-k="mini"><span class="qic" aria-hidden="true">🏗️</span><b>Final Mission: Mini Project</b><span class="qmeta"><span class="stars">★★★</span><span class="xptag">up to +70 XP</span>${miniTicks ? `<span class="clr">${miniTicks} / ${MUST.length} ticks</span>` : ''}</span><span class="qstory">Design your own UAE web page for a real client: choose a brief, plan it, build it and review it.</span></button>`);
+  const n = qCleared();
+  $('qSum').innerHTML = n >= 3 ? `🏆 You cleared <b>${n}</b> quests – goal reached! Try a harder one or the Final Mission.` : `Cleared <b>${n}</b> of 3 quests. Keep going!`;
+  $('qSum').className = 'qsum' + (n >= 3 ? ' ok' : '');
 }
+$('qFilter').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  qFilt = +b.dataset.f; $('qFilter').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); drawBoard();
+});
+$('qCards').addEventListener('click', e => {
+  const b = e.target.closest('.qcard'); if (!b) return;
+  if (b.dataset.k === 'mini'){ openMini(); return; }
+  openQuest(+b.dataset.k);
+});
+function boardView(){ $('qBoard').hidden = false; $('qWork').hidden = true; $('miniWrap').hidden = true; qOpen = null; drawBoard(); persist(); window.scrollTo({top:0}); }
+$('qBack').onclick = boardView; $('mBack').onclick = boardView;
+function openMini(){ $('qBoard').hidden = true; $('qWork').hidden = true; $('miniWrap').hidden = false; qOpen = 'mini'; persist(); window.scrollTo({top:0}); }
+
+function drawQuest(fresh){
+  const Q = QB[qOpen], t = st.qt[Q.id] || (st.qt[Q.id] = Q.checks.map(() => 0));
+  $('qHead').className = 'qhead l' + Q.lvl;
+  $('qHead').innerHTML = `<span class="qic" aria-hidden="true">${Q.ic}</span><div><span class="qn"><span class="stars">${LV[Q.lvl].s}</span> ${LV[Q.lvl].n} · <span class="xptag">+${LV[Q.lvl].xp} XP</span>${st.qd[Q.id] ? ' · ✓ Cleared' : ''}</span><h2>${esc(Q.name)}</h2><p>${Q.task}</p></div>`;
+  $('qMust').innerHTML = Q.checks.map((c,j) => `<li class="${t[j] ? 'met' : ''}"><span class="bx"></span><span>${c.lab}</span></li>`).join('');
+  if (fresh) fresh.forEach(j => $('qMust').children[j].classList.add('bump'));
+  $('qXP').innerHTML = `<span class="t">✓ ${sum(t)} / ${Q.checks.length}</span><span class="x">⚡ ${questXP()} XP</span>`;
+}
+function openQuest(k){
+  qOpen = k; const Q = QB[k];
+  $('qBoard').hidden = true; $('miniWrap').hidden = true; $('qWork').hidden = false;
+  $('qEditor').value = st.qcode[Q.id] || Q.code;
+  $('qHint').hidden = true; $('qHintBtn').textContent = '💡 Show hint'; $('qResult').hidden = true;
+  qUpdate(); qBlank(); drawQuest(); persist(); window.scrollTo({top:0});
+}
+let qT;
 function qUpdate(){
   const v = $('qEditor').value;
   $('qGutter').innerHTML = Array.from({length: v.split('\n').length}, (_,k) => k+1).join('\n');
-  qStore(v);
+  if (qOpen !== null && qOpen !== 'mini'){ st.qcode[QB[qOpen].id] = v; clearTimeout(qT); qT = setTimeout(persist, 400); }
 }
 function qBlank(){ $('qOut').srcdoc = '<body style="margin:0;height:100vh;display:grid;place-items:center;font:700 18px Arial,sans-serif;color:#8A93AE;text-align:center;padding:24px;box-sizing:border-box"><div>Do the quest on the left,<br>then press <b style="color:#FF7A1A">Check my code</b> to see your page here.</div></body>'; }
-function goQuest(k){
-  st.qcur = k;
-  const Q = QUESTS[k];
-  if (Q.prep && !st.qd[k]){ const v = Q.prep($('qEditor').value); if (v !== $('qEditor').value){ $('qEditor').value = v; } }
-  qUpdate(); drawQuests();
-  $('qHint').hidden = true; $('qHintBtn').textContent = '💡 Show hint'; $('qResult').hidden = true;
-}
-$('qPath').addEventListener('click', e => { const b = e.target.closest('.qstep'); if (b && !b.disabled) goQuest(+b.dataset.k); });
 $('qEditor').addEventListener('input', qUpdate);
 $('qEditor').addEventListener('scroll', () => { $('qGutter').scrollTop = $('qEditor').scrollTop; });
 $('qEditor').addEventListener('keydown', e => { if (e.key === 'Tab'){ e.preventDefault(); const t = e.target, s = t.selectionStart; t.setRangeText('  ', s, t.selectionEnd, 'end'); qUpdate(); } });
@@ -1036,24 +1111,20 @@ function qNoPaste(e){ e.preventDefault(); const b = $('qResult'); b.hidden = fal
 ['paste','drop'].forEach(ev => $('qEditor').addEventListener(ev, qNoPaste));
 $('qEditor').addEventListener('beforeinput', e => { if (e.inputType === 'insertFromPaste' || e.inputType === 'insertFromDrop') qNoPaste(e); });
 $('qEditor').addEventListener('contextmenu', e => e.preventDefault());
-$('qReset').onclick = () => {
-  let v = Q_START;
-  QUESTS.forEach((Q,k) => { if (Q.prep && (k <= st.qcur)) v = Q.prep(v); });
-  $('qEditor').value = v; $('qResult').hidden = true; qUpdate(); qBlank();
-};
+$('qReset').onclick = () => { const Q = QB[qOpen]; $('qEditor').value = Q.code; $('qResult').hidden = true; qUpdate(); qBlank(); };
 $('qHintBtn').onclick = () => {
   const h = $('qHint');
   if (!h.hidden){ h.hidden = true; $('qHintBtn').textContent = '💡 Show hint'; return; }
-  const Q = QUESTS[st.qcur], p = document.createElement('p');
-  p.className = 'hwhere'; p.innerHTML = `<b>Quest ${st.qcur+1}: ${esc(Q.name)}</b><br>${Q.where($('qEditor').value)}`;
-  h.innerHTML = ''; h.append(p, codePicture(Q.hint));
+  const Q = QB[qOpen], t = st.qt[Q.id], j = Math.max(0, t.findIndex(x => !x)), c = Q.checks[j], p = document.createElement('p');
+  p.className = 'hwhere'; p.innerHTML = `<b>Next: ${c.lab}</b><br>${c.where}`;
+  h.innerHTML = ''; h.append(p, codePicture(c.hint));
   h.hidden = false; $('qHintBtn').textContent = '💡 Hide hint';
 };
 ['contextmenu','copy','dragstart'].forEach(ev => $('qHint').addEventListener(ev, e => e.preventDefault()));
 $('qCheck').onclick = () => {
   const box = $('qResult'); box.hidden = false;
   if (!needId(t => { box.className = 'result bad'; box.innerHTML = `<h3>${t}</h3>`; })) return;
-  const src = $('qEditor').value; $('qOut').srcdoc = src;
+  const Q = QB[qOpen], src = $('qEditor').value; $('qOut').srcdoc = src;
   const errs = checkCode(src);
   if (errs.length){
     box.className = 'result bad';
@@ -1064,26 +1135,85 @@ $('qCheck').onclick = () => {
     return;
   }
   qUpdate();
-  const doc = new DOMParser().parseFromString(src, 'text/html');
-  QUESTS.forEach((Q,k) => { let ok = false; try { ok = !!Q.test(doc); } catch(e){} if (ok && k <= st.qcur) st.qd[k] = st.qd[k] || 1; });
-  const Q = QUESTS[st.qcur];
-  if (!st.qd[st.qcur]){ box.className = 'result bad'; box.innerHTML = `<h3>Almost! No errors, but the quest is not done yet.</h3><p>${Q.fail}</p>`; drawQuests(); return; }
-  drawQuests(); drawXP();
-  const next = st.qd.findIndex(x => !x);
-  box.className = 'result ok';
-  if (next === -1){
-    confetti(220); markDone('quest');
-    box.innerHTML = `<h3>🏆 All 6 quests done – your invitation is ready! You are an Expert Helper 🧑‍🏫</h3><p>Help a friend, or try the ⭐ Challenge.</p><div class="actions"><button class="btn big" id="toChallenge">⭐ Go to the Challenge →</button></div>`;
-    $('toChallenge').onclick = () => showSec(idx('mini'));
-  } else {
-    confetti(110);
-    box.innerHTML = `<h3>🎉 Quest ${st.qcur+1} done! +10 XP</h3><div class="actions"><button class="btn big" id="qNext">Next: Quest ${next+1} – ${esc(QUESTS[next].name)} →</button></div>`;
-    $('qNext').onclick = () => goQuest(next);
+  const doc = new DOMParser().parseFromString(src, 'text/html'), t = st.qt[Q.id], fresh = [];
+  Q.checks.forEach((c,j) => { let ok = false; try { ok = !!c.test(doc); } catch(e){} if (ok && !t[j]){ t[j] = 1; fresh.push(j); } });
+  const all = t.every(Boolean), first = all && !st.qd[Q.id];
+  if (all) st.qd[Q.id] = 1;
+  drawQuest(fresh); drawXP();
+  if (first){
+    confetti(160);
+    const n = qCleared();
+    box.className = 'result ok';
+    box.innerHTML = `<h3>🎉 Quest cleared! +${LV[Q.lvl].xp} XP</h3><p>${n >= 3 ? `You have cleared ${n} quests – goal reached! 🧑‍🏫 You are an Expert Helper: help a friend, or pick a harder quest.` : `Cleared ${n} of 3. Pick your next quest!`}</p><div class="actions"><button class="btn big" id="qToBoard">◀ Back to Quest Board</button></div>`;
+    $('qToBoard').onclick = boardView;
+    if (n >= 3) markDone('quest');
+    save('Quest: ' + Q.name);
+  } else if (all){ box.className = 'result ok'; box.innerHTML = '<h3>✅ Already cleared – great work!</h3>'; }
+  else {
+    const j = t.findIndex(x => !x);
+    if (fresh.length) confetti(70);
+    box.className = fresh.length ? 'result ok' : 'result bad';
+    box.innerHTML = `<h3>${fresh.length ? `👍 ${sum(t)} of ${Q.checks.length} done!` : 'Almost! No errors, but this step is not done yet.'}</h3><p>Next: <b>${Q.checks[j].lab}</b>. Stuck? Press <b>💡 Show hint</b>.</p>`;
+    if (fresh.length) persist();
   }
-  save('Quest ' + (st.qcur + 1));
 };
-$('qEditor').value = qLoad() || Q_START;
-goQuest(0); qBlank();
+
+/* ---------- save & restore on this computer (and from home via the Google Sheet) ---------- */
+const SKEY = 'wdq3-state';
+function persist(){
+  if (!st.sid) return;
+  const o = { name:st.name, div:st.div, sid:st.sid, t0:st.t0, warmQ:st.warmQ, exitQ:st.exitQ, play:st.play, qd:st.qd, qt:st.qt, qcode:st.qcode,
+    ticks:st.ticks, plan:st.plan, review:st.review, theme:st.theme, picked:st.picked, seen:[...seen], sec:cur, qOpen };
+  try { localStorage.setItem(SKEY, JSON.stringify(o)); } catch(e){}
+}
+function applyState(o, fromSheet){
+  const mx = (a,b) => Math.max(+a || 0, +b || 0);
+  if (!fromSheet){
+    ['warmQ','exitQ'].forEach(k => { if (Array.isArray(o[k])) o[k].forEach((v,i) => st[k][i] = v); });
+    if (Array.isArray(o.play)) st.play = o.play;
+    Object.assign(st.qd, o.qd || {}); Object.assign(st.qt, o.qt || {}); Object.assign(st.qcode, o.qcode || {});
+    Object.keys(o.ticks || {}).forEach(k => st.ticks[k] = o.ticks[k]);
+    Object.assign(st.plan, o.plan || {}); st.review = o.review || st.review;
+    if (o.picked){ st.theme = o.theme; st.picked = true; }
+    (o.seen || []).forEach(markDone);
+  } else {
+    ['s1','s2','s3'].forEach((k,i) => { if (o[k] !== '' && o[k] != null && st.warmQ[i] === '') st.warmQ[i] = +o[k]; });
+    ['q1','q2','q3'].forEach((k,i) => { if (o[k] !== '' && o[k] != null && st.exitQ[i] === '') st.exitQ[i] = +o[k]; });
+    const pl = +o.play || 0; if (pl > playPts()) st.play = Array.from({length:4}, (_,i) => i < pl ? 1 : 0);
+    QB.forEach(Q => { if (+o['q_' + Q.id]) { st.qd[Q.id] = 1; st.qt[Q.id] = Q.checks.map(() => 1); } });
+    const ti = THEMES.findIndex(T => T.name === o.theme);
+    if (ti >= 0){ const d = tickArr(ti); ['t1','t2','t3','t4','t5','t6'].forEach((k,j) => d[j] = mx(d[j], o[k])); st.theme = ti; st.picked = true; }
+    if (o.review && !st.review) st.review = o.review;
+  }
+}
+function refreshAll(){
+  restoreQuiz.warm(); restoreQuiz.exit(); drawRoundFresh(); drawBoard();
+  if (st.picked){ pickTheme(st.theme, true); } drawMust(); drawBrief(); drawXP();
+  if (st.review){ $('improve').value = st.review; $('revMsg').className = 'msg ok'; $('revMsg').textContent = 'Review saved ✓'; }
+}
+function loginDone(restored){
+  $('sname').value = st.name; $('scls').value = st.div;
+  $('sname').disabled = true; $('scls').disabled = true; $('newBtn').hidden = false;
+  $('whoTag').textContent = `${st.name} · ${st.div}`;
+  $('startMsg').className = 'msg ok';
+  $('startMsg').textContent = restored ? `Welcome back, ${st.name}! Your work has been restored.` : `Welcome, ${st.name}! Your work is saved for ${st.div}.`;
+  markDone('home');
+}
+/* bring back scores saved from another computer (e.g. home) */
+function pullFromSheet(){
+  if (!SCORE_URL) return;
+  fetch(SCORE_URL + '?sid=' + encodeURIComponent(st.sid)).then(r => r.json()).then(j => {
+    if (j && j.found){ applyState(j.data, true); refreshAll(); persist(); }
+  }).catch(() => {});
+}
+$('newBtn').onclick = () => {
+  if (!confirmNew){ confirmNew = true; $('newBtn').textContent = 'Tap again to start as a new student'; return; }
+  try { Object.keys(localStorage).filter(k => k.startsWith('wdq')).forEach(k => localStorage.removeItem(k)); } catch(e){}
+  location.reload();
+};
+let confirmNew = false;
+addEventListener('pagehide', persist);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') persist(); });
 
 /* ---------- HOT: menu toggle ---------- */
 $('menuBtns').addEventListener('click', e => {
@@ -1094,33 +1224,35 @@ $('menuBtns').addEventListener('click', e => {
 
 /* ---------- Trophies ---------- */
 function drawTrophies(){
-  const bt = bestTheme(), d = tickArr(bt), main = sum(d.slice(0, 5));
+  const bt = bestTheme(), d = tickArr(bt), main = sum(d.slice(0, 5)), n = qCleared();
   const T = [
     ['🔥','Warm-up Star','3 / 3 in the Warm-up', warmPts() === 3],
     ['📘','Fast Learner','Visited Goals and Learn', seen.has('goals') && seen.has('learn')],
     ['🎮','Align Ace','4 / 4 in Play', playPts() === 4],
-    ['🗺️','Quest Hero','All 6 Quests done', questPts() === 6],
-    ['🧑‍🏫','Expert Helper','Finished the Quests – help a friend!', questPts() === 6],
-    ['🏗️','Challenge Champion','All 5 main ticks in the Challenge', main === 5],
+    ['🗺️','Quest Hero','Cleared 3 quests', n >= 3],
+    ['🔥','Hard Mode','Cleared a ★★★ quest', QB.some(Q => Q.lvl === 3 && st.qd[Q.id])],
+    ['🧑‍🏫','Quest Master','Cleared all 8 quests', n === QB.length],
+    ['🏗️','Final Mission','All 5 main ticks in the Mini Project', main === 5],
     ['⭐','Bonus Hunter','Made the 3-property banner', !!d[5]],
     ['📝','Reflective Designer','Submitted the self-review', !!st.review],
     ['🎯','Exit Champion','3 / 3 in the Exit Ticket', exitPts() === 3]
   ];
-  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/4</b>Play</div><div><b>${questPts()}/6</b>Quests</div><div><b>${sum(d)}/6</b>Challenge</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
-  $('troBox').innerHTML = T.map(([ic,n,how,got]) => `<div class="tro${got ? ' got' : ''}"><span class="ic">${ic}</span><b>${n}</b><span>${got ? 'Earned! 🎉' : how}</span></div>`).join('');
+  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/4</b>Play</div><div><b>${n}/${QB.length}</b>Quests</div><div><b>${sum(d)}/6</b>Mini Project</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
+  $('troBox').innerHTML = T.map(([ic,nm,how,got]) => `<div class="tro${got ? ' got' : ''}"><span class="ic">${ic}</span><b>${nm}</b><span>${got ? 'Earned! 🎉' : how}</span></div>`).join('');
   if (T.some(t => t[3])) confetti(80);
   if (st.sid){ markDone('tro'); save('Trophies'); }
 }
 
 /* ---------- saving to Google Sheet ---------- */
 function save(what){
+  persist();
   if (!SCORE_URL || !st.sid) return;
   st.seq++;
   const bt = bestTheme(), d = tickArr(bt), answered = a => a.some(v => v !== '');
   const data = { sid:st.sid, seq:st.seq, name:st.name, cls:st.div,
     s1:st.warmQ[0], s2:st.warmQ[1], s3:st.warmQ[2], start: answered(st.warmQ) ? warmPts() : '',
     play: st.play.length ? playPts() : '',
-    qq:(st.qd || []).map(Boolean).map(Number), quests:questPts(),
+    ...Object.fromEntries(QB.map(Q => ['q_' + Q.id, st.qd[Q.id] ? 1 : 0])), quests:qCleared(), questxp:questXP(),
     theme: sum(d) ? THEMES[bt].name : '', t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], ticks:sum(d), plan:planText(bt), review:st.review,
     q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: answered(st.exitQ) ? exitPts() : '',
     xp:xp(), rank:rank().replace(/^\S+\s/, ''), seconds: Math.round((Date.now() - st.t0) / 1000), what };
@@ -1128,7 +1260,16 @@ function save(what){
 }
 
 $('editor').value = load(0) || starter(THEMES[0]);
-update(); blankOut(); drawMust(); drawBrief(); drawXP(); showSec(0);
+update(); blankOut(); drawMust(); drawBrief(); drawBoard(); drawXP();
+(function restore(){
+  let o = null; try { o = JSON.parse(localStorage.getItem(SKEY) || 'null'); } catch(e){}
+  if (!o || !o.sid){ showSec(0); return; }
+  st.name = o.name; st.div = o.div; st.sid = o.sid; st.t0 = o.t0 || Date.now();
+  applyState(o, false); loginDone(true); refreshAll();
+  showSec(typeof o.sec === 'number' ? o.sec : 0);
+  if (o.qOpen === 'mini') openMini(); else if (typeof o.qOpen === 'number') openQuest(o.qOpen);
+  pullFromSheet();
+})();
 </script>
 
 </body>
