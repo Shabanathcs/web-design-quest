@@ -729,9 +729,9 @@ function makeQuiz(box, doneMsg, items, marks, label, tabKey){
 }
 const restoreQuiz = {};
 restoreQuiz.warm = makeQuiz('warmBox', 'warmMsg', [
-  {q:'Which code makes the text red?', o:['<p style="color=red">','<p style="color:red;">','<p colour="red">'], a:1, why:'style, then property:value inside double quotes.'},
+  {q:'Which attribute changes the colour of text?', o:['size','style','name'], a:1, why:'We use the style attribute, e.g. style="color:red;".'},
   {q:'Where do we write the style attribute?', o:['Inside the start tag','Inside the end tag','After the end tag'], a:0, why:'Attributes always go inside the start tag.'},
-  {q:'How do we put two properties in one style?', o:['style="color:white background-color:red"','style="color:white; background-color:red;"','style="color:white, background-color:red"'], a:1, why:'A semicolon separates the two properties.'}
+  {q:'Which one is written correctly?', o:['color=red','color red','color:red;'], a:2, why:'Property, colon, value, then a semicolon.'}
 ], st.warmQ, 'Warm-up', 'warm');
 restoreQuiz.exit = makeQuiz('exitBox', 'exitMsg', [
   {q:'Which value puts text in the middle of the line?', o:['middle','centre','center'], a:2, why:'CSS uses the spelling center.'},
