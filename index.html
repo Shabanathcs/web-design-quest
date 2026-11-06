@@ -966,7 +966,7 @@ function update(){
   $('gutter').innerHTML = Array.from({length: v.split('\n').length}, (_,k) => k+1).join('\n');
   clearTimeout(t1); t1 = setTimeout(() => store(st.theme, v), 400);
 }
-function blankOut(){ $('out').srcdoc = $('editor').value; }
+function blankOut(){ const f = $('out'), v = $('editor').value; f.srcdoc = ''; requestAnimationFrame(() => { f.srcdoc = v; }); }
 $('editor').addEventListener('input', update);
 $('editor').addEventListener('scroll', () => { $('gutter').scrollTop = $('editor').scrollTop; });
 $('editor').addEventListener('keydown', e => {
@@ -1189,7 +1189,7 @@ function openQuest(k){
   $('miniWrap').hidden = true; $('qBoard').hidden = false; $('qWork').hidden = false; document.body.classList.add('locked');
   $('qEditor').value = st.qcode['v4:' + Q.id] || Q.code;
   $('qHint').hidden = true; $('qHintBtn').textContent = '💡 Hint'; $('qResult').hidden = true;
-  qUpdate(); $('qOut').srcdoc = qRender($('qEditor').value); drawQuest(); persist();
+  qUpdate(); qBlank(); drawQuest(); persist();
   $('qWork').scrollTop = 0; setTimeout(() => { const e = $('qEditor'); e.focus(); e.setSelectionRange(0,0); e.scrollTop = 0; }, 50);
 }
 let qT;
@@ -1199,7 +1199,7 @@ function qUpdate(){
   if (qOpen !== null && qOpen !== 'mini'){ st.qcode['v4:' + QB[qOpen].id] = v; clearTimeout(qT); qT = setTimeout(persist, 400); }
 }
 const qRender = src => '<!DOCTYPE html><html><body style="font-family:Arial,Helvetica,sans-serif;font-size:18px;margin:14px">' + src + '</body></html>';
-function qBlank(){ $('qOut').srcdoc = qRender($('qEditor').value); }
+function qBlank(){ const f = $('qOut'), v = qRender($('qEditor').value); f.srcdoc = ''; requestAnimationFrame(() => { f.srcdoc = v; setTimeout(() => { if (f.srcdoc !== v) f.srcdoc = v; }, 150); }); }
 $('qEditor').addEventListener('input', qUpdate);
 $('qEditor').addEventListener('scroll', () => { $('qGutter').scrollTop = $('qEditor').scrollTop; });
 $('qEditor').addEventListener('keydown', e => { if (e.key === 'Tab'){ e.preventDefault(); const t = e.target, s = t.selectionStart; t.setRangeText('  ', s, t.selectionEnd, 'end'); qUpdate(); } });
