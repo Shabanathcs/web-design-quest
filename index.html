@@ -1052,6 +1052,7 @@ function styleLint(attrs, at, add){
 
 $('checkBtn').onclick = () => {
   const box = $('result'); box.hidden = false;
+  $('out').srcdoc = $('editor').value;
   if (!needId(t => { box.className = 'result bad'; box.innerHTML = `<h3>${t}</h3>`; })) return;
   const planOK = st.plan[st.theme] && st.plan[st.theme].every(Boolean);
   if (!st.picked || !planOK){
@@ -1061,7 +1062,6 @@ $('checkBtn').onclick = () => {
     return;
   }
   const src = $('editor').value;
-  $('out').srcdoc = src;
   const errs = checkCode(src);
   if (errs.length){
     box.className = 'result bad';
@@ -1219,8 +1219,9 @@ $('qHintBtn').onclick = () => {
 ['contextmenu','copy','dragstart'].forEach(ev => $('qHint').addEventListener(ev, e => e.preventDefault()));
 $('qCheck').onclick = () => {
   const box = $('qResult'); box.hidden = false;
+  $('qOut').srcdoc = qRender($('qEditor').value);
   if (!needId(t => { box.className = 'result bad'; box.innerHTML = `<h3>${t}</h3>`; })) return;
-  const Q = QB[qOpen], src = $('qEditor').value; $('qOut').srcdoc = qRender(src);
+  const Q = QB[qOpen], src = $('qEditor').value;
   const errs = checkCode(src, true);
   if (errs.length){
     box.className = 'result bad';
