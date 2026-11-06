@@ -232,6 +232,23 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 .edxp .x{background:var(--gold);color:#4A3000}.edxp .t{background:#21C08B;color:#fff}
 .hintpic{font-size:1.05rem;padding:12px 16px}
 
+.qpath{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+@media (max-width:900px){.qpath{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.qstep{--m:#CD7F32;border:3px solid var(--m);background:#fff;border-radius:14px;padding:8px 10px;text-align:left;cursor:pointer;font:800 .9rem var(--body);color:var(--ink);display:grid;gap:2px;box-shadow:0 4px 0 var(--m)}
+.qstep .md{font:800 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--m)}
+.qstep.silver{--m:#7D8BA6}.qstep.gold{--m:#E0A800}
+.qstep.cur{background:var(--m);color:#fff;transform:translateY(-3px)}
+.qstep.cur .md{color:#fff}
+.qstep.done{background:var(--ok-soft);border-color:var(--ok);box-shadow:0 4px 0 var(--ok)}
+.qstep.done .md{color:var(--ok)}
+.qstep.done .md::after{content:" ✓"}
+.qstep:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.qtask{border-radius:16px;padding:16px 20px;background:#fff;border:3px solid var(--m,#CD7F32);box-shadow:0 5px 0 var(--m,#CD7F32);display:grid;gap:6px}
+.qtask .qn{font:800 .85rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--m,#CD7F32)}
+.qtask h2{font-size:clamp(1.4rem,3vw,1.9rem)}
+.qtask p{font-size:1.2rem;font-weight:700}
+.qtask code{font-size:1.05em}
+
 /* ---------- HOT, AE connect ---------- */
 .hotq{font:700 clamp(1.3rem,2.8vw,1.75rem) var(--display);line-height:1.3}
 .menuc{border:2px dashed #D9D2E8;border-radius:12px;background:#fff;padding:12px 16px;font-family:"Times New Roman",serif;color:#000;font-size:1.15rem;display:grid;gap:4px}
@@ -391,9 +408,40 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
   </div>
 </section>
 
-<!-- 6 MINI PROJECT -->
+<!-- 7 QUESTS -->
+<section class="panel" id="p-quest" hidden>
+  <div class="shead"><span class="snum">7</span><div><h1>🗺️ Quests: Build the National Day Invitation</h1><div class="tags"><span class="tag">Main activity · step by step</span>Each quest = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="qpath" id="qPath"></div>
+  <div class="qtask" id="qTask"></div>
+  <div class="bench">
+    <div>
+      <span class="lab">💻 Your code</span>
+      <div class="codebox">
+        <div class="gutter" id="qGutter" aria-hidden="true">1</div>
+        <textarea class="code" id="qEditor" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Quest code editor"></textarea>
+      </div>
+      <div class="actions edrow">
+        <button class="btn big" id="qCheck">▶ Check my code</button>
+        <button class="btn hint" id="qHintBtn">💡 Show hint</button>
+        <button class="btn ghost" id="qReset">↺ Start again</button>
+        <div class="edxp" id="qXP" aria-live="polite"></div>
+      </div>
+    </div>
+    <div>
+      <span class="lab">🖥️ Your web page</span>
+      <iframe class="out" id="qOut" title="Your quest web page" sandbox=""></iframe>
+    </div>
+  </div>
+  <div>
+    <div class="hintpic" id="qHint" hidden style="margin-top:0"></div>
+    <div class="result" id="qResult" hidden></div>
+  </div>
+</section>
+
+<!-- 8 CHALLENGE (MINI PROJECT LITE) -->
 <section class="panel" id="p-mini" hidden>
-  <div class="shead"><span class="snum">7</span><div><h1>🏗️ Mini Project: My Aligned Web Page</h1><div class="tags"><span class="tag">Main activity · project-based learning</span>Each tick = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="shead"><span class="snum">8</span><div><h1>⭐ Challenge: Mini Project</h1><div class="tags"><span class="tag">For quest champions · G&amp;T</span>Each tick = <span class="xptag">+10 XP</span></div></div></div>
+  <p class="lead" id="chLead">Finished all 6 Quests? Design a new web page for a real client. Choose your theme, plan it and build it!</p>
   <div class="dq"><span aria-hidden="true">❓</span><div><b>Driving question</b>How can text alignment make a web page easy to read?</div></div>
   <div class="sbox s1" id="box1">
     <div class="step"><span class="k">1</span>Pick your theme and read the brief <span class="todo" id="todo1">👉 Tap a theme</span></div>
@@ -448,7 +496,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 7 PLENARY -->
 <section class="panel" id="p-plen" hidden>
-  <div class="shead"><span class="snum">8</span><div><h1>🎯 Plenary: Exit Ticket</h1><div class="tags"><span class="tag">What did you learn today?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
+  <div class="shead"><span class="snum">9</span><div><h1>🎯 Plenary: Exit Ticket</h1><div class="tags"><span class="tag">What did you learn today?</span>Each correct answer = <span class="xptag">+10 XP</span></div></div></div>
   <p class="lead">Three questions about today's lesson. You get XP if you are right on the first try.</p>
   <div class="grid3" id="exitBox"></div>
   <div class="msg" id="exitMsg"></div>
@@ -456,7 +504,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 8 HOT -->
 <section class="panel" id="p-hot" hidden>
-  <div class="shead"><span class="snum">9</span><div><h1>🧠 HOT: Think Deeper</h1><div class="tags"><span class="tag">Higher-order thinking</span></div></div></div>
+  <div class="shead"><span class="snum">10</span><div><h1>🧠 HOT: Think Deeper</h1><div class="tags"><span class="tag">Higher-order thinking</span></div></div></div>
   <div class="grid2">
     <div class="card" style="display:grid;gap:14px;align-content:start">
       <p class="hotq">On a restaurant menu, the food names are on the left and the prices are on the right. Why are prices right-aligned? What would happen if they were centred?</p>
@@ -489,7 +537,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 
 <!-- 10 TROPHIES -->
 <section class="panel" id="p-tro" hidden>
-  <div class="shead"><span class="snum">10</span><div><h1>🏆 Trophies</h1><div class="tags"><span class="tag">Your results today</span></div></div></div>
+  <div class="shead"><span class="snum">11</span><div><h1>🏆 Trophies</h1><div class="tags"><span class="tag">Your results today</span></div></div></div>
   <div class="scoreboard" id="board"></div>
   <div class="trophies" id="troBox"></div>
 </section>
@@ -508,7 +556,7 @@ const sum = a => a.reduce((x,y)=>x+y,0);
 const st = { sid:'', seq:0, name:'', div:'', t0:0, warmQ:['','',''], exitQ:['','',''], play:[], theme:0, ticks:{} };
 
 /* ---------- sections ---------- */
-const SECS = [['home','🏠 Home'],['warm','🔥 Warm-up'],['goals','🎯 Goals'],['learn','📘 Learn'],['uae','🇦🇪 AE Connect'],['play','🎮 Play'],['mini','🏗️ Mini Project'],['plen','📝 Plenary'],['hot','🧠 HOT'],['tro','🏆 Trophies']];
+const SECS = [['home','🏠 Home'],['warm','🔥 Warm-up'],['goals','🎯 Goals'],['learn','📘 Learn'],['uae','🇦🇪 AE Connect'],['play','🎮 Play'],['quest','🗺️ Quests'],['mini','⭐ Challenge'],['plen','📝 Plenary'],['hot','🧠 HOT'],['tro','🏆 Trophies']];
 let cur = 0;
 $('tabs').innerHTML = SECS.map(([k,n],i) => `<button role="tab" data-i="${i}" id="tab-${k}" aria-selected="${i===0}">${n}</button>`).join('');
 function showSec(i){
@@ -530,13 +578,14 @@ const seen = new Set();
 function markDone(k){ seen.add(k); $('tab-'+k).classList.add('done'); }
 
 /* ---------- XP + rank ---------- */
-const MAX_XP = 200;
-const RANKS = [[0,'🥉 Rookie'],[40,'🧭 Explorer'],[80,'🧱 Builder'],[120,'🎨 Designer'],[160,'👑 Master']];
+const MAX_XP = 230;
+const RANKS = [[0,'🥉 Rookie'],[40,'🧭 Explorer'],[90,'🧱 Builder'],[140,'🎨 Designer'],[190,'👑 Master']];
 const warmPts = () => st.warmQ.filter(v => v === 1).length, exitPts = () => st.exitQ.filter(v => v === 1).length;
 const playPts = () => st.play.filter(v => v === 1).length;
-const tickArr = i => st.ticks[i] || (st.ticks[i] = [0,0,0,0,0,0,0,0,0]);
+const tickArr = i => st.ticks[i] || (st.ticks[i] = [0,0,0,0,0,0]);
 const bestTheme = () => { let b = st.theme; THEMES.forEach((_,i) => { if (sum(tickArr(i)) > sum(tickArr(b))) b = i; }); return b; };
-const xp = () => (warmPts() + playPts() + sum(tickArr(bestTheme())) + (st.review ? 1 : 0) + exitPts()) * 10;
+const questPts = () => (st.qd || []).filter(Boolean).length;
+const xp = () => (warmPts() + playPts() + questPts() + sum(tickArr(bestTheme())) + (st.review ? 1 : 0) + exitPts()) * 10;
 const rank = () => RANKS.filter(r => xp() >= r[0]).pop()[1];
 let lastXP = 0;
 function drawXP(){
@@ -672,17 +721,10 @@ const MUST = [
   { lab:T => `Give the heading a <b>colour</b>`, where:T => 'Add a colour inside the <b>same</b> style of &lt;h1&gt; (any colour you like):', hint:T => `<h1 style="text-align:center; color:${T.c1};">`, test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center' && h.style.color) },
   { lab:T => `Move the <b>${T.parts[1].toLowerCase()}</b> to the <b>right</b>`, where:T => `Find the line <b>${esc(firstWords(T.lines[1]))}…</b> Change its &lt;p&gt; to:`, hint:T => '<p style="text-align:right;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p) && al(p) === 'right') },
   { lab:T => `<b>Justify</b> the ${T.parts[2].toLowerCase()}`, where:T => `Find the line <b>${esc(firstWords(T.lines[2]))}…</b> Change its &lt;p&gt; to:`, hint:T => '<p style="text-align:justify;">', test:d => [...d.querySelectorAll('body p')].some(p => txt(p).length >= 20 && al(p) === 'justify') },
-  { lab:T => `Add a line <code>&lt;hr&gt;</code> under the heading`, where:T => 'Type this on a new line just after <b>&lt;/h1&gt;</b>:', hint:T => '<hr>', test:d => !!d.querySelector('body hr') },
-  { lab:T => `Make one word <b>bold</b> with <code>&lt;b&gt;</code>`, where:T => `Put &lt;b&gt; before a word and &lt;/b&gt; after it. Example with the word <b>${T.bold}</b>:`, hint:T => `<b>${T.bold}</b>`, test:d => [...d.querySelectorAll('body b, body strong')].some(b => txt(b)) },
-  { lab:T => `Colour the page <b>background</b>`, where:T => 'Find <b>&lt;body&gt;</b>. Change it to (any light colour):', hint:T => `<body style="background-color:${T.bg};">`, test:d => !!(d.body && d.body.style.backgroundColor) },
   { lab:T => `Write <b>your own words</b> (change a line or add one)`, where:T => 'Change one sentence to your own words, or type a new line before <b>&lt;/body&gt;</b>. Example:', hint:T => `<p>${T.own}</p>`, test:d => { const orig = new Set(THEMES[st.theme].lines.map(l => l.replace(/<[^>]+>/g,'').trim())); return [...d.querySelectorAll('body h1, body h2, body p')].some(e => txt(e).length >= 3 && !orig.has(txt(e))); } },
   { lab:T => `⭐ BONUS: add a banner with <b>center + color + background</b>`, where:T => 'Type a new line before <b>&lt;/body&gt;</b>. Start it like this, then add your text and <b>&lt;/p&gt;</b>:', hint:T => `<p style="text-align:center; color:white; background-color:${T.ban};">`, bonus:true, test:d => body(d).some(e => al(e) === 'center' && e.style.color && e.style.backgroundColor && txt(e)) }
 ];
 const THEMES = [
-  { ic:'🇦🇪', name:'UAE National Day', file:'invitation', title:'National Day Invitation',
-    from:'The School Events Team', brief:'We need an invitation web page for our UAE National Day celebration. Parents and students will read it. Make the title stand out, show the date clearly and write a friendly message.',
-    parts:['Title','Date','Message'], tc:'#C8102E', c1:'red', bg:'lightyellow', ban:'green', bold:'party', own:'We will sing the national anthem together.',
-    lines:['<h1>Happy UAE National Day!</h1>','<p>2 December 2026</p>','<p>You are invited to our National Day party in Class 6.</p>'] },
   { ic:'📌', name:'School Notice Board', file:'notice', title:'Notice Board',
     from:'The Principal’s Office', brief:'We need a notice web page about the Science Exhibition for all students. Make the heading easy to spot, put the date where notices usually show it, and keep the message neat.',
     parts:['Heading','Date','Notice'], tc:'#1D4ED8', c1:'blue', bg:'lightblue', ban:'red', bold:'Friday', own:'Please bring your project on time.',
@@ -716,7 +758,7 @@ $('plan').addEventListener('change', e => {
   }
 });
 const starter = T => `<!DOCTYPE html>\n<html>\n<head>\n  <title>${T.title}</title>\n</head>\n<body>\n${T.lines.join('\n')}\n\n</body>\n</html>\n`;
-const KEY = i => 'wdq-mini-' + i;
+const KEY = i => 'wdq2-mini-' + i;
 const load = i => { try { return localStorage.getItem(KEY(i)); } catch(e){ return null; } };
 const store = (i, v) => { try { localStorage.setItem(KEY(i), v); } catch(e){} };
 
@@ -793,7 +835,7 @@ function update(){
   $('gutter').innerHTML = Array.from({length: v.split('\n').length}, (_,k) => k+1).join('\n');
   clearTimeout(t1); t1 = setTimeout(() => store(st.theme, v), 400);
 }
-function blankOut(){ $('out').srcdoc = '<body style="margin:0;height:100vh;display:grid;place-items:center;font:700 18px Arial,sans-serif;color:#8A93AE;text-align:center;padding:24px;box-sizing:border-box">Add the styles on the left,<br>then press <b style="color:#FF7A1A">&nbsp;Check my code&nbsp;</b> to see your page here.</body>'; }
+function blankOut(){ $('out').srcdoc = '<body style="margin:0;height:100vh;display:grid;place-items:center;font:700 18px Arial,sans-serif;color:#8A93AE;text-align:center;padding:24px;box-sizing:border-box"><div>Add the styles on the left,<br>then press <b style="color:#FF7A1A">Check my code</b> to see your page here.</div></body>'; }
 $('editor').addEventListener('input', update);
 $('editor').addEventListener('scroll', () => { $('gutter').scrollTop = $('editor').scrollTop; });
 $('editor').addEventListener('keydown', e => {
@@ -870,6 +912,7 @@ function styleLint(attrs, at, add){
     const prop = dec.slice(0, c).trim().toLowerCase(), val = dec.slice(c + 1).trim().toLowerCase();
     if (!PROPS.includes(prop)){ add(at, `<code>${esc(prop)}</code> is not a property we use. Try <code>text-align</code>, <code>color</code> or <code>background-color</code>.`); return; }
     if (!val){ add(at, `Give <code>${esc(prop)}</code> a value, like <code>${prop === 'text-align' ? 'text-align:center;' : prop + ':red;'}</code>`); return; }
+    if (prop === 'text-align' && /_/.test(val)){ add(at, 'Fill the blank <code>______</code>: delete the lines and type <code>left</code>, <code>center</code>, <code>right</code> or <code>justify</code>.'); return; }
     if (prop === 'text-align' && !AL.includes(val)) add(at, `<code>${esc(val)}</code> is not an alignment. Use <code>left</code>, <code>center</code>, <code>right</code> or <code>justify</code>.`);
     if ((prop === 'color' || prop === 'background-color') && window.CSS && CSS.supports && !CSS.supports('color', val)) add(at, `<code>${esc(val)}</code> is not a colour name. Try red, green, white, gold, lightyellow…`);
   });
@@ -915,6 +958,133 @@ $('result').addEventListener('click', e => {
   ta.scrollTop = Math.max(0, (n - 4) * 26.4);
 });
 
+/* ---------- Quests: one invitation page, 6 small steps ---------- */
+const Q_START = `<!DOCTYPE html>
+<html>
+<head>
+  <title>National Day Invitation</title>
+</head>
+<body>
+<h1>Happy UAE National Day!</h1>
+<p>2 December 2026</p>
+<p>You are invited to our National Day party in Class 6. Come and celebrate with us!</p>
+</body>
+</html>
+`;
+const lineWith = (src, s) => { const k = src.split('\n').findIndex(l => l.includes(s)); return k + 1; };
+const QUESTS = [
+  { md:'bronze', name:'Center the heading', task:'Fill the blank <code>______</code> so the heading moves to the <b>middle</b>.',
+    prep:src => src.replace('<h1>Happy', '<h1 style="text-align:______;">Happy'),
+    where:src => `Line ${lineWith(src,'<h1')}: delete <code>______</code> and type the value. It should look like:`, hint:'<h1 style="text-align:center;">',
+    fail:'The heading is not in the middle yet. Type <code>center</code> in the blank.',
+    test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center') },
+  { md:'bronze', name:'Date to the right', task:'Fill the blank <code>______</code> so the <b>date</b> moves to the <b>right</b>.',
+    prep:src => src.replace('<p>2 December', '<p style="text-align:______;">2 December'),
+    where:src => `Line ${lineWith(src,'December')}: delete <code>______</code> and type the value. It should look like:`, hint:'<p style="text-align:right;">',
+    fail:'The date is not on the right yet. Type <code>right</code> in the blank.',
+    test:d => [...d.querySelectorAll('body p')].some(p => /December/.test(txt(p)) && al(p) === 'right') },
+  { md:'silver', name:'Colour the heading', task:'Give the heading a <b>colour</b>. Type it inside the same style, after <code>center;</code>',
+    where:src => `Line ${lineWith(src,'<h1')}: after <code>center;</code> add a space and a colour. It should look like:`, hint:'<h1 style="text-align:center; color:red;">',
+    fail:'The heading has no colour yet. After <code>center;</code> type a space and <code>color:red;</code> (or any colour).',
+    test:d => [...d.querySelectorAll('body h1')].some(h => al(h) === 'center' && h.style.color) },
+  { md:'silver', name:'Justify the message', task:'Type the style <b>yourself</b> on the message <code>&lt;p&gt;</code> to make it <b>justify</b>.',
+    where:src => `Line ${lineWith(src,'invited')}: inside <code>&lt;p&gt;</code> type the style. It should look like:`, hint:'<p style="text-align:justify;">',
+    fail:'The message is not justified yet. Change its <code>&lt;p&gt;</code> to <code>&lt;p style="text-align:justify;"&gt;</code>',
+    test:d => [...d.querySelectorAll('body p')].some(p => /invited/.test(txt(p)) && al(p) === 'justify') },
+  { md:'silver', name:'Line under the heading', task:'Add a line <code>&lt;hr&gt;</code> under the heading.',
+    where:src => `Make a new line after line ${lineWith(src,'</h1>')} (the heading) and type:`, hint:'<hr>',
+    fail:'There is no line yet. Type <code>&lt;hr&gt;</code> on a new line after <code>&lt;/h1&gt;</code>.',
+    test:d => !!d.querySelector('body hr') },
+  { md:'gold', name:'Colour the page', task:'Give the whole page a <b>background colour</b> in the <code>&lt;body&gt;</code> tag.',
+    where:src => `Line ${lineWith(src,'<body')}: change <code>&lt;body&gt;</code> to:`, hint:'<body style="background-color:lightyellow;">',
+    fail:'The page has no background colour yet. Change <code>&lt;body&gt;</code> to <code>&lt;body style="background-color:lightyellow;"&gt;</code>',
+    test:d => !!(d.body && d.body.style.backgroundColor) }
+];
+const MEDAL = { bronze:'🥉 Bronze', silver:'🥈 Silver', gold:'🥇 Gold' };
+st.qd = QUESTS.map(() => 0); st.qcur = 0;
+const QKEY = 'wdq2-quest';
+const qLoad = () => { try { return localStorage.getItem(QKEY); } catch(e){ return null; } };
+const qStore = v => { try { localStorage.setItem(QKEY, v); } catch(e){} };
+const qUnlocked = k => k === 0 || st.qd[k-1] || st.qd[k];
+
+function drawQuests(){
+  $('qPath').innerHTML = QUESTS.map((Q,k) => `<button class="qstep ${Q.md}${st.qd[k] ? ' done' : ''}${k === st.qcur ? ' cur' : ''}" data-k="${k}" ${qUnlocked(k) ? '' : 'disabled'}><span class="md">${MEDAL[Q.md]} · Quest ${k+1}</span>${esc(Q.name)}</button>`).join('');
+  const Q = QUESTS[st.qcur], col = {bronze:'#CD7F32', silver:'#7D8BA6', gold:'#E0A800'}[Q.md];
+  $('qTask').style.setProperty('--m', col);
+  $('qTask').innerHTML = `<span class="qn">${MEDAL[Q.md]} · Quest ${st.qcur+1} of ${QUESTS.length}${st.qd[st.qcur] ? ' · done ✓' : ''}</span><h2>${esc(Q.name)}</h2><p>${Q.task}</p>`;
+  const n = questPts();
+  $('qXP').innerHTML = `<span class="t">✓ ${n} / ${QUESTS.length}</span><span class="x">⚡ ${n * 10} XP</span>`;
+}
+function qUpdate(){
+  const v = $('qEditor').value;
+  $('qGutter').innerHTML = Array.from({length: v.split('\n').length}, (_,k) => k+1).join('\n');
+  qStore(v);
+}
+function qBlank(){ $('qOut').srcdoc = '<body style="margin:0;height:100vh;display:grid;place-items:center;font:700 18px Arial,sans-serif;color:#8A93AE;text-align:center;padding:24px;box-sizing:border-box"><div>Do the quest on the left,<br>then press <b style="color:#FF7A1A">Check my code</b> to see your page here.</div></body>'; }
+function goQuest(k){
+  st.qcur = k;
+  const Q = QUESTS[k];
+  if (Q.prep && !st.qd[k]){ const v = Q.prep($('qEditor').value); if (v !== $('qEditor').value){ $('qEditor').value = v; } }
+  qUpdate(); drawQuests();
+  $('qHint').hidden = true; $('qHintBtn').textContent = '💡 Show hint'; $('qResult').hidden = true;
+}
+$('qPath').addEventListener('click', e => { const b = e.target.closest('.qstep'); if (b && !b.disabled) goQuest(+b.dataset.k); });
+$('qEditor').addEventListener('input', qUpdate);
+$('qEditor').addEventListener('scroll', () => { $('qGutter').scrollTop = $('qEditor').scrollTop; });
+$('qEditor').addEventListener('keydown', e => { if (e.key === 'Tab'){ e.preventDefault(); const t = e.target, s = t.selectionStart; t.setRangeText('  ', s, t.selectionEnd, 'end'); qUpdate(); } });
+function qNoPaste(e){ e.preventDefault(); const b = $('qResult'); b.hidden = false; b.className = 'result bad'; b.innerHTML = '<h3>Paste is turned off</h3><p>Type the code yourself – that is how real web designers learn!</p>'; }
+['paste','drop'].forEach(ev => $('qEditor').addEventListener(ev, qNoPaste));
+$('qEditor').addEventListener('beforeinput', e => { if (e.inputType === 'insertFromPaste' || e.inputType === 'insertFromDrop') qNoPaste(e); });
+$('qEditor').addEventListener('contextmenu', e => e.preventDefault());
+$('qReset').onclick = () => {
+  let v = Q_START;
+  QUESTS.forEach((Q,k) => { if (Q.prep && (k <= st.qcur)) v = Q.prep(v); });
+  $('qEditor').value = v; $('qResult').hidden = true; qUpdate(); qBlank();
+};
+$('qHintBtn').onclick = () => {
+  const h = $('qHint');
+  if (!h.hidden){ h.hidden = true; $('qHintBtn').textContent = '💡 Show hint'; return; }
+  const Q = QUESTS[st.qcur], p = document.createElement('p');
+  p.className = 'hwhere'; p.innerHTML = `<b>Quest ${st.qcur+1}: ${esc(Q.name)}</b><br>${Q.where($('qEditor').value)}`;
+  h.innerHTML = ''; h.append(p, codePicture(Q.hint));
+  h.hidden = false; $('qHintBtn').textContent = '💡 Hide hint';
+};
+['contextmenu','copy','dragstart'].forEach(ev => $('qHint').addEventListener(ev, e => e.preventDefault()));
+$('qCheck').onclick = () => {
+  const box = $('qResult'); box.hidden = false;
+  if (!needId(t => { box.className = 'result bad'; box.innerHTML = `<h3>${t}</h3>`; })) return;
+  const src = $('qEditor').value; $('qOut').srcdoc = src;
+  const errs = checkCode(src);
+  if (errs.length){
+    box.className = 'result bad';
+    box.innerHTML = `<h3>Found ${errs.length} error${errs.length > 1 ? 's' : ''} to fix</h3><p style="color:var(--bad)">Stuck? Press <b>💡 Show hint</b>.</p>
+      <ul class="errs">${errs.map(e => `<li>${e.line ? `<span class="ln">Line ${e.line}</span>` : '<span></span>'}<span>${e.msg}</span></li>`).join('')}</ul>`;
+    const lines = new Set(errs.filter(e => e.line).map(e => e.line));
+    $('qGutter').innerHTML = src.split('\n').map((_, k) => lines.has(k+1) ? `<span class="err">${k+1}</span>` : String(k+1)).join('\n');
+    return;
+  }
+  qUpdate();
+  const doc = new DOMParser().parseFromString(src, 'text/html');
+  QUESTS.forEach((Q,k) => { let ok = false; try { ok = !!Q.test(doc); } catch(e){} if (ok && k <= st.qcur) st.qd[k] = st.qd[k] || 1; });
+  const Q = QUESTS[st.qcur];
+  if (!st.qd[st.qcur]){ box.className = 'result bad'; box.innerHTML = `<h3>Almost! No errors, but the quest is not done yet.</h3><p>${Q.fail}</p>`; drawQuests(); return; }
+  drawQuests(); drawXP();
+  const next = st.qd.findIndex(x => !x);
+  box.className = 'result ok';
+  if (next === -1){
+    confetti(220); markDone('quest');
+    box.innerHTML = `<h3>🏆 All 6 quests done – your invitation is ready! You are an Expert Helper 🧑‍🏫</h3><p>Help a friend, or try the ⭐ Challenge.</p><div class="actions"><button class="btn big" id="toChallenge">⭐ Go to the Challenge →</button></div>`;
+    $('toChallenge').onclick = () => showSec(idx('mini'));
+  } else {
+    confetti(110);
+    box.innerHTML = `<h3>🎉 Quest ${st.qcur+1} done! +10 XP</h3><div class="actions"><button class="btn big" id="qNext">Next: Quest ${next+1} – ${esc(QUESTS[next].name)} →</button></div>`;
+    $('qNext').onclick = () => goQuest(next);
+  }
+  save('Quest ' + (st.qcur + 1));
+};
+$('qEditor').value = qLoad() || Q_START;
+goQuest(0); qBlank();
+
 /* ---------- HOT: menu toggle ---------- */
 $('menuBtns').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
@@ -924,17 +1094,19 @@ $('menuBtns').addEventListener('click', e => {
 
 /* ---------- Trophies ---------- */
 function drawTrophies(){
-  const bt = bestTheme(), d = tickArr(bt), main = sum(d.slice(0, 8));
+  const bt = bestTheme(), d = tickArr(bt), main = sum(d.slice(0, 5));
   const T = [
     ['🔥','Warm-up Star','3 / 3 in the Warm-up', warmPts() === 3],
     ['📘','Fast Learner','Visited Goals and Learn', seen.has('goals') && seen.has('learn')],
     ['🎮','Align Ace','4 / 4 in Play', playPts() === 4],
-    ['🏗️','Web Designer','All 8 main ticks in the Mini Project', main === 8],
-    ['⭐','Bonus Hunter','Made the 3-property banner', !!d[8]],
+    ['🗺️','Quest Hero','All 6 Quests done', questPts() === 6],
+    ['🧑‍🏫','Expert Helper','Finished the Quests – help a friend!', questPts() === 6],
+    ['🏗️','Challenge Champion','All 5 main ticks in the Challenge', main === 5],
+    ['⭐','Bonus Hunter','Made the 3-property banner', !!d[5]],
     ['📝','Reflective Designer','Submitted the self-review', !!st.review],
     ['🎯','Exit Champion','3 / 3 in the Exit Ticket', exitPts() === 3]
   ];
-  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/4</b>Play</div><div><b>${sum(d)}/9</b>Mini Project</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
+  $('board').innerHTML = `<div><b>${xp()}</b>XP</div><div><b>${rank()}</b>Rank</div><div><b>${warmPts()}/3</b>Warm-up</div><div><b>${playPts()}/4</b>Play</div><div><b>${questPts()}/6</b>Quests</div><div><b>${sum(d)}/6</b>Challenge</div><div><b>${exitPts()}/3</b>Exit Ticket</div>`;
   $('troBox').innerHTML = T.map(([ic,n,how,got]) => `<div class="tro${got ? ' got' : ''}"><span class="ic">${ic}</span><b>${n}</b><span>${got ? 'Earned! 🎉' : how}</span></div>`).join('');
   if (T.some(t => t[3])) confetti(80);
   if (st.sid){ markDone('tro'); save('Trophies'); }
@@ -948,7 +1120,8 @@ function save(what){
   const data = { sid:st.sid, seq:st.seq, name:st.name, cls:st.div,
     s1:st.warmQ[0], s2:st.warmQ[1], s3:st.warmQ[2], start: answered(st.warmQ) ? warmPts() : '',
     play: st.play.length ? playPts() : '',
-    theme: THEMES[bt].name, t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], t7:d[6], t8:d[7], t9:d[8], ticks:sum(d), plan:planText(bt), review:st.review,
+    qq:(st.qd || []).map(Boolean).map(Number), quests:questPts(),
+    theme: sum(d) ? THEMES[bt].name : '', t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], ticks:sum(d), plan:planText(bt), review:st.review,
     q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: answered(st.exitQ) ? exitPts() : '',
     xp:xp(), rank:rank().replace(/^\S+\s/, ''), seconds: Math.round((Date.now() - st.t0) / 1000), what };
   fetch(SCORE_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).catch(() => {});
