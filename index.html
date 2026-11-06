@@ -1112,11 +1112,12 @@ const QB = [
     task:'Put the title in the <b>center</b> and give it a <b>colour</b>.',
     code:'<h1>Burj Khalifa</h1>\n<p>The Burj Khalifa in Dubai is 828 metres tall. It is the tallest building in the world.</p>',
     checks:[ { ...C.h1c, lab:'Title is in the center', where:'Line 1: change <code>&lt;h1&gt;</code> to:' }, { ...C.h1col, lab:'Title has a colour (same style)', hint:'<h1 style="text-align:center; color:blue;">', where:'Line 1: add a colour after <code>center;</code>' } ] },
-  { id:'menu', ic:'🍽️', name:'Emirati Food Menu', lvl:2, story:'Line up the prices of tasty Emirati dishes neatly on the right.',
-    task:'Center the menu title and move <b>all 3 dishes</b> with prices to the <b>right</b>.',
-    code:'<h1>Emirati Food Menu</h1>\n<p>Luqaimat – 10 AED</p>\n<p>Machboos – 25 AED</p>\n<p>Harees – 18 AED</p>',
+  { id:'menu', ic:'🍽️', name:'Emirati Food Menu', lvl:2, story:'Like a real menu: food names on the left, prices on the right.',
+    task:'Center the menu title. Put every <b>food name</b> on the <b>left</b> and every <b>price</b> on the <b>right</b>, like a real menu.',
+    code:'<h1>Emirati Food Menu</h1>\n<p>Luqaimat</p>\n<p>10 AED</p>\n<p>Machboos</p>\n<p>25 AED</p>\n<p>Harees</p>\n<p>18 AED</p>',
     checks:[ { ...C.h1c, lab:'Title is in the center', where:'Line 1: change <code>&lt;h1&gt;</code> to:' },
-             { lab:'All 3 dishes are on the right', hint:'<p style="text-align:right;">', where:'Lines 2, 3 and 4: change <b>each</b> <code>&lt;p&gt;</code> to:', test:d => pWith(d,/AED/).filter(p => al(p) === 'right').length >= 3 } ] },
+             { lab:'All 3 food names are on the left', hint:'<p style="text-align:left;">', where:'Lines 2, 4 and 6 (food names): change <b>each</b> <code>&lt;p&gt;</code> to:', test:d => pWith(d,/Luqaimat|Machboos|Harees/).filter(p => !/AED/.test(txt(p)) && al(p) === 'left').length >= 3 },
+             { lab:'All 3 prices are on the right', hint:'<p style="text-align:right;">', where:'Lines 3, 5 and 7 (prices): change <b>each</b> <code>&lt;p&gt;</code> to:', test:d => pWith(d,/AED/).filter(p => al(p) === 'right').length >= 3 } ] },
   { id:'news', ic:'📰', name:'Gulf News Story', lvl:2, story:'Make the news story neat on both edges, like a real newspaper.',
     task:'Center the headline and make the story <b>justify</b> – straight on both edges.',
     code:'<h1>Louvre Abu Dhabi Welcomes Students</h1>\n<p>Hundreds of students from schools across the UAE visited the Louvre Abu Dhabi this week. They saw art from many countries, joined drawing workshops and learnt how museums protect old treasures for the future.</p>',
@@ -1187,7 +1188,7 @@ function drawQuest(fresh){
 function openQuest(k){
   qOpen = k; const Q = QB[k];
   $('miniWrap').hidden = true; $('qBoard').hidden = false; $('qWork').hidden = false; document.body.classList.add('locked');
-  $('qEditor').value = st.qcode['v2:' + Q.id] || Q.code;
+  $('qEditor').value = st.qcode['v3:' + Q.id] || Q.code;
   $('qHint').hidden = true; $('qHintBtn').textContent = '💡 Hint'; $('qResult').hidden = true;
   qUpdate(); $('qOut').srcdoc = qRender($('qEditor').value); drawQuest(); persist();
   $('qWork').scrollTop = 0; setTimeout(() => { const e = $('qEditor'); e.focus(); e.setSelectionRange(0,0); e.scrollTop = 0; }, 50);
@@ -1196,7 +1197,7 @@ let qT;
 function qUpdate(){
   const v = $('qEditor').value;
   $('qGutter').innerHTML = Array.from({length: v.split('\n').length}, (_,k) => k+1).join('\n');
-  if (qOpen !== null && qOpen !== 'mini'){ st.qcode['v2:' + QB[qOpen].id] = v; clearTimeout(qT); qT = setTimeout(persist, 400); }
+  if (qOpen !== null && qOpen !== 'mini'){ st.qcode['v3:' + QB[qOpen].id] = v; clearTimeout(qT); qT = setTimeout(persist, 400); }
 }
 const qRender = src => '<!DOCTYPE html><html><body style="font-family:Arial,Helvetica,sans-serif;font-size:18px;margin:14px">' + src + '</body></html>';
 function qBlank(){ $('qOut').srcdoc = '<body style="margin:0;height:100vh;display:grid;place-items:center;font:700 18px Arial,sans-serif;color:#8A93AE;text-align:center;padding:24px;box-sizing:border-box"><div>Do the quest on the left,<br>then press <b style="color:#FF7A1A">Check my code</b> to see your page here.</div></body>'; }
