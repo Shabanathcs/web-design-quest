@@ -312,6 +312,29 @@ body.locked{overflow:hidden}
 @keyframes glow{0%,100%{box-shadow:0 4px 0 var(--orange-d),0 0 0 0 rgba(255,122,26,.6)}50%{box-shadow:0 4px 0 var(--orange-d),0 0 0 10px rgba(255,122,26,0)}}
 .btn.nextq{animation:glow 1.4s ease-in-out infinite}
 
+/* key vocabulary */
+.vocab{background:#fff;border:3px solid var(--violet);border-radius:18px;padding:16px 20px;box-shadow:0 5px 0 var(--violet);display:grid;gap:12px}
+.vocab h3{font-size:1.3rem;color:var(--violet)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.vw{border-radius:14px;padding:10px 12px;display:grid;gap:4px;align-content:start}
+.vw b{font:800 1.2rem var(--display)}
+.vw span{font-weight:700;font-size:1rem;color:#3A4466}
+.vw code{justify-self:start;background:#fff}
+.v1{background:#E1ECFF}.v1 b{color:#1E4FB0}.v2{background:#FFF0C2}.v2 b{color:#8A5A00}.v3{background:#FFE1DC}.v3 b{color:#B4301B}
+.v4{background:#D9F5E8}.v4 b{color:#0B6F55}.v5{background:#E6DEFF}.v5 b{color:#5B35C8}.v6{background:#FFE8F3}.v6 b{color:#B0306E}
+.vline{font-weight:800;font-size:1.1rem;background:#F5F3FA;border-radius:10px;padding:10px 14px}
+.vline .c1{color:#1E4FB0}.vline .c2{color:#8A5A00}.vline .c3{color:#B4301B}.vline .c4{color:#0B6F55}
+/* self-assessment traffic light */
+.selfbox{background:#fff;border:2px solid var(--line);border-radius:18px;padding:18px 20px;display:grid;gap:12px;box-shadow:0 5px 0 #E6E0F0}
+.selfbox h3{font-size:1.3rem}
+.lights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.lights{grid-template-columns:minmax(0,1fr)}}
+.light{--lc:#16A34A;display:flex;gap:12px;align-items:center;border:3px solid var(--lc);background:#fff;border-radius:16px;padding:14px 16px;cursor:pointer;font:800 1.08rem var(--body);color:var(--ink);text-align:left;box-shadow:0 4px 0 var(--lc)}
+.light.a{--lc:#F59E0B}.light.r{--lc:#DC2626}
+.light .dot{flex:none;width:34px;height:34px;border-radius:50%;background:var(--lc);box-shadow:inset 0 -4px 0 rgba(0,0,0,.18)}
+.light[aria-pressed="true"]{background:var(--lc);color:#fff}
+.light[aria-pressed="true"] .dot{background:#fff}
+
 /* ---------- HOT, AE connect ---------- */
 .hotq{font:700 clamp(1.3rem,2.8vw,1.75rem) var(--display);line-height:1.3}
 .menuc{border:2px dashed #D9D2E8;border-radius:12px;background:#fff;padding:12px 16px;font-family:"Times New Roman",serif;color:#000;font-size:1.15rem;display:grid;gap:4px}
@@ -417,6 +440,18 @@ body.locked{overflow:hidden}
 <!-- 4 LEARN -->
 <section class="panel learn" id="p-learn" hidden>
   <div class="shead"><span class="snum">4</span><div><h1>📘 Learn: text-align</h1><div class="tags"><span class="tag">New today</span></div></div></div>
+  <div class="vocab">
+    <h3>🔑 Key words – quick refresh</h3>
+    <div class="vgrid">
+      <div class="vw v1"><b>Tag</b><span>An HTML command in <code>&lt; &gt;</code></span><code>&lt;h1&gt;</code></div>
+      <div class="vw v2"><b>Attribute</b><span>Extra information inside the start tag</span><code>style="…"</code></div>
+      <div class="vw v3"><b>Property</b><span>What we want to change</span><code>text-align</code></div>
+      <div class="vw v4"><b>Value</b><span>How we want to change it</span><code>center</code></div>
+      <div class="vw v5"><b>Align</b><span>Line text up to one side or the middle</span><code>left · center · right</code></div>
+      <div class="vw v6"><b>Justify</b><span>Both edges of a paragraph are straight</span><code>justify</code></div>
+    </div>
+    <p class="vline"><code>&lt;h1 <span class="c2">style</span>="<span class="c3">text-align</span>:<span class="c4">center</span>;"&gt;</code> &nbsp;=&nbsp; <span class="c1">tag</span> + <span class="c2">attribute</span> + <span class="c3">property</span> : <span class="c4">value</span> ;</p>
+  </div>
   <p class="big">Moves your text to the <b class="k-l">left</b>, <b class="k-c">center</b>, <b class="k-r">right</b>, or makes both edges straight with <b class="k-j">justify</b>.</p>
 
   <div class="codeout">
@@ -582,6 +617,16 @@ body.locked{overflow:hidden}
   <p class="lead">Three questions about today's lesson. You get XP if you are right on the first try.</p>
   <div class="grid3" id="exitBox"></div>
   <div class="msg" id="exitMsg"></div>
+  <div class="selfbox">
+    <h3>🚦 Self-assessment: How confident are you with <code>text-align</code>?</h3>
+    <p class="lead" style="margin:0">Think about today's success criteria. Be honest – it helps your teacher help you!</p>
+    <div class="lights" id="lights" role="group" aria-label="Self-assessment">
+      <button class="light g" data-v="Green"><span class="dot"></span><b>I can do it on my own</b></button>
+      <button class="light a" data-v="Amber"><span class="dot"></span><b>I can do it with a little help</b></button>
+      <button class="light r" data-v="Red"><span class="dot"></span><b>I need more help</b></button>
+    </div>
+    <div class="msg" id="selfMsg"></div>
+  </div>
 </section>
 
 <!-- 8 HOT -->
@@ -1235,7 +1280,7 @@ const SKEY = 'wdq3-state';
 function persist(){
   if (!st.sid) return;
   const o = { name:st.name, div:st.div, sid:st.sid, t0:st.t0, warmQ:st.warmQ, exitQ:st.exitQ, play:st.play, qd:st.qd, qt:st.qt, qcode:st.qcode,
-    ticks:st.ticks, plan:st.plan, review:st.review, theme:st.theme, picked:st.picked, seen:[...seen], sec:cur, qOpen };
+    ticks:st.ticks, plan:st.plan, review:st.review, self:st.self, theme:st.theme, picked:st.picked, seen:[...seen], sec:cur, qOpen };
   try { localStorage.setItem(SKEY, JSON.stringify(o)); } catch(e){}
 }
 function applyState(o, fromSheet){
@@ -1245,7 +1290,7 @@ function applyState(o, fromSheet){
     if (Array.isArray(o.play)) st.play = o.play;
     Object.assign(st.qd, o.qd || {}); Object.assign(st.qt, o.qt || {}); Object.assign(st.qcode, o.qcode || {});
     Object.keys(o.ticks || {}).forEach(k => st.ticks[k] = o.ticks[k]);
-    Object.assign(st.plan, o.plan || {}); st.review = o.review || st.review;
+    Object.assign(st.plan, o.plan || {}); st.review = o.review || st.review; st.self = o.self || st.self;
     if (o.picked){ st.theme = o.theme; st.picked = true; }
     (o.seen || []).forEach(markDone);
   } else {
@@ -1256,10 +1301,11 @@ function applyState(o, fromSheet){
     const ti = THEMES.findIndex(T => T.name === o.theme);
     if (ti >= 0){ const d = tickArr(ti); ['t1','t2','t3','t4','t5','t6','t7'].forEach((k,j) => d[j] = mx(d[j], o[k])); st.theme = ti; st.picked = true; }
     if (o.review && !st.review) st.review = o.review;
+    if (o.self && !st.self) st.self = o.self;
   }
 }
 function refreshAll(){
-  restoreQuiz.warm(); restoreQuiz.exit(); drawRoundFresh(); drawBoard();
+  restoreQuiz.warm(); restoreQuiz.exit(); drawRoundFresh(); drawBoard(); drawSelf();
   if (st.picked){ pickTheme(st.theme, true); } drawMust(); drawBrief(); drawXP();
   if (st.review){ $('improve').value = st.review; $('revMsg').className = 'msg ok'; $('revMsg').textContent = 'Review saved ✓'; }
 }
@@ -1284,6 +1330,16 @@ $('newBtn').onclick = () => {
   location.reload();
 };
 let confirmNew = false;
+st.self = '';
+function drawSelf(){ $('lights').querySelectorAll('.light').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === st.self))); }
+$('lights').addEventListener('click', e => {
+  const b = e.target.closest('.light'); if (!b) return;
+  if (!needId(t => { $('selfMsg').className = 'msg bad'; $('selfMsg').textContent = t; })) return;
+  st.self = b.dataset.v; drawSelf();
+  const msg = { Green:'🟢 Great! Try a ★★★ quest or help a friend.', Amber:'🟡 Good effort! Your teacher will help you practise a little more.', Red:'🔴 Thank you for being honest. Your teacher will help you next lesson.' };
+  $('selfMsg').className = 'msg ok'; $('selfMsg').textContent = msg[st.self] + ' (saved)';
+  save('Self-assessment');
+});
 $('perks').addEventListener('click', e => {
   const b = e.target.closest('button[data-go]'); if (!b) return;
   if (!st.sid){ $('startMsg').className = 'msg bad'; $('startMsg').textContent = 'Type your name and select your class first, then press Let\u2019s begin.'; $('sname').focus(); return; }
@@ -1332,7 +1388,7 @@ function save(what){
     play: st.play.length ? playPts() : '',
     ...Object.fromEntries(QB.map(Q => ['q_' + Q.id, st.qd[Q.id] ? 1 : 0])), quests:qCleared(), questxp:questXP(),
     theme: sum(d) ? THEMES[bt].name : '', t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], t7:d[6], ticks:sum(d), plan:planText(bt), review:st.review,
-    q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: answered(st.exitQ) ? exitPts() : '',
+    q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: answered(st.exitQ) ? exitPts() : '', self:st.self,
     xp:xp(), rank:rank().replace(/^\S+\s/, ''), seconds: Math.round((Date.now() - st.t0) / 1000), what };
   fetch(SCORE_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).catch(() => {});
 }
