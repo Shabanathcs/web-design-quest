@@ -270,8 +270,7 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 .qsum{margin-top:16px;font:800 1.15rem var(--body);background:#fff;border:2px dashed #D9D2E8;border-radius:14px;padding:12px 16px;text-align:center}
 .qsum.ok{background:var(--ok-soft);border-color:var(--ok);color:#0A6E52}
 .backbtn{justify-self:start;font:800 1rem var(--body);border:0;border-radius:12px;padding:10px 16px;background:var(--lav);color:var(--violet);cursor:pointer;box-shadow:0 4px 0 #D6CCFF;margin-bottom:12px}
-#qWork,#miniWrap{display:grid;gap:16px}
-#qWork[hidden],#miniWrap[hidden]{display:none!important}
+#miniWrap .mbox{gap:16px}
 .qhead{--lc:#2EAD6B;display:flex;gap:16px;align-items:center;background:#fff;border:3px solid var(--lc);border-radius:18px;padding:16px 20px;box-shadow:0 5px 0 var(--lc)}
 .qhead.l2{--lc:#2F6FDB}.qhead.l3{--lc:#E0482D}
 .qhead .qic{font-size:3.2rem;line-height:1}
@@ -510,8 +509,10 @@ body.locked{overflow:hidden}
     </div>
   </div>
 
-  <div id="miniWrap" hidden>
-    <button class="backbtn" id="mBack">◀ Back to Quest Board</button>
+  <div class="modal" id="miniWrap" hidden role="dialog" aria-modal="true" aria-label="Final Mission: Mini Project">
+   <div class="mbox">
+    <button class="mclose" id="mBack" aria-label="Close mini project">✕</button>
+    <div class="mhead"><div class="t"><span class="qic" aria-hidden="true">🏗️</span><h2>Final Mission: Mini Project</h2></div><div class="qmeta"><span class="stars">★★★</span><span class="xptag">up to +70 XP</span></div></div>
     <div class="dq"><span aria-hidden="true">❓</span><div><b>Final Mission · Driving question</b>How can text alignment make a web page easy to read?</div></div>
   <div class="sbox s1" id="box1">
       <div class="step"><span class="k">1</span>Pick your theme and read the brief <span class="todo" id="todo1">👉 Tap a theme</span></div>
@@ -562,6 +563,7 @@ body.locked{overflow:hidden}
       <div class="actions"><button class="btn big" id="revBtn">Submit my review</button></div>
       <div class="msg" id="revMsg" style="margin-top:10px"></div>
     </div>
+   </div>
   </div>
 </section>
 
@@ -1110,9 +1112,9 @@ $('qCards').addEventListener('click', e => {
 });
 function boardView(){ $('qBoard').hidden = false; $('qWork').hidden = true; $('miniWrap').hidden = true; qOpen = null; document.body.classList.remove('locked'); drawBoard(); persist(); window.scrollTo({top:0}); }
 $('qBack').onclick = boardView; $('mBack').onclick = boardView;
-$('qWork').addEventListener('click', e => { if (e.target === $('qWork')) boardView(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('qWork').hidden) boardView(); });
-function openMini(){ $('qBoard').hidden = true; $('qWork').hidden = true; $('miniWrap').hidden = false; qOpen = 'mini'; persist(); window.scrollTo({top:0}); }
+['qWork','miniWrap'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) boardView(); }));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && (!$('qWork').hidden || !$('miniWrap').hidden)) boardView(); });
+function openMini(){ $('qBoard').hidden = false; $('qWork').hidden = true; $('miniWrap').hidden = false; qOpen = 'mini'; document.body.classList.add('locked'); $('miniWrap').scrollTop = 0; persist(); }
 
 function drawQuest(fresh){
   const Q = QB[qOpen], t = st.qt[Q.id] || (st.qt[Q.id] = Q.checks.map(() => 0));
