@@ -5,4 +5,4 @@ An interactive, game-based lesson website for Grade 6 learners on text alignment
 **Concept, design and content: Shabanath Shihab**
 Live site: https://shabanathcs.github.io/web-design-quest/
 
-© 2026 Shabanath Shihab. All rights reserved. See [LICENSE](LICENSE).
+© 2026 Shabanath Shihab. See [LICENSE](LICENSE).
