@@ -305,6 +305,8 @@ iframe.out{border:2px solid var(--line);border-radius:14px;width:100%;height:min
 .qrows li.met .bx{background:var(--ok)}
 .qrows li.met .bx::after{content:"✓";font-weight:900}
 body.locked{overflow:hidden}
+@keyframes glow{0%,100%{box-shadow:0 4px 0 var(--orange-d),0 0 0 0 rgba(255,122,26,.6)}50%{box-shadow:0 4px 0 var(--orange-d),0 0 0 10px rgba(255,122,26,0)}}
+.btn.nextq{animation:glow 1.4s ease-in-out infinite}
 
 /* ---------- HOT, AE connect ---------- */
 .hotq{font:700 clamp(1.3rem,2.8vw,1.75rem) var(--display);line-height:1.3}
@@ -1176,11 +1178,10 @@ $('qCheck').onclick = () => {
     confetti(160);
     const n = qCleared();
     box.className = 'result ok';
-    box.innerHTML = `<h3>🎉 Quest cleared! +${LV[Q.lvl].xp} XP</h3><p>You have cleared ${n} of ${QB.length} quests. Pick another quest, or help a friend as an 🧑‍🏫 Expert Helper!</p><div class="actions"><button class="btn big" id="qToBoard">◀ Back to Quest Board</button></div>`;
-    $('qToBoard').onclick = boardView;
+    showNext(box, `🎉 Quest cleared! +${LV[Q.lvl].xp} XP`, `You have cleared ${n} of ${QB.length} quests.`);
     markDone('quest');
     save('Quest: ' + Q.name);
-  } else if (all){ box.className = 'result ok'; box.innerHTML = '<h3>✅ Already cleared – great work!</h3>'; }
+  } else if (all){ box.className = 'result ok'; showNext(box, '✅ Already cleared – great work!', ''); }
   else {
     const j = t.findIndex(x => !x);
     if (fresh.length) confetti(70);
@@ -1189,6 +1190,26 @@ $('qCheck').onclick = () => {
     if (fresh.length) persist();
   }
 };
+
+/* after a quest: point to the next quest (same level or harder first) */
+function nextQuest(){
+  const cl = QB[qOpen].lvl, open = QB.map((Q,k) => k).filter(k => !st.qd[QB[k].id] && k !== qOpen);
+  return open.find(k => QB[k].lvl === cl) ?? open.find(k => QB[k].lvl > cl) ?? open[0];
+}
+function showNext(box, title, line){
+  const k = nextQuest();
+  box.className = 'result ok';
+  if (k === undefined){
+    box.innerHTML = `<h3>${title}</h3><p>${line} 🏆 You cleared ALL quests! Now try the Final Mission, or help a friend as an 🧑‍🏫 Expert Helper.</p><div class="actions"><button class="btn big" id="qGoMini">🏗️ Go to the Final Mission →</button><button class="btn mlite" id="qToBoard">◀ Quest Board</button></div>`;
+    $('qGoMini').onclick = () => { boardView(); openMini(); };
+  } else {
+    const N = QB[k];
+    box.innerHTML = `<h3>${title}</h3><p>${line} 👉 Your next quest is ready:</p><div class="actions"><button class="btn big nextq" id="qGoNext">${N.ic} Next Quest: ${esc(N.name)} <span class="stars" style="color:#fff">${LV[N.lvl].s}</span> →</button><button class="btn mlite" id="qToBoard">◀ Choose another quest</button></div>`;
+    $('qGoNext').onclick = () => openQuest(k);
+  }
+  $('qToBoard').onclick = boardView;
+  setTimeout(() => box.scrollIntoView({behavior:'smooth', block:'center'}), 60);
+}
 
 /* ---------- save & restore on this computer (and from home via the Google Sheet) ---------- */
 const SKEY = 'wdq3-state';
