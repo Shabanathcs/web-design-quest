@@ -508,7 +508,7 @@ body.locked{overflow:hidden}
       <p class="ptask" id="pTask"></p>
       <div class="choices" id="pChoices"></div>
       <div class="msg" id="pMsg" style="margin-top:12px"></div>
-      <div class="actions"><button class="btn big" id="pNext" hidden>Next round →</button></div>
+      <div class="actions"><button class="btn ghost big" id="pTry" hidden>↺ Try again</button><button class="btn big" id="pNext" hidden>Next round →</button></div>
       <div class="dots" id="pDots"></div>
     </div>
     <div><span class="lab">🖥️ How it looks</span><div class="thing" id="pThing"></div></div>
@@ -834,12 +834,12 @@ function drawRound(){
   $('pRound').textContent = `Round ${pr+1} of ${ROUNDS.length}`;
   $('pTask').textContent = `Which alignment fits: ${R.t}?`;
   $('pThing').innerHTML = R.html; $('pThing').style.textAlign = 'left';
-  $('pMsg').textContent = ''; $('pMsg').className = 'msg'; $('pNext').hidden = true; pTried = false;
+  $('pMsg').textContent = ''; $('pMsg').className = 'msg'; $('pNext').hidden = true; $('pTry').hidden = true; pTried = false;
   $('pChoices').querySelectorAll('button').forEach(b => { b.disabled = false; b.removeAttribute('aria-pressed'); });
   $('pDots').innerHTML = ROUNDS.map((_,k) => `<i class="${st.play[k] === 1 ? 'ok' : st.play[k] === 0 ? 'miss' : ''}${k === pr ? ' now' : ''}"></i>`).join('');
 }
 $('pChoices').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b || !$('pNext').hidden) return;
+  const b = e.target.closest('button'); if (!b || b.disabled || !$('pNext').hidden) return;
   if (!needId(t => { $('pMsg').className = 'msg bad'; $('pMsg').textContent = t; })) return;
   const R = ROUNDS[pr], v = b.dataset.v;
   $('pThing').style.textAlign = v;
@@ -849,13 +849,35 @@ $('pChoices').addEventListener('click', e => {
     b.setAttribute('aria-pressed','true');
     $('pMsg').className = 'msg ok'; $('pMsg').textContent = (pTried ? 'Correct! ' : 'Correct! +10 XP. ') + R.why;
     $('pChoices').querySelectorAll('button').forEach(x => x.disabled = x !== b);
-    drawXP();
-    if (pr < ROUNDS.length - 1){ $('pNext').hidden = false; $('pNext').textContent = 'Next round →'; }
-    else { $('pNext').hidden = false; $('pNext').textContent = 'Play again ↺'; confetti(110); markDone('play'); save('Play'); $('pMsg').textContent += ` 🎉 Game over: ${playPts()} / ${ROUNDS.length} on the first try!`; }
-    $('pDots').innerHTML = ROUNDS.map((_,k) => `<i class="${st.play[k] === 1 ? 'ok' : st.play[k] === 0 ? 'miss' : ''}${k === pr ? ' now' : ''}"></i>`).join('');
-  } else { pTried = true; $('pMsg').className = 'msg bad'; $('pMsg').textContent = `Look at the page: ${v} does not fit here. Try another value.`; }
+    drawXP(); pShowNext();
+  } else {
+    if (st.play[pr] == null) st.play[pr] = 0;
+    pTried = true; b.setAttribute('aria-pressed','false');
+    $('pChoices').querySelectorAll('button').forEach(x => x.disabled = true);
+    $('pMsg').className = 'msg bad'; $('pMsg').textContent = `Not quite: ${v} does not fit here. Press Try again, or Next to move on.`;
+    $('pTry').hidden = false; pShowNext(); save('Play');
+  }
+  $('pDots').innerHTML = ROUNDS.map((_,k) => `<i class="${st.play[k] === 1 ? 'ok' : st.play[k] === 0 ? 'miss' : ''}${k === pr ? ' now' : ''}"></i>`).join('');
 });
-$('pNext').onclick = () => { pr = pr < ROUNDS.length - 1 ? pr + 1 : 0; drawRound(); };
+function pShowNext(){
+  $('pNext').hidden = false;
+  $('pNext').textContent = pr < ROUNDS.length - 1 ? 'Next round →' : 'Finish game 🏁';
+}
+let pOver = false;
+$('pTry').onclick = () => {
+  $('pTry').hidden = true; $('pNext').hidden = true; $('pMsg').textContent = ''; $('pMsg').className = 'msg';
+  $('pThing').style.textAlign = 'left'; $('pThing').querySelectorAll('h2,p,div').forEach(el => el.style.textAlign = 'left');
+  $('pChoices').querySelectorAll('button').forEach(x => { x.disabled = false; x.removeAttribute('aria-pressed'); });
+};
+$('pNext').onclick = () => {
+  if (pOver){ pOver = false; pr = 0; drawRound(); return; }
+  if (pr < ROUNDS.length - 1){ pr++; drawRound(); return; }
+  pOver = true; markDone('play'); save('Play'); drawXP();
+  if (playPts() >= 3) confetti(110);
+  $('pTry').hidden = true; $('pChoices').querySelectorAll('button').forEach(x => x.disabled = true);
+  $('pMsg').className = 'msg ok'; $('pMsg').textContent = `🎉 Game over: ${playPts()} / ${ROUNDS.length} right on the first try! Now go to the Quests.`;
+  $('pNext').textContent = 'Play again ↺';
+};
 function drawRoundFresh(){ const k = ROUNDS.findIndex((_,i) => st.play[i] == null); pr = k === -1 ? 0 : k; if (k === -1 && st.play.length) markDone('play'); drawRound(); }
 drawRound();
 
