@@ -687,6 +687,7 @@ body.locked{overflow:hidden}
 <footer class="foot"><span>Teacher designed • Grade 6 Computer Science • Sharjah Indian School, Juwaiza</span><span>© 2026 <b class="author">Shabanath Shihab</b></span></footer>
 
 <script>
+(() => {
 /* Paste the Google Apps Script web-app URL here to record scores (leave '' to switch saving off). */
 const SCORE_URL = 'https://script.google.com/macros/s/AKfycbx8a1kdJC4p0HRhvj6xVT73OBBY_kLaNzCSrKvWQX9t_gZhbHyAOjwO0dcNUp03nJK2/exec';
 
@@ -1456,6 +1457,15 @@ update(); blankOut(); drawMust(); drawBrief(); drawBoard(); drawXP();
   try { localStorage.removeItem(SKEY); Object.keys(localStorage).filter(k => /^wdq4-mini-/.test(k)).forEach(k => localStorage.removeItem(k)); } catch(e){}
   $('sname').value = ''; $('scls').value = '';
   showSec(0);
+})();
+
+/* ---------- protection: scores live only inside this closure ---------- */
+document.addEventListener('contextmenu', e => { if (!e.target.closest('textarea, input')) e.preventDefault(); });
+document.addEventListener('keydown', e => {
+  const k = (e.key || '').toLowerCase();
+  if (e.key === 'F12' || ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i','j','c'].includes(k)) || ((e.ctrlKey || e.metaKey) && k === 'u')) e.preventDefault();
+});
+setInterval(drawXP, 1500);   // if XP text is changed by hand on the screen, it goes back to the real XP
 })();
 </script>
 
