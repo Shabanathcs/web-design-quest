@@ -43,6 +43,7 @@ header.top{background:var(--navy);color:#fff;position:sticky;top:env(safe-area-i
 .xpnum{font:800 .95rem var(--body);white-space:nowrap;font-variant-numeric:tabular-nums}
 .rank{font:800 .85rem var(--body);background:var(--violet);border-radius:999px;padding:3px 12px;white-space:nowrap}
 .who{font:700 .85rem var(--body);color:#FFC977;white-space:nowrap}
+.outbtn{font:700 .8rem var(--body);background:#FF6B6B;color:#fff;border:0;border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap}.outbtn:hover{filter:brightness(1.08)}
 nav.tabs{display:flex;gap:6px;overflow-x:auto;padding-block:2px 10px;scrollbar-width:thin}
 nav.tabs button{flex:none;font:800 .88rem var(--body);border:0;background:var(--navy2);color:#D7DCF2;padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
 nav.tabs button:hover{background:#333C6E;color:#fff}
@@ -388,7 +389,7 @@ body.locked{overflow:hidden}
       <div class="xpbar" aria-hidden="true"><i id="xpFill"></i></div>
       <span class="xpnum" id="xpNum">⚡ 0 XP</span>
       <span class="rank" id="rankTag">🥉 Rookie</span>
-      <span class="who" id="whoTag"></span>
+      <span class="who" id="whoTag"></span><button class="outbtn" id="outBtn" hidden title="Save and log out for the next student">🚪 Log out</button>
     </div>
     <nav class="tabs" role="tablist" aria-label="Lesson sections" id="tabs"></nav>
   </div>
@@ -407,7 +408,7 @@ body.locked{overflow:hidden}
       <div class="field"><label for="sname">Your full name</label><input id="sname" maxlength="40" placeholder="Type your name" autocomplete="off"></div>
       <div class="field"><label for="scls">Your class</label><select id="scls"><option value="">Select your class</option></select></div>
       <button class="btn big" id="goBtn">Let's begin →</button>
-      <button class="btn ghost" id="newBtn" hidden>Not you? Start as a new student</button>
+      <button class="btn ghost" id="newBtn" hidden>🚪 Finished? Log out for the next student</button>
       <div class="msg" id="startMsg"></div>
     </div>
   </div>
@@ -758,7 +759,10 @@ $('goBtn').onclick = () => {
   st.div = $('scls').value;
   if (!st.div){ $('startMsg').className = 'msg bad'; $('startMsg').textContent = 'Now select your class.'; return; }
   st.name = n.replace(/\s+/g,' '); st.sid = (st.div + '-' + st.name.toLowerCase()).replace(/[^a-z0-9\u0600-\u06FF]+/gi,'-'); st.t0 = Date.now();
-  loginDone(false); persist(); save('Start'); pullFromSheet(); showSec(1);
+  let o = null; try { o = JSON.parse(localStorage.getItem(UKEY()) || 'null'); } catch(e){}
+  if (o && o.sid === st.sid){ st.t0 = o.t0 || st.t0; applyState(o, false); }
+  $('editor').value = load(st.theme || 0) || starter(THEMES[st.theme || 0]); update();
+  loginDone(!!o); refreshAll(); persist(); save('Start'); pullFromSheet(); showSec(1);
 };
 function needId(show){
   if (st.sid) return true;
@@ -903,7 +907,7 @@ $('plan').addEventListener('change', e => {
   }
 });
 const starter = T => `<!DOCTYPE html>\n<html>\n<head>\n  <title>${T.title}</title>\n</head>\n<body>\n${T.lines.join('\n')}\n\n</body>\n</html>\n`;
-const KEY = i => 'wdq4-mini-' + i;
+const KEY = i => 'wdq5-mini-' + (st.sid || 'guest') + '-' + i;
 const load = i => { try { return localStorage.getItem(KEY(i)); } catch(e){ return null; } };
 const store = (i, v) => { try { localStorage.setItem(KEY(i), v); } catch(e){} };
 
@@ -1298,11 +1302,12 @@ function showNext(box, title, line){
 
 /* ---------- save & restore on this computer (and from home via the Google Sheet) ---------- */
 const SKEY = 'wdq3-state';
+const UKEY = () => 'wdq5-s-' + st.sid;
 function persist(){
   if (!st.sid) return;
   const o = { name:st.name, div:st.div, sid:st.sid, t0:st.t0, warmQ:st.warmQ, exitQ:st.exitQ, play:st.play, qd:st.qd, qt:st.qt, qcode:st.qcode,
     ticks:st.ticks, plan:st.plan, review:st.review, self:st.self, theme:st.theme, picked:st.picked, seen:[...seen], sec:cur, qOpen };
-  try { localStorage.setItem(SKEY, JSON.stringify(o)); } catch(e){}
+  try { localStorage.setItem(UKEY(), JSON.stringify(o)); } catch(e){}
 }
 function applyState(o, fromSheet){
   const mx = (a,b) => Math.max(+a || 0, +b || 0);
@@ -1332,11 +1337,11 @@ function refreshAll(){
 }
 function loginDone(restored){
   $('sname').value = st.name; $('scls').value = st.div;
-  $('sname').disabled = true; $('scls').disabled = true; $('newBtn').hidden = false;
+  $('sname').disabled = true; $('scls').disabled = true; $('newBtn').hidden = false; $('outBtn').hidden = false;
   $('whoTag').textContent = `${st.name} · ${st.div}`;
   $('startMsg').className = 'msg ok';
   $('startMsg').textContent = restored ? `Welcome back, ${st.name}! Your work has been restored.` : `Welcome, ${st.name}! Your work is saved for ${st.div}.`;
-  markDone('home');
+  markDone('home'); idleReset();
 }
 /* bring back scores saved from another computer (e.g. home) */
 function pullFromSheet(){
@@ -1345,11 +1350,19 @@ function pullFromSheet(){
     if (j && j.found){ applyState(j.data, true); refreshAll(); persist(); }
   }).catch(() => {});
 }
+function logOut(){ if (st.sid) save('Log out'); setTimeout(() => location.reload(), 400); }
 $('newBtn').onclick = () => {
-  if (!confirmNew){ confirmNew = true; $('newBtn').textContent = 'Tap again to start as a new student'; return; }
-  try { Object.keys(localStorage).filter(k => k.startsWith('wdq')).forEach(k => localStorage.removeItem(k)); } catch(e){}
-  location.reload();
+  if (!confirmNew){ confirmNew = true; $('newBtn').textContent = 'Tap again to log out (your work is saved)'; return; }
+  logOut();
 };
+$('outBtn').onclick = () => {
+  if (!confirmNew){ confirmNew = true; $('outBtn').textContent = 'Tap again to log out'; setTimeout(() => { confirmNew = false; $('outBtn').textContent = '🚪 Log out'; }, 4000); return; }
+  logOut();
+};
+/* auto log out after 15 minutes with no activity, so the next class starts fresh */
+let idleT;
+function idleReset(){ clearTimeout(idleT); if (st.sid) idleT = setTimeout(logOut, 15 * 60 * 1000); }
+['click','keydown','pointermove','touchstart'].forEach(ev => document.addEventListener(ev, idleReset, {passive:true}));
 let confirmNew = false;
 document.querySelectorAll('[data-hw]').forEach(b => b.addEventListener('click', () => { showSec(idx('quest')); if (b.dataset.hw === 'mini') openMini(); }));
 st.self = '';
@@ -1417,14 +1430,10 @@ function save(what){
 
 $('editor').value = load(0) || starter(THEMES[0]);
 update(); blankOut(); drawMust(); drawBrief(); drawBoard(); drawXP();
-(function restore(){
-  let o = null; try { o = JSON.parse(localStorage.getItem(SKEY) || 'null'); } catch(e){}
-  if (!o || !o.sid){ showSec(0); return; }
-  st.name = o.name; st.div = o.div; st.sid = o.sid; st.t0 = o.t0 || Date.now();
-  applyState(o, false); loginDone(true); refreshAll();
-  showSec(typeof o.sec === 'number' ? o.sec : 0);
-  if (o.qOpen === 'mini') openMini(); else if (typeof o.qOpen === 'number') openQuest(o.qOpen);
-  pullFromSheet();
+(function fresh(){
+  try { localStorage.removeItem(SKEY); Object.keys(localStorage).filter(k => /^wdq4-mini-/.test(k)).forEach(k => localStorage.removeItem(k)); } catch(e){}
+  $('sname').value = ''; $('scls').value = '';
+  showSec(0);
 })();
 </script>
 
