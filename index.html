@@ -1349,7 +1349,7 @@ function applyState(o, fromSheet){
     const ti = THEMES.findIndex(T => T.name === o.theme);
     if (ti >= 0){ const d = tickArr(ti); ['t1','t2','t3','t4','t5','t6','t7'].forEach((k,j) => d[j] = mx(d[j], o[k])); st.theme = ti; st.picked = true; }
     if (o.review && !st.review) st.review = o.review;
-    if (o.self && !st.self) st.self = o.self;
+    if (o.self && !st.self) st.self = ({3:'Green', 2:'Amber', 1:'Red'})[o.self] || (['Green','Amber','Red'].includes(o.self) ? o.self : '');
   }
 }
 function refreshAll(){
@@ -1445,7 +1445,7 @@ function save(what){
     play: st.play.length ? playPts() : '',
     ...Object.fromEntries(QB.map(Q => ['q_' + Q.id, st.qd[Q.id] ? 1 : 0])), quests:qCleared(), questxp:questXP(),
     theme: sum(d) ? THEMES[bt].name : '', t1:d[0], t2:d[1], t3:d[2], t4:d[3], t5:d[4], t6:d[5], t7:d[6], ticks:sum(d), plan:planText(bt), review:st.review,
-    q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: answered(st.exitQ) ? exitPts() : '', self:st.self,
+    q1:st.exitQ[0], q2:st.exitQ[1], q3:st.exitQ[2], exit: answered(st.exitQ) ? exitPts() : '', self:({Green:3, Amber:2, Red:1})[st.self] || '',
     xp:xp(), rank:rank().replace(/^\S+\s/, ''), seconds: Math.round((Date.now() - st.t0) / 1000), what };
   fetch(SCORE_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).catch(() => {});
 }
